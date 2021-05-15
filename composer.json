@@ -9,5 +9,29 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "php":" >=7.2.5"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "fakerphp/faker": "^1.13",
+        "laravel/legacy-factories": "^1.0@dev"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jeffpereira\\RealEstate\\RealEstateServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+           "Jeffpereira\\RealEstate\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jeffpereira\\RealEstate\\Tests\\": "tests/"
+        }
+    }
 }
