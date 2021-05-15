@@ -1,5 +1,6 @@
 {
-    "name": "real-estate-laravel",
+    "name": "jeffersonpereira/realestatelaravel",
+    "description": "It's package to make manager real estate in system with laravel",
     "license": "MIT",
     "authors": [
         {
@@ -7,5 +8,6 @@
             "email": "jefferson.pereira.nascimento10@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {}
 }
