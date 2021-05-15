@@ -1,0 +1,11 @@
+{
+    "name": "real-estate-laravel",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "jeffepereira",
+            "email": "jefferson.pereira.nascimento10@gmail.com"
+        }
+    ],
+    "require": {}
+}
