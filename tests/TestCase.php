@@ -2,8 +2,8 @@
 
 namespace JPAddress\Tests;
 
-use JPAddress\JPAddressServiceProvider;
-use LaravelLegends\PtBrValidator\ValidatorProvider;
+use Jeffpereira\RealEstate\RealEstateServiceProvider;
+// use LaravelLegends\PtBrValidator\ValidatorProvider;
 // When testing inside of a Laravel installation, the base class would be Tests\TestCase
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -11,14 +11,14 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            JPAddressServiceProvider::class, ValidatorProvider::class
+            RealEstateServiceProvider::class, //ValidatorProvider::class
         ];
     }
     // When testing inside of a Laravel installation, this is not needed
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withFactories(realpath(__DIR__ . "/../src/factories"));
+        $this->withFactories(realpath(__DIR__ . "/../src/database/factories"));
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
     }
     /**

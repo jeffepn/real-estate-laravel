@@ -13,7 +13,6 @@ class RealEstateServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //$this->app->make("JPAddress\Controllers\Api\Address\CountryController");
     }
 
     /**
@@ -24,6 +23,7 @@ class RealEstateServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
+        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->loadFactoriesFrom(__DIR__ . '/database/factories');
     }
