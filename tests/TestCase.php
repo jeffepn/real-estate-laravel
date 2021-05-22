@@ -1,6 +1,6 @@
 <?php
 
-namespace JPAddress\Tests;
+namespace Jeffpereira\RealEstate\Tests;
 
 use Jeffpereira\RealEstate\RealEstateServiceProvider;
 // use LaravelLegends\PtBrValidator\ValidatorProvider;
