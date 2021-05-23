@@ -1,0 +1,6 @@
+{
+    "all.common.error_save_data": "Erro ao salvar os dados.",
+
+    "all.business.not_delete_with_relations": "Não é possivel remover um negócio, com imóveis relacionados a ele.",
+    "all.business.not_delete" : "Não foi possível excluir o negócio."
+}

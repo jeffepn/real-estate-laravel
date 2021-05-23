@@ -1,12 +1,12 @@
 <?php
 
-namespace Jeffpereira\RealEstate\Http\Controllers\Api;
+namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
-use Jeffpereira\RealEstate\Models\Property\Business;
+use Jeffpereira\RealEstate\Models\Property\Property;
 use Illuminate\Http\Request;
-use Jeffpereira\RealEstate\Controllers\Controller;
+use Jeffpereira\Blog\Controllers\Controller;
 
-class BusinessController extends Controller
+class PropertyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,10 +32,10 @@ class BusinessController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Property\Business  $business
+     * @param  \App\Models\Property  $property
      * @return \Illuminate\Http\Response
      */
-    public function show(Business $business)
+    public function show(Property $property)
     {
         //
     }
@@ -44,10 +44,10 @@ class BusinessController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Property\Business  $business
+     * @param  \App\Models\Property  $property
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Business $business)
+    public function update(Request $request, Property $property)
     {
         //
     }
@@ -55,10 +55,10 @@ class BusinessController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Property\Business  $business
+     * @param  \App\Models\Property  $property
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Business $business)
+    public function destroy(Property $property)
     {
         //
     }

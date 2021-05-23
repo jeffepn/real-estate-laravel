@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Jeffpereira\RealEstate\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Jeffpereira\RealEstate\Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
