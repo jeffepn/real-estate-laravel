@@ -10,4 +10,20 @@ class Property extends Model
     use UsesUuid;
 
     protected $guarded = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::saving(function ($property) {
+            $property->slug = $property->slug ?: static::genereateSlug();
+        });
+    }
+
+
+
+
+    private static function genereateSlug()
+    {
+        return 'kkkk';
+    }
 }

@@ -10,12 +10,14 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php":" >=7.2.5"
+        "php":" >=7.2.5",
+        "jeffersonpereira/address": "1.*"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",
         "fakerphp/faker": "^1.13",
-        "laravel/legacy-factories": "^1.0@dev"
+        "laravel/legacy-factories": "^1.0@dev",
+        "nunomaduro/collision": "^3.0"
     },
     "extra": {
         "laravel": {
