@@ -21,8 +21,6 @@ class PropertyTest extends TestCase
      */
     public function the_slug_can_be_defined_per_script_or_custom_text()
     {
-        dd(env('KOOL_DATABASE_PORT'));
-
         $property = factory(Property::class)->create();
         $this->assertNotNull($property->slug);
         $this->assertEquals('', $property->slug);

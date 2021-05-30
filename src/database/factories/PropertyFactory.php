@@ -13,7 +13,7 @@ $factory->define(Property::class, function (Faker $faker) {
             return factory(Business::class)->create(['name' => $faker->name]);
         },
         'address_id' => function () use ($faker) {
-            return Address::create(['addresses' => $faker->streetName]);
+            return Address::create(['addresses' => $faker->streetName])->id;
         }
     ];
 });
