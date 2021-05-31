@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae21e5084efe36ecdfd020b6501998ee",
+    "content-hash": "7d6acab5ff59b802942fcc24a42286d1",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -306,16 +306,16 @@
         },
         {
             "name": "jeffersonpereira/address",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/packages-jp-dev-web/php/address.git",
-                "reference": "f1e966c49492dcf0d24e867a670a685cbdcb6ce0"
+                "reference": "4a34dce0013bdf579561475111aac80430323c7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/packages-jp-dev-web%2Fphp%2Faddress/repository/archive.zip?sha=f1e966c49492dcf0d24e867a670a685cbdcb6ce0",
-                "reference": "f1e966c49492dcf0d24e867a670a685cbdcb6ce0",
+                "url": "https://gitlab.com/api/v4/projects/packages-jp-dev-web%2Fphp%2Faddress/repository/archive.zip?sha=4a34dce0013bdf579561475111aac80430323c7d",
+                "reference": "4a34dce0013bdf579561475111aac80430323c7d",
                 "shasum": ""
             },
             "require": {
@@ -354,7 +354,7 @@
             "support": {
                 "issues": "https://gitlab.com/api/v4/projects/23351123/issues"
             },
-            "time": "2021-01-08T19:26:59+00:00"
+            "time": "2021-05-30T18:54:40+00:00"
         },
         {
             "name": "laravel/framework",

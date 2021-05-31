@@ -24,6 +24,6 @@ class Property extends Model
 
     private static function genereateSlug()
     {
-        return 'kkkk';
+        return '';
     }
 }
