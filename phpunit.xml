@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    backupGlobals="false" backupStaticAttributes="false"
+    colors="true" convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    processIsolation="false" stopOnFailure="false"
+>
+    <php>
+        <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
+         <!-- <env name="DB_CONNECTION" value="sqlite"/> -->
+        <!-- <env name="DB_CONNECTION" value="testbench"/> -->
+        <env name="DB_CONNECTION" value="mysql"/>
+        <!-- <env name="DB_HOST" value="127.0.0.1"/>
+        <env name="DB_PORT" value="3306"/>
+        <env name="DB_DATABASE" value="blog"/>
+        <env name="DB_USERNAME" value="blog"/>
+        <env name="DB_PASSWORD" value="secret"/> -->
+    </php>
+
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
