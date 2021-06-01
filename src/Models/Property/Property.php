@@ -3,26 +3,16 @@
 namespace Jeffpereira\RealEstate\Models\Property;
 
 use Illuminate\Database\Eloquent\Model;
+use Jeffpereira\RealEstate\Models\Traits\SetSlug;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 
 class Property extends Model
 {
-    use UsesUuid;
+    use UsesUuid, SetSlug;
 
     protected $guarded = [];
 
-    protected static function boot()
-    {
-        parent::boot();
-        static::saving(function ($property) {
-            $property->slug = $property->slug ?: static::genereateSlug();
-        });
-    }
-
-
-
-
-    private static function genereateSlug()
+    protected function generateSlug()
     {
         return '';
     }

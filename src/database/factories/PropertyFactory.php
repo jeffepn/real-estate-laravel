@@ -23,7 +23,7 @@ $factory->define(Property::class, function (Faker $faker) {
                 'neighborhood_id' => factory(Neighborhood::class)->create([
                     'city_id' => factory(City::class)->create([
                         'state_id' => factory(State::class)->create([
-                            'country_id' => factory(Country::class)->create()->id
+                            'country_id' => Country::firstOrCreate(['name' => 'brasil'])->id
                         ])
                     ])->id
                 ])->id

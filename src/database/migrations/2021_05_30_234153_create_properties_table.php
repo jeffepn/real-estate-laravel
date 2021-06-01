@@ -44,12 +44,6 @@ class CreatePropertiesTable extends Migration
             $table->integer('max_garage')->nullable();
             $table->timestamps();
         });
-
-        Schema::table('properties', function (Blueprint $table) {
-            $table->foreign('sub_type_id')
-                ->references('id')
-                ->on('sub_types');
-        });
     }
 
     /**
