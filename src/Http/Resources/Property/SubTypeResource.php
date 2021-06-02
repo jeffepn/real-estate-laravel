@@ -5,7 +5,7 @@ namespace Jeffpereira\RealEstate\Http\Resources\Property;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 
-class BusinessResource extends JsonResource
+class SubTypeResource extends JsonResource
 {
     private $message;
 
@@ -37,6 +37,7 @@ class BusinessResource extends JsonResource
             'name' => Str::title($this->name),
         ];
     }
+
     public function with($request)
     {
         return [

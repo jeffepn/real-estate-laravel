@@ -7,22 +7,23 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
-use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Models\Property\Property;
+use Jeffpereira\RealEstate\Models\Property\SubType;
+use Jeffpereira\RealEstate\Models\Property\Type;
 use Jeffpereira\RealEstate\Tests\TestCase;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 
-class BusinessTest extends TestCase
+class TypeTest extends TestCase
 {
     use RefreshDatabase;
-    protected $api = '/api/business';
+    protected $api = '/api/type';
 
     /**
      * @test
      */
     public function verify_format_return_index()
     {
-        factory(Business::class)->create();
+        factory(Type::class)->create();
         $response = $this->getJson($this->api);
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -35,8 +36,8 @@ class BusinessTest extends TestCase
      */
     public function verify_format_return_show()
     {
-        $business = factory(Business::class)->create();
-        $response = $this->getJson("$this->api/$business->id");
+        $type = factory(Type::class)->create();
+        $response = $this->getJson("$this->api/$type->id");
         $response->assertStatus(200);
         $response->assertJsonStructure([
             "data" => [
@@ -44,9 +45,9 @@ class BusinessTest extends TestCase
             ]
         ], $response->json());
         $this->assertEquals([
-            'id' => $business->id,
-            'slug' => $business->slug,
-            'name' => Str::title($business->name),
+            'id' => $type->id,
+            'slug' => $type->slug,
+            'name' => Str::title($type->name),
         ], $response->json()['data']);
     }
     /**
@@ -56,11 +57,9 @@ class BusinessTest extends TestCase
     {
         $response = $this->postJson($this->api, ['name' => 'Test of name']);
         $response->assertStatus(201);
-        $response->assertJsonStructure([
-            'data' => ['id', 'slug', 'name'], 'error', 'message'
-        ]);
-        $this->assertEquals("test-of-name", Business::first()->slug);
-        $this->assertEquals("TEST OF NAME", Business::first()->name);
+        $response->assertJsonStructure(['data' => ['id', 'name', 'slug'], 'error', 'message']);
+        $this->assertEquals("test-of-name", Type::first()->slug);
+        $this->assertEquals("TEST OF NAME", Type::first()->name);
     }
 
     /**
@@ -68,10 +67,10 @@ class BusinessTest extends TestCase
      */
     public function update_with_success()
     {
-        $business = factory(Business::class)->create();
-        $response = $this->patchJson("$this->api/$business->id", ['name' => 'Test of name2']);
+        $type = factory(Type::class)->create();
+        $response = $this->patchJson("$this->api/$type->id", ['name' => 'Test of name2']);
         $response->assertStatus(200);
-        $this->assertEquals("test-of-name2", Business::first()->slug);
+        $this->assertEquals("test-of-name2", Type::first()->slug);
     }
 
     /**
@@ -79,25 +78,25 @@ class BusinessTest extends TestCase
      */
     public function destroy_with_success()
     {
-        $business = factory(Business::class)->create();
-        $this->assertNotNull(Business::first());
-        $response = $this->deleteJson("$this->api/$business->id");
+        $type = factory(Type::class)->create();
+        $this->assertNotNull(Type::first());
+        $response = $this->deleteJson("$this->api/$type->id");
         $response->assertStatus(200);
-        $this->assertNull(Business::first());
+        $this->assertNull(Type::first());
     }
 
     /**
      * @test
      */
-    public function dont_destroy_business_with_one_or_more_properties()
+    public function dont_destroy_type_with_one_or_more_sub_type()
     {
-        $business = factory(Business::class)->create();
-        $this->assertNotNull(Business::first());
-        $business->properties()->save(factory(Property::class)->make());
-        $response = $this->deleteJson("$this->api/$business->id");
+        $type = factory(Type::class)->create();
+        $this->assertNotNull(Type::first());
+        $type->subTypes()->save(factory(SubType::class)->make());
+        $response = $this->deleteJson("$this->api/$type->id");
         $response->assertStatus(400);
-        $this->assertNotNull(Business::first());
-        $this->assertEquals(Terminologies::get('all.business.not_delete_with_relations'), $response->json()['message']);
+        $this->assertNotNull(Type::first());
+        $this->assertEquals(Terminologies::get('all.type.not_delete_with_relations'), $response->json()['message']);
     }
 
     /**
@@ -105,8 +104,8 @@ class BusinessTest extends TestCase
      */
     public function validate_name_request()
     {
-        // $request = new BusinessRequest();
-        $business = factory(Business::class)->create(['name' => 'teste']);
+        // $request = new typeRequest();
+        $type = factory(Type::class)->create(['name' => 'teste']);
 
         $response = $this->postJson($this->api, ['name' => Str::random(30)]);
         $response->assertStatus(Response::HTTP_CREATED);
@@ -120,7 +119,7 @@ class BusinessTest extends TestCase
         $response = $this->postJson($this->api, ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->patchJson("$this->api/$business->id", ['name' => 'teste']);
+        $response = $this->patchJson("$this->api/$type->id", ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_OK);
     }
 }

@@ -31,7 +31,8 @@ class BusinessController extends Controller
     {
         try {
             if ($business = Business::create($request->all())) {
-                return response(['id' => $business->id], 201);
+                return (new BusinessResource($business, Terminologies::get('all.common.save_data')))
+                    ->response()->setStatusCode(201);
             }
             return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
         } catch (\Throwable $th) {
@@ -61,7 +62,7 @@ class BusinessController extends Controller
     {
         try {
             if ($business->update($request->all())) {
-                return response()->noContent(200);
+                return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
             return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
         } catch (\Throwable $th) {

@@ -2,9 +2,13 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
-use Jeffpereira\Blog\Controllers\Controller;
 use Illuminate\Http\Request;
+use Jeffpereira\RealEstate\Http\Controllers\Controller;
+use Jeffpereira\RealEstate\Http\Requests\Property\TypeRequest;
+use Jeffpereira\RealEstate\Http\Resources\Property\TypeCollection;
+use Jeffpereira\RealEstate\Http\Resources\Property\TypeResource;
 use Jeffpereira\RealEstate\Models\Property\Type;
+use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class TypeController extends Controller
 {
@@ -15,18 +19,26 @@ class TypeController extends Controller
      */
     public function index()
     {
-        //
+        return new TypeCollection(Type::all());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  TypeRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TypeRequest $request)
     {
-        //
+        try {
+            if ($type = Type::create($request->all())) {
+                return (new TypeResource($type, Terminologies::get('all.common.save_data')))
+                    ->response()->setStatusCode(201);
+            }
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        } catch (\Throwable $th) {
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], 400);
+        }
     }
 
     /**
@@ -37,19 +49,26 @@ class TypeController extends Controller
      */
     public function show(Type $type)
     {
-        //
+        return new TypeResource($type);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  TypeRequest $request
      * @param  \App\Models\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Type $type)
+    public function update(TypeRequest $request, Type $type)
     {
-        //
+        try {
+            if ($type->update($request->all())) {
+                return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
+            }
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        } catch (\Throwable $th) {
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        }
     }
 
     /**
@@ -60,6 +79,16 @@ class TypeController extends Controller
      */
     public function destroy(Type $type)
     {
-        //
+        try {
+            if ($type->subTypes->count() > 0) {
+                return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete_with_relations')], 400);
+            }
+            if ($type->delete()) {
+                return response()->noContent(200);
+            }
+            return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete')], 400);
+        } catch (\Throwable $th) {
+            return response(['error' => true, 'message' => $th->getMessage()], 400);
+        }
     }
 }
