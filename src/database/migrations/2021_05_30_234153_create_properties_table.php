@@ -28,7 +28,7 @@ class CreatePropertiesTable extends Migration
             $table->foreign('sub_type_id')
                 ->references('id')
                 ->on('sub_types');
-            $table->string('slug', 100);
+            $table->string('slug', 150)->unique();
             $table->double('building_area', 8, 2)->nullable();
             $table->double('total_area', 8, 2)->nullable();
             $table->string('min_description', 200);

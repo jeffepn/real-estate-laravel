@@ -23,7 +23,7 @@ class Type extends Model
     }
 
     // Relationships
-    public function subTypes(): HasMany
+    public function sub_types(): HasMany
     {
         return $this->hasMany(SubType::class);
     }

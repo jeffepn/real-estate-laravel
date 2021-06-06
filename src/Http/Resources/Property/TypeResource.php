@@ -19,8 +19,6 @@ class TypeResource extends JsonResource
     public function __construct($resource, $message = '')
     {
         parent::__construct($resource);
-        $this->resource = $resource;
-
         $this->message = $message;
     }
     /**
@@ -32,15 +30,29 @@ class TypeResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'type' => 'type',
             'id' => $this->id,
-            'slug' => $this->slug,
-            'name' => Str::title($this->name),
+            'attributes' => [
+                'slug' => $this->slug,
+                'name' => Str::title($this->name),
+            ],
+            'relationships' => [
+                'sub_types' => [
+                    'data' => $this->sub_types->map(function ($subType) {
+                        return [
+                            'type' => 'sub_type',
+                            'id' => $subType->id
+                        ];
+                    })
+                ],
+            ]
         ];
     }
 
     public function with($request)
     {
         return [
+            'included' => new SubTypeCollection($this->sub_types),
             'error' => false,
             'message' => $this->message
         ];

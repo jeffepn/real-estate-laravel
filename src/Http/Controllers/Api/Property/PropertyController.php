@@ -4,7 +4,11 @@ namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Illuminate\Http\Request;
-use Jeffpereira\Blog\Controllers\Controller;
+use Jeffpereira\RealEstate\Http\Controllers\Controller;
+use Jeffpereira\RealEstate\Http\Requests\Property\PropertyRequest;
+use Jeffpereira\RealEstate\Http\Resources\Property\PropertyCollection;
+use Jeffpereira\RealEstate\Http\Resources\Property\PropertyResource;
+use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class PropertyController extends Controller
 {
@@ -15,18 +19,26 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        //
+        return new PropertyCollection(Property::all());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PropertyRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PropertyRequest $request)
     {
-        //
+        try {
+            if ($business = Property::create($request->all())) {
+                return (new PropertyResource($business, Terminologies::get('all.common.save_data')))
+                    ->response()->setStatusCode(201);
+            }
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        } catch (\Throwable $th) {
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        }
     }
 
     /**
@@ -37,17 +49,17 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        //
+        return new PropertyResource($property);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PropertyRequest  $request
      * @param  \App\Models\Property  $property
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Property $property)
+    public function update(PropertyRequest $request, Property $property)
     {
         //
     }

@@ -7,6 +7,11 @@ use Illuminate\Support\Str;
 
 class BusinessResource extends JsonResource
 {
+    /**
+     * Message response
+     *
+     * @var string
+     */
     private $message;
 
     /**
@@ -18,8 +23,6 @@ class BusinessResource extends JsonResource
     public function __construct($resource, $message = '')
     {
         parent::__construct($resource);
-        $this->resource = $resource;
-
         $this->message = $message;
     }
 
@@ -32,9 +35,12 @@ class BusinessResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'type' => 'business',
             'id' => $this->id,
-            'slug' => $this->slug,
-            'name' => Str::title($this->name),
+            'attributes' => [
+                'slug' => $this->slug,
+                'name' => Str::title($this->name),
+            ]
         ];
     }
     public function with($request)

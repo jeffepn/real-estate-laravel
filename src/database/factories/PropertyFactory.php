@@ -30,7 +30,8 @@ $factory->define(Property::class, function (Faker $faker) {
             ]);
         },
         'sub_type_id' => function () {
-            return factory(SubType::class)->create();
+            // dd("rsrs");
+            return factory(SubType::class)->create()->id;
         },
         'min_description' => $faker->sentence(4, true)
     ];

@@ -6,6 +6,11 @@ use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Illuminate\Support\Facades\Config;
 use Jeffpereira\RealEstate\RealEstateServiceProvider;
 use JPAddress\JPAddressServiceProvider;
+use JPAddress\Models\Address\Address;
+use JPAddress\Models\Address\City;
+use JPAddress\Models\Address\Country;
+use JPAddress\Models\Address\Neighborhood;
+use JPAddress\Models\Address\State;
 
 // use LaravelLegends\PtBrValidator\ValidatorProvider;
 // When testing inside of a Laravel installation, the base class would be Tests\TestCase
@@ -53,5 +58,20 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'engine'      => env('DB_ENGINE', null),
         ]);
         parent::getEnvironmentSetUp($app);
+    }
+
+
+    public function createAddress()
+    {
+        return factory(Address::class)->create([
+            'cep' => '99999999',
+            'neighborhood_id' => factory(Neighborhood::class)->create([
+                'city_id' => factory(City::class)->create([
+                    'state_id' => factory(State::class)->create([
+                        'country_id' => Country::firstOrCreate(['name' => 'brasil'])->id
+                    ])
+                ])->id
+            ])->id
+        ]);
     }
 }

@@ -15,10 +15,23 @@ class SubType extends Model
 
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::saving(function ($type) {
+            $type->name = Str::upper($type->name);
+        });
+    }
+
     // Relationships
     public function properties(): HasMany
     {
         return $this->hasMany(Property::class);
+    }
+
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(Type::class);
     }
 
     protected function generateSlug()

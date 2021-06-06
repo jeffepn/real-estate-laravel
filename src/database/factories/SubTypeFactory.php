@@ -10,7 +10,8 @@ $factory->define(SubType::class, function (Faker $faker) {
     return [
         'name' => $faker->unique()->name,
         'type_id' => function () {
-            return factory(Type::class)->create();
+            // dd("kkkgggggggg");
+            return factory(Type::class)->create()->id;
         },
     ];
 });
