@@ -108,12 +108,10 @@ class PropertyTest extends TestCase
     {
         $business = factory(Business::class)->create();
         $subType = factory(SubType::class)->create();
-        $address = $this->createAddress();
         $response = $this->postJson(
             $this->api,
             [
                 'business_id' => $business->id,
-                'address_id' => $address->id,
                 'sub_type_id' => $subType->id,
                 'min_description' =>
                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
@@ -127,6 +125,17 @@ class PropertyTest extends TestCase
                 'max_bathroom' => 6,
                 'min_garage' => 4,
                 'max_garage' => 8,
+                'address' => 'av. campos do jordão',
+                'number' => 2324,
+                'complement' => 'apt. 6',
+                'cep' => '99999-999',
+                'latitude' => 45,
+                'longitude' => 123,
+                "neighborhood" => "Jd Santa Maria",
+                "city" => "Poços de Caldas",
+                "state" => "Minas Gerais",
+                "initials" => "MG",
+                "country" => "Brasil"
             ]
         );
         $response->assertStatus(201);
@@ -158,6 +167,17 @@ class PropertyTest extends TestCase
                 'sub_type' => ['data' => ['type' => 'sub_type', 'id' => $property->sub_type_id]],
             ]
         ], $response->json()['data']);
+        $this->assertEquals('av. campos do jordão', $property->address->address);
+        $this->assertEquals(2324, $property->address->number);
+        $this->assertEquals('apt. 6', $property->address->complement);
+        $this->assertEquals('99999999', $property->address->cep);
+        $this->assertEquals(45, $property->address->latitude);
+        $this->assertEquals(123, $property->address->longitude);
+        $this->assertEquals(Str::upper('Jd Santa Maria'), $property->address->neighborhood->name);
+        $this->assertEquals(Str::upper('Poços de Caldas'), $property->address->neighborhood->city->name);
+        $this->assertEquals(Str::upper('Minas Gerais'), $property->address->neighborhood->city->state->name);
+        $this->assertEquals('MG', $property->address->neighborhood->city->state->initials);
+        $this->assertEquals(Str::upper('Brasil'), $property->address->neighborhood->city->state->country->name);
     }
 
     /**
@@ -170,8 +190,8 @@ class PropertyTest extends TestCase
         $address = $this->createAddress();
         $property = Property::create([
             'business_id' => $business->id,
-            'address_id' => $address->id,
             'sub_type_id' => $subType->id,
+            'address_id' => $address->id,
             'min_description' =>
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
             'content' => 'test content', 'items' => 'test items',
@@ -245,13 +265,11 @@ class PropertyTest extends TestCase
         $business = factory(Business::class)->create();
         $type = factory(Type::class)->create();
         $subType = factory(SubType::class)->create(['name' => 'teste', 'type_id' => $type->id]);
-        $address = $this->createAddress();
         $data = [
+            'slug' => 'test-slug',
             'business_id' => $business->id,
-            'address_id' => $address->id,
             'sub_type_id' => $subType->id,
-            'min_description' =>
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
+            'min_description' =>  Str::random(200),
             'content' => 'test content', 'items' => 'test items',
             'building_area' => 105.49, 'total_area' => 200.50,
             'min_dormitory' => 1,
@@ -262,33 +280,83 @@ class PropertyTest extends TestCase
             'max_bathroom' => 6,
             'min_garage' => 4,
             'max_garage' => 8,
+            "neighborhood" => "Jd Santa Maria",
+            "city" => "Poços de Caldas",
+            "state" => "Minas Gerais",
+            "initials" => "MG",
+            "country" => "Brasil"
         ];
 
         $response = $this->postJson($this->api, $data);
         $response->assertStatus(Response::HTTP_CREATED);
+        $data['slug'] = 'test-slug-2';
         $array_validation = [
-            'business_id' => null,
+            ['key' => 'business_id', 'value' => null],
+            ['key' => 'business_id', 'value' => 'kkk'],
+            ['key' => 'sub_type_id', 'value' => null],
+            ['key' => 'sub_type_id', 'value' => 'kkkk'],
+            ['key' => 'min_description', 'value' => null],
+            ['key' => 'min_description', 'value' => Str::random(9)],
+            ['key' => 'min_description', 'value' => Str::random(201)],
+            ['key' => 'slug', 'value' => Str::lower(Str::random(2))],
+            ['key' => 'slug', 'value' => Str::lower(Str::random(151))],
+            ['key' => 'slug', 'value' => 'test of slug with format incorrect'],
+            ['key' => 'slug', 'value' => 'test-slug'],
+            ['key' => 'total_area', 'value' => 0],
+            ['key' => 'total_area', 'value' => 'jjj'],
+            ['key' => 'building_area', 'value' => 0],
+            ['key' => 'building_area', 'value' => 'kk'],
+            ['key' => 'min_dormitory', 'value' => 'kk'],
+            ['key' => 'min_dormitory', 'value' => -1],
+            ['key' => 'max_dormitory', 'value' => 'kk'],
+            ['key' => 'max_dormitory', 'value' => -1],
+            ['key' => 'min_suite', 'value' => 'kk'],
+            ['key' => 'min_suite', 'value' => -1],
+            ['key' => 'max_suite', 'value' => 'kk'],
+            ['key' => 'max_suite', 'value' => -1],
+            ['key' => 'min_bathroom', 'value' => 'kk'],
+            ['key' => 'min_bathroom', 'value' => -1],
+            ['key' => 'max_bathroom', 'value' => 'kk'],
+            ['key' => 'max_bathroom', 'value' => -1],
+            ['key' => 'min_garage', 'value' => 'kk'],
+            ['key' => 'min_garage', 'value' => -1],
+            ['key' => 'max_garage', 'value' => 'kk'],
+            ['key' => 'max_garage', 'value' => -1],
+            ['key' => 'address', 'value' => Str::random(101)],
+            ['key' => 'number', 'value' => 'jjk'],
+            ['key' => 'number', 'value' => 0],
+            ['key' => 'complement', 'value' => Str::random(16)],
+            ['key' => 'cep', 'value' => Str::random(16)],
+            ['key' => 'latitude', 'value' => 'fsfd'],
+            ['key' => 'longitude', 'value' => 'fsfd'],
+            ['key' => 'neighborhood', 'value' => null],
+            ['key' => 'neighborhood', 'value' => ''],
+            ['key' => 'neighborhood', 'value' => 'f'],
+            ['key' => 'neighborhood', 'value' => Str::random(101)],
+            ['key' => 'city', 'value' => null],
+            ['key' => 'city', 'value' => ''],
+            ['key' => 'city', 'value' => 'f'],
+            ['key' => 'city', 'value' => Str::random(101)],
+            ['key' => 'state', 'value' => null],
+            ['key' => 'state', 'value' => ''],
+            ['key' => 'state', 'value' => 'f'],
+            ['key' => 'state', 'value' => Str::random(101)],
+            ['key' => 'initials', 'value' => null],
+            ['key' => 'initials', 'value' => ''],
+            ['key' => 'initials', 'value' => 'f'],
+            ['key' => 'initials', 'value' => Str::random(3)],
+
         ];
-        foreach ($array_validation as $key => $item) {
+        foreach ($array_validation as $item) {
             $aux = $data;
-            $aux[$key] = $item;
+            $aux[$item['key']] = $item['value'];
             $response = $this->postJson($this->api, $aux);
             $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+            $this->assertEquals(1, count($response->json()['errors']));
         }
-
-        // $response = $this->postJson($this->api, ['name' => Str::random(31), 'type_id' => $type->id]);
-        // $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        // $response = $this->postJson($this->api, ['name' => '', 'type_id' => $type->id]);
-        // $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        // $response = $this->postJson($this->api, ['name' => 'teste', 'type_id' => $type->id]);
-        // $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        // $response = $this->patchJson("$this->api/$subType->id", []);
-        // $response->assertStatus(Response::HTTP_OK);
-
-        // $response = $this->patchJson("$this->api/$subType->id", ['name' => 'teste', 'type_id' => $type->id]);
-        // $response->assertStatus(Response::HTTP_OK);
+        $property = Property::first();
+        // Test update slug, when is ignored
+        $response = $this->patchJson("$this->api/$property->id", ['slug' => 'test-slug']);
+        $response->assertStatus(Response::HTTP_OK);
     }
 }

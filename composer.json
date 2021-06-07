@@ -11,7 +11,8 @@
     "minimum-stability": "dev",
     "require": {
         "php": " >=7.2.5",
-        "jeffersonpereira/address": "1.*"
+        "jeffersonpereira/address": "1.*",
+        "laravellegends/pt-br-validator": "dev-master"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",

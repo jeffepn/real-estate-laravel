@@ -11,6 +11,7 @@ use JPAddress\Models\Address\City;
 use JPAddress\Models\Address\Country;
 use JPAddress\Models\Address\Neighborhood;
 use JPAddress\Models\Address\State;
+use LaravelLegends\PtBrValidator\ValidatorProvider;
 
 // use LaravelLegends\PtBrValidator\ValidatorProvider;
 // When testing inside of a Laravel installation, the base class would be Tests\TestCase
@@ -22,7 +23,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            RealEstateServiceProvider::class, JPAddressServiceProvider::class //ValidatorProvider::class
+            RealEstateServiceProvider::class, JPAddressServiceProvider::class, ValidatorProvider::class
         ];
     }
     // When testing inside of a Laravel installation, this is not needed

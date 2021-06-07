@@ -2,6 +2,7 @@
 
 namespace Jeffpereira\RealEstate;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class RealEstateServiceProvider extends ServiceProvider
@@ -29,5 +30,8 @@ class RealEstateServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/realestatelaravel.php' => config_path('realestatelaravel.php'),
         ], 'config');
+        Validator::extend('slug', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $value);
+        });
     }
 }

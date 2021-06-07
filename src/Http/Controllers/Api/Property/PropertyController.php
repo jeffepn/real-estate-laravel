@@ -9,6 +9,12 @@ use Jeffpereira\RealEstate\Http\Requests\Property\PropertyRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\PropertyCollection;
 use Jeffpereira\RealEstate\Http\Resources\Property\PropertyResource;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
+use JPAddress\Models\Address\Address;
+use JPAddress\Models\Address\City;
+use JPAddress\Models\Address\Country;
+use JPAddress\Models\Address\Neighborhood;
+use JPAddress\Models\Address\State;
+use PHPUnit\Framework\Constraint\Count;
 
 class PropertyController extends Controller
 {
@@ -31,8 +37,11 @@ class PropertyController extends Controller
     public function store(PropertyRequest $request)
     {
         try {
-            if ($business = Property::create($request->all())) {
-                return (new PropertyResource($business, Terminologies::get('all.common.save_data')))
+            $address = $this->generateAddress($request->getDataAddress());
+            $data = $request->getData();
+            $data['address_id'] = $address->id;
+            if ($property = Property::create($data)) {
+                return (new PropertyResource($property, Terminologies::get('all.common.save_data')))
                     ->response()->setStatusCode(201);
             }
             return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
@@ -62,7 +71,7 @@ class PropertyController extends Controller
     public function update(PropertyRequest $request, Property $property)
     {
         try {
-            if ($property->update($request->all())) {
+            if ($property->update($request->getData())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
             return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
@@ -87,5 +96,21 @@ class PropertyController extends Controller
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => $th->getMessage()], 400);
         }
+    }
+
+    private function generateAddress(array $dataAddress): Address
+    {
+        $dataAddress['neighborhood_id'] = Neighborhood::firstOrCreate([
+            'name' => $dataAddress['neighborhood'],
+            'city_id' => City::firstOrCreate([
+                "name" => $dataAddress['city'],
+                'state_id' => State::firstOrCreate([
+                    'name' => $dataAddress['state'],
+                    'initials' => $dataAddress['initials'],
+                    'country_id' => Country::firstOrCreate(['name' => $dataAddress['country']])->id
+                ])->id
+            ])->id
+        ])->id;
+        return Address::create($dataAddress);
     }
 }
