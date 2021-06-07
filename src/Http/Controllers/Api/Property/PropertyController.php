@@ -61,7 +61,14 @@ class PropertyController extends Controller
      */
     public function update(PropertyRequest $request, Property $property)
     {
-        //
+        try {
+            if ($property->update($request->all())) {
+                return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
+            }
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        } catch (\Throwable $th) {
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        }
     }
 
     /**
@@ -72,6 +79,13 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
-        //
+        try {
+            if ($property->delete()) {
+                return response()->noContent(200);
+            }
+            return response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], 400);
+        } catch (\Throwable $th) {
+            return response(['error' => true, 'message' => $th->getMessage()], 400);
+        }
     }
 }

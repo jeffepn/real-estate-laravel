@@ -14,8 +14,21 @@ class PropertyRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->method() == 'PUT' || $this->method() == 'PATCH') {
+            return [
+                "business_id" => ['sometimes', 'required', 'uuid'],
+            ];
+        }
         return [
-            //
+            "business_id" => ['required', 'uuid'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'business_id.required' => 'Escolha um tipo de negócio.',
+            'business_id.uuid' => 'Escolha um tipo de negócio.',
         ];
     }
 }

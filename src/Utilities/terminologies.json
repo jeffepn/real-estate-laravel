@@ -6,5 +6,6 @@
     "all.type.not_delete_with_relations": "Não é possivel remover um tipo, com subtipos relacionados a ele.",
     "all.type.not_delete": "Não foi possível excluir o tipo de imóvel.",
     "all.sub_type.not_delete_with_relations": "Não é possivel remover um subtipo, com imóveis relacionados a ele.",
-    "all.sub_type.not_delete": "Não foi possível excluir o subtipo de imóvel."
+    "all.sub_type.not_delete": "Não foi possível excluir o subtipo de imóvel.",
+    "all.property.not_delete": "Não foi possível excluir o imóvel."
 }

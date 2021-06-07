@@ -101,7 +101,7 @@ class SubTypeTest extends TestCase
     /**
      * @test
      */
-    public function validate_name_request()
+    public function validate_data_request()
     {
         $type = factory(Type::class)->create();
         $subType = factory(SubType::class)->create(['name' => 'teste', 'type_id' => $type->id]);

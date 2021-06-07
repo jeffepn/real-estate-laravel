@@ -5,6 +5,7 @@ namespace Jeffpereira\RealEstate\Tests\Feature;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Http\Requests\Property\BusinessRequest;
@@ -111,10 +112,21 @@ class PropertyTest extends TestCase
         $response = $this->postJson(
             $this->api,
             [
+                'business_id' => $business->id,
+                'address_id' => $address->id,
+                'sub_type_id' => $subType->id,
+                'min_description' =>
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
+                'content' => 'test content', 'items' => 'test items',
+                'building_area' => 105.49, 'total_area' => 200.50,
+                'min_dormitory' => 1,
                 'max_dormitory' => 3,
-                'business_id' => $business->id, 'address_id' => $address->id, 'sub_type_id' => $subType->id,
-                'min_description' => "Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                 Asperiores exercitationem placeat "
+                'min_suite' => 2,
+                'max_suite' => 4,
+                'min_bathroom' => 3,
+                'max_bathroom' => 6,
+                'min_garage' => 4,
+                'max_garage' => 8,
             ]
         );
         $response->assertStatus(201);
@@ -132,5 +144,151 @@ class PropertyTest extends TestCase
             ],
             'included', 'error', 'message'
         ]);
+        $property = Property::first();
+        $this->assertEquals([
+            'type' => 'property', 'id' => $property->id, 'attributes' => [
+                'slug' => $property->slug, 'building_area' => 105.49, 'total_area' => 200.50,
+                'min_description' => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
+                'min_dormitory' => 1, 'max_dormitory' => 3, 'min_suite' => 2, 'max_suite' => 4, 'min_bathroom' => 3, 'max_bathroom' => 6,
+                'min_garage' => 4, 'max_garage' => 8, 'content' => 'test content', 'items' => 'test items'
+            ],
+            'relationships' => [
+                'address' => ['data' => ['type' => 'address', 'id' => $property->address_id]],
+                'business' => ['data' => ['type' => 'business', 'id' => $property->business_id]],
+                'sub_type' => ['data' => ['type' => 'sub_type', 'id' => $property->sub_type_id]],
+            ]
+        ], $response->json()['data']);
+    }
+
+    /**
+     * @test
+     */
+    public function update_with_success()
+    {
+        $business = factory(Business::class)->create();
+        $subType = factory(SubType::class)->create();
+        $address = $this->createAddress();
+        $property = Property::create([
+            'business_id' => $business->id,
+            'address_id' => $address->id,
+            'sub_type_id' => $subType->id,
+            'min_description' =>
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
+            'content' => 'test content', 'items' => 'test items',
+            'building_area' => 105.49, 'total_area' => 200.50,
+            'min_dormitory' => 1,
+            'max_dormitory' => 3,
+            'min_suite' => 2,
+            'max_suite' => 4,
+            'min_bathroom' => 3,
+            'max_bathroom' => 6,
+            'min_garage' => 4,
+            'max_garage' => 8,
+        ]);
+        $response = $this->patchJson("$this->api/$property->id", [
+            'min_description' => "min description edit",
+            'content' => 'test content edit', 'items' => 'test items edit',
+            'building_area' => 115.49, 'total_area' => 210.50,
+            'min_dormitory' => 2,
+            'max_dormitory' => 6,
+            'min_suite' => 3,
+            'max_suite' => 5,
+            'min_bathroom' => 2,
+            'max_bathroom' => 7,
+            'min_garage' => 5,
+            'max_garage' => 9,
+        ]);
+        $response->assertStatus(200);
+        $data = $property->refresh()->toArray();
+        unset($data['created_at']);
+        unset($data['updated_at']);
+        unset($data['business']);
+        unset($data['sub_type']);
+        unset($data['address']);
+        $this->assertEquals([
+            'id' => $property->id,
+            'slug' => $property->slug,
+            'business_id' => $property->business_id,
+            'address_id' => $property->address_id,
+            'sub_type_id' => $property->sub_type_id,
+            'min_description' => "min description edit",
+            'content' => 'test content edit', 'items' => 'test items edit',
+            'building_area' => 115.49, 'total_area' => 210.50,
+            'min_dormitory' => 2,
+            'max_dormitory' => 6,
+            'min_suite' => 3,
+            'max_suite' => 5,
+            'min_bathroom' => 2,
+            'max_bathroom' => 7,
+            'min_garage' => 5,
+            'max_garage' => 9,
+        ], $data);
+    }
+
+    /**
+     * @test
+     */
+    public function destroy_with_success()
+    {
+        $property = factory(Property::class)->create();
+        $this->assertNotNull(Property::first());
+        $response = $this->deleteJson("$this->api/$property->id");
+        $response->assertStatus(200);
+        $this->assertNull(Property::first());
+    }
+
+    /**
+     * @test
+     */
+    public function validate_data_request()
+    {
+        $business = factory(Business::class)->create();
+        $type = factory(Type::class)->create();
+        $subType = factory(SubType::class)->create(['name' => 'teste', 'type_id' => $type->id]);
+        $address = $this->createAddress();
+        $data = [
+            'business_id' => $business->id,
+            'address_id' => $address->id,
+            'sub_type_id' => $subType->id,
+            'min_description' =>
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
+            'content' => 'test content', 'items' => 'test items',
+            'building_area' => 105.49, 'total_area' => 200.50,
+            'min_dormitory' => 1,
+            'max_dormitory' => 3,
+            'min_suite' => 2,
+            'max_suite' => 4,
+            'min_bathroom' => 3,
+            'max_bathroom' => 6,
+            'min_garage' => 4,
+            'max_garage' => 8,
+        ];
+
+        $response = $this->postJson($this->api, $data);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $array_validation = [
+            'business_id' => null,
+        ];
+        foreach ($array_validation as $key => $item) {
+            $aux = $data;
+            $aux[$key] = $item;
+            $response = $this->postJson($this->api, $aux);
+            $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // $response = $this->postJson($this->api, ['name' => Str::random(31), 'type_id' => $type->id]);
+        // $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        // $response = $this->postJson($this->api, ['name' => '', 'type_id' => $type->id]);
+        // $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        // $response = $this->postJson($this->api, ['name' => 'teste', 'type_id' => $type->id]);
+        // $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        // $response = $this->patchJson("$this->api/$subType->id", []);
+        // $response->assertStatus(Response::HTTP_OK);
+
+        // $response = $this->patchJson("$this->api/$subType->id", ['name' => 'teste', 'type_id' => $type->id]);
+        // $response->assertStatus(Response::HTTP_OK);
     }
 }
