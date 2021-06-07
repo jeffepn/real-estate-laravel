@@ -80,7 +80,7 @@ class TypeController extends Controller
     public function destroy(Type $type)
     {
         try {
-            if ($type->subTypes->count() > 0) {
+            if ($type->sub_types->count() > 0) {
                 return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete_with_relations')], 400);
             }
             if ($type->delete()) {

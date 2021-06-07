@@ -18,4 +18,13 @@ class SubTypeCollection extends ResourceCollection
             return new SubTypeResource($subType);
         });
     }
+
+    public function with($request)
+    {
+        return [
+            'included' => [
+                new TypeCollection($this->collection->pluck('type')->unique()->values())
+            ]
+        ];
+    }
 }

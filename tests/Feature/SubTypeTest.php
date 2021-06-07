@@ -25,7 +25,9 @@ class SubTypeTest extends TestCase
         $response = $this->getJson($this->api);
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'data' => [['id', 'slug', 'name']]
+            'data' => [[
+                'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['type']
+            ]], 'included',
         ], $response->json());
     }
 
@@ -39,13 +41,19 @@ class SubTypeTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonStructure([
             "data" => [
-                'id', 'slug', 'name'
-            ]
+                'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['type']
+            ], 'included',
         ], $response->json());
         $this->assertEquals([
+            'type' => 'sub_type',
             'id' => $subType->id,
-            'slug' => $subType->slug,
-            'name' => Str::title($subType->name),
+            'attributes' => [
+                'slug' => $subType->slug,
+                'name' => Str::title($subType->name),
+            ],
+            'relationships' => [
+                'type' => ['data' => ['type' => 'type', 'id' => $subType->type_id]]
+            ]
         ], $response->json()['data']);
     }
     /**
@@ -56,7 +64,7 @@ class SubTypeTest extends TestCase
         $type = factory(Type::class)->create();
         $response = $this->postJson($this->api, ['name' => 'Test of name', 'type_id' => $type->id]);
         $response->assertStatus(201);
-        $response->assertJsonStructure(['data' => ['id', 'name', 'slug'], 'error', 'message']);
+        $response->assertJsonStructure(['data' => ['type', 'id', 'attributes' => ['name', 'slug'], 'relationships' => ['type']], 'included', 'error', 'message']);
         $this->assertEquals("test-of-name", SubType::first()->slug);
         $this->assertEquals("TEST OF NAME", SubType::first()->name);
     }

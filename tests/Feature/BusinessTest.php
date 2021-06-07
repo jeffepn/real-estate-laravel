@@ -26,7 +26,7 @@ class BusinessTest extends TestCase
         $response = $this->getJson($this->api);
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'data' => [['id', 'slug', 'name']]
+            'data' => [['type', 'id', 'attributes' => ['slug', 'name']]]
         ], $response->json());
     }
 
@@ -40,13 +40,16 @@ class BusinessTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonStructure([
             "data" => [
-                'id', 'slug', 'name'
+                'type', 'id', 'attributes' => ['slug', 'name']
             ]
         ], $response->json());
         $this->assertEquals([
+            'type' => 'business',
             'id' => $business->id,
-            'slug' => $business->slug,
-            'name' => Str::title($business->name),
+            'attributes' => [
+                'slug' => $business->slug,
+                'name' => Str::title($business->name),
+            ]
         ], $response->json()['data']);
     }
     /**
@@ -57,7 +60,7 @@ class BusinessTest extends TestCase
         $response = $this->postJson($this->api, ['name' => 'Test of name']);
         $response->assertStatus(201);
         $response->assertJsonStructure([
-            'data' => ['id', 'slug', 'name'], 'error', 'message'
+            'data' => ['type', 'id', 'attributes' => ['slug', 'name']], 'error', 'message'
         ]);
         $this->assertEquals("test-of-name", Business::first()->slug);
         $this->assertEquals("TEST OF NAME", Business::first()->name);

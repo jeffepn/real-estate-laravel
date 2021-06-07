@@ -27,7 +27,7 @@ class TypeTest extends TestCase
         $response = $this->getJson($this->api);
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'data' => [['id', 'slug', 'name']]
+            'data' => [['type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types']]]
         ], $response->json());
     }
 
@@ -41,13 +41,16 @@ class TypeTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonStructure([
             "data" => [
-                'id', 'slug', 'name'
+                'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types']
             ]
         ], $response->json());
         $this->assertEquals([
+            'type' => 'type',
             'id' => $type->id,
-            'slug' => $type->slug,
-            'name' => Str::title($type->name),
+            'attributes' => [
+                'slug' => $type->slug,
+                'name' => Str::title($type->name),
+            ], 'relationships' => ['sub_types' => ['data' => []]]
         ], $response->json()['data']);
     }
     /**
@@ -57,7 +60,9 @@ class TypeTest extends TestCase
     {
         $response = $this->postJson($this->api, ['name' => 'Test of name']);
         $response->assertStatus(201);
-        $response->assertJsonStructure(['data' => ['id', 'name', 'slug'], 'error', 'message']);
+        $response->assertJsonStructure(['data' => [
+            'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types' => ['data' => []]]
+        ], 'error', 'message']);
         $this->assertEquals("test-of-name", Type::first()->slug);
         $this->assertEquals("TEST OF NAME", Type::first()->name);
     }
@@ -92,7 +97,7 @@ class TypeTest extends TestCase
     {
         $type = factory(Type::class)->create();
         $this->assertNotNull(Type::first());
-        $type->subTypes()->save(factory(SubType::class)->make());
+        $type->sub_types()->save(factory(SubType::class)->make());
         $response = $this->deleteJson("$this->api/$type->id");
         $response->assertStatus(400);
         $this->assertNotNull(Type::first());
