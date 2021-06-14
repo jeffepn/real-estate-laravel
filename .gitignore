@@ -1,4 +1,6 @@
-/vendor/
+vendor/
 .env
 .phpunit.result.cache
+node_modules/
+laravel/
 

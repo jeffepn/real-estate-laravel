@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+body,
+html {
+  height: 100%;
+  width: 100%;
+}
+main {
+  display: flex;
+  height: 100vh;
+  height: -webkit-fill-available;
+  max-height: 100vh;
+  flex-direction: column;
+  width: 100%;
+}
+@import "sidebar.scss";
+@import "context.scss";
