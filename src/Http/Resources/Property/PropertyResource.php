@@ -41,6 +41,7 @@ class PropertyResource extends JsonResource
             'id' => $this->id,
             'attributes' => [
                 'slug' => $this->slug,
+                'code' => $this->code,
                 'building_area' => $this->building_area,
                 'total_area' => $this->total_area,
                 'min_description' => $this->min_description,

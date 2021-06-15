@@ -15,6 +15,14 @@ class Property extends Model
 
     protected $guarded = [];
 
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->code = $model->max('code') + 1;
+        });
+    }
+
     // Relationships
     public function business(): BelongsTo
     {

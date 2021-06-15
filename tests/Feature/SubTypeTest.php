@@ -14,7 +14,7 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 class SubTypeTest extends TestCase
 {
     use RefreshDatabase;
-    protected $api = '/api/sub-type';
+    protected $api = 'sub-type';
 
     /**
      * @test

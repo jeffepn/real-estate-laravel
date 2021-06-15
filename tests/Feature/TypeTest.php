@@ -16,7 +16,7 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 class TypeTest extends TestCase
 {
     use RefreshDatabase;
-    protected $api = '/api/type';
+    protected $api = 'type';
 
     /**
      * @test

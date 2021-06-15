@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreatePropertiesTable extends Migration
@@ -29,6 +30,7 @@ class CreatePropertiesTable extends Migration
                 ->references('id')
                 ->on('sub_types');
             $table->string('slug', 150)->unique();
+            $table->unsignedInteger('code');
             $table->double('building_area', 8, 2)->nullable();
             $table->double('total_area', 8, 2)->nullable();
             $table->string('min_description', 200);

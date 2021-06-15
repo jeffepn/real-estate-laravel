@@ -2,5 +2,5 @@
 
 
 @section('content')
-<re-list-properties></re-list-properties>
+<re-create-or-edit-properties></re-create-or-edit-properties>
 @endsection

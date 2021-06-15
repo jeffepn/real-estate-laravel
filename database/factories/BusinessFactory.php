@@ -8,6 +8,6 @@ use Faker\Generator as Faker;
 $factory->define(Business::class, function (Faker $faker) {
     $businesses = ["Venda", "Locação", "Permuta"];
     return [
-        'name' => $faker->unique()->firstName()
+        'name' => $faker->unique()->name()
     ];
 });

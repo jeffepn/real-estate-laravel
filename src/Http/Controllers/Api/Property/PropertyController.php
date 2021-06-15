@@ -25,7 +25,7 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        return new PropertyCollection(Property::all());
+        return new PropertyCollection(Property::orderBy('code', "desc")->get());
     }
 
     /**
@@ -41,7 +41,7 @@ class PropertyController extends Controller
             $data = $request->getData();
             $data['address_id'] = $address->id;
             if ($property = Property::create($data)) {
-                return (new PropertyResource($property, Terminologies::get('all.common.save_data')))
+                return (new PropertyResource($property->refresh(), Terminologies::get('all.common.save_data')))
                     ->response()->setStatusCode(201);
             }
             return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);

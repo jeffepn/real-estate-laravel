@@ -7,6 +7,7 @@ use JPAddress\Resources\AddressCollection;
 use JPAddress\Resources\AddressResource;
 use JPAddress\Resources\CityResource;
 use JPAddress\Resources\NeighborhoodResource;
+use JPAddress\Resources\StateResource;
 
 class PropertyCollection extends ResourceCollection
 {
@@ -44,12 +45,16 @@ class PropertyCollection extends ResourceCollection
         $cities = $this->collection->pluck('address.neighborhood.city')->unique()->values()->map(function ($city) {
             return new CityResource($city);
         })->toArray();
+        $states = $this->collection->pluck('address.neighborhood.city.state')->unique()->values()->map(function ($state) {
+            return new StateResource($state);
+        })->toArray();
         $includes = array_merge($includes, $businesses);
         $includes = array_merge($includes, $types);
         $includes = array_merge($includes, $subTypes);
         $includes = array_merge($includes, $addresses);
         $includes = array_merge($includes, $neighborhoods);
         $includes = array_merge($includes, $cities);
+        $includes = array_merge($includes, $states);
 
         return [
             'included' =>  $includes

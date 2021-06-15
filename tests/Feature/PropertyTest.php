@@ -19,7 +19,7 @@ use JPAddress\Models\Address\Address;
 class PropertyTest extends TestCase
 {
     use RefreshDatabase;
-    protected $api = '/api/property';
+    protected $api = 'property';
 
 
     /**
@@ -43,7 +43,7 @@ class PropertyTest extends TestCase
                 [
                     'type', 'id',
                     'attributes' => [
-                        'slug', 'building_area', 'total_area', 'min_description',
+                        'slug', "code", 'building_area', 'total_area', 'min_description',
                         'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
                         'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
                     ],
@@ -66,7 +66,7 @@ class PropertyTest extends TestCase
             "data" => [
                 'type', 'id',
                 'attributes' => [
-                    'slug', 'building_area', 'total_area', 'min_description',
+                    'slug', 'code', 'building_area', 'total_area', 'min_description',
                     'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
                     'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
                 ],
@@ -74,11 +74,13 @@ class PropertyTest extends TestCase
             ],
             'included'
         ], $response->json());
+        $property->refresh();
         $this->assertEquals([
             'type' => 'property',
             'id' => $property->id,
             'attributes' => [
                 'slug' => $property->slug,
+                'code' => $property->code,
                 'building_area' => $property->building_area,
                 'total_area' => $property->total_area,
                 'min_description' => $property->min_description,
@@ -143,7 +145,7 @@ class PropertyTest extends TestCase
             'data' => [
                 'type', 'id',
                 'attributes' => [
-                    'slug', 'building_area', 'total_area', 'min_description',
+                    'slug', 'code', 'building_area', 'total_area', 'min_description',
                     'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
                     'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
                 ],
@@ -154,9 +156,11 @@ class PropertyTest extends TestCase
             'included', 'error', 'message'
         ]);
         $property = Property::first();
+
+        $property->refresh();
         $this->assertEquals([
             'type' => 'property', 'id' => $property->id, 'attributes' => [
-                'slug' => $property->slug, 'building_area' => 105.49, 'total_area' => 200.50,
+                'slug' => $property->slug, 'code' => $property->code, 'building_area' => 105.49, 'total_area' => 200.50,
                 'min_description' => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
                 'min_dormitory' => 1, 'max_dormitory' => 3, 'min_suite' => 2, 'max_suite' => 4, 'min_bathroom' => 3, 'max_bathroom' => 6,
                 'min_garage' => 4, 'max_garage' => 8, 'content' => 'test content', 'items' => 'test items'
@@ -228,6 +232,7 @@ class PropertyTest extends TestCase
         $this->assertEquals([
             'id' => $property->id,
             'slug' => $property->slug,
+            'code' => $property->code,
             'business_id' => $property->business_id,
             'address_id' => $property->address_id,
             'sub_type_id' => $property->sub_type_id,
@@ -286,7 +291,6 @@ class PropertyTest extends TestCase
             "initials" => "MG",
             "country" => "Brasil"
         ];
-
         $response = $this->postJson($this->api, $data);
         $response->assertStatus(Response::HTTP_CREATED);
         $data['slug'] = 'test-slug-2';

@@ -15,7 +15,7 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 class BusinessTest extends TestCase
 {
     use RefreshDatabase;
-    protected $api = '/api/business';
+    protected $api = 'business';
 
     /**
      * @test
