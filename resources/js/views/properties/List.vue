@@ -1,53 +1,127 @@
 <template>
   <div class="container">
-    <div class="content-table">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Código</th>
-            <th scope="col">Endereço</th>
-            <th scope="col">Negócio</th>
-            <th scope="col">Tipo - Subtipo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="property in properties" :key="property.id">
-            <th>
-              <div class="actions">
-                <span v-text="`${property.code} - `"></span>
-                <a class="btn btn-success btn-sm" href="#" role="button">
-                  <i class="fas fa-eye"></i>
-                </a>
-                <a class="btn btn-primary btn-sm" href="#" role="button">
-                  <i class="fas fa-edit"></i>
-                </a>
-                <a class="btn btn-danger btn-sm" href="#" role="button">
-                  <i class="fas fa-trash"></i>
-                </a>
-              </div>
-            </th>
-            <td v-text="formateAddress(property)"></td>
-            <td v-text="property.business.name"></td>
-            <td
-              v-text="`${property.type.name} - ${property.sub_type.name}`"
-            ></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card my-5">
+      <div
+        class="card-header d-flex flex-wrap justify-content-between align-items-center"
+      >
+        <h2>Imóveis</h2>
+        <div class="d-flex flex-wrap">
+          <div class="input-search input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Procurar"
+              aria-label="Procurar"
+              aria-describedby="basic-addon2"
+              v-model="search"
+            />
+            <span class="input-group-text" id="basic-addon2">
+              <i class="fas fa-search"></i>
+            </span>
+          </div>
+          <a
+            :href="$route('jp_realestate.property.create')"
+            class="btn btn-outline-primary ms-2"
+          >
+            <i class="fas fa-plus"></i> Novo
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="content-table">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Endereço</th>
+                <th scope="col">Negócio</th>
+                <th scope="col">Tipo - Subtipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="property in properties" :key="property.id">
+                <th>
+                  <div class="actions">
+                    <span v-text="`${property.code} - `"></span>
+                    <a class="btn btn-success btn-sm" href="#" role="button">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <a class="btn btn-primary btn-sm" href="#" role="button">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a class="btn btn-danger btn-sm" href="#" role="button">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </div>
+                </th>
+                <td v-text="formateAddress(property)"></td>
+                <td v-text="property.business.name"></td>
+                <td
+                  v-text="`${property.type.name} - ${property.sub_type.name}`"
+                ></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <re-pagination
+          :per-page="pagination.perPage"
+          :total="total"
+          :page="pagination.page"
+          @changePage="updatePage"
+          @changePerPage="updatePerPage"
+        ></re-pagination>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import RePagination from "@/components/Controls/Pagination";
 export default {
+  components: { RePagination },
   data() {
     return {
+      search: null,
       data: [],
       included: [],
+      pagination: {
+        perPage: 10,
+        page: 1,
+      },
     };
   },
   computed: {
     properties() {
+      const initial = (this.pagination.page - 1) * this.pagination.perPage;
+      const final = initial + this.pagination.perPage;
+      return this.filteredProperties.slice(initial, final);
+    },
+    filteredProperties() {
+      if (this.searchIsEmpty) {
+        return this.originalProperties;
+      }
+
+      const result = this.originalProperties.filter(
+        (item) =>
+          item.business.name.search(
+            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
+          ) !== -1 ||
+          item.type.name.search(
+            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
+          ) !== -1 ||
+          item.sub_type.name.search(
+            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
+          ) !== -1 ||
+          item.slug.search(
+            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
+          ) !== -1,
+      );
+      this.resetPage();
+      return result;
+    },
+    originalProperties() {
       return this.data.reduce((acumulator, currentValue) => {
         let { id, attributes, relationships } = currentValue;
 
@@ -59,6 +133,12 @@ export default {
         acumulator.push(property);
         return acumulator;
       }, []);
+    },
+    total() {
+      return this.filteredProperties.length;
+    },
+    searchIsEmpty() {
+      return !(this.search && this.search.trim().length);
     },
   },
   mounted() {
@@ -76,8 +156,16 @@ export default {
           this.$toast.message(error.message, true);
         });
     },
+    updatePage(page) {
+      this.pagination.page = page;
+    },
+    updatePerPage(perPage) {
+      this.pagination.perPage = perPage;
+    },
+    resetPage() {
+      this.updatePage(1);
+    },
     formateAddress(property) {
-      console.log(property);
       return `${property.address.neighborhood}, ${property.address.city} - ${property.address.state}`;
     },
     extractBusiness(relationships) {
@@ -162,5 +250,8 @@ export default {
   span {
     white-space: nowrap;
   }
+}
+.input-search {
+  max-width: 250px;
 }
 </style>

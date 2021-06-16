@@ -26,4 +26,18 @@ class PropertyController extends Controller
     {
         return view('jpviews::properties.list');
     }
+    /**
+     * View create new resource.
+     */
+    public function create(): View
+    {
+        return view('jpviews::properties.create_or_edit');
+    }
+    /**
+     * View create new resource.
+     */
+    public function edit(Property $property): View
+    {
+        return view('jpviews::properties.create_or_edit', ["propertyId" => $property->id]);
+    }
 }

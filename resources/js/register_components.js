@@ -13,3 +13,8 @@ Vue.component("re-list-properties", () =>
     /* webpackChunkName: "js/list-properites" */ "@/views/properties/List.vue"
   ),
 );
+Vue.component("re-create-or-edit-properties", () =>
+  import(
+    /* webpackChunkName: "js/create-or-edit-properites" */ "@/views/properties/CreateOrEdit.vue"
+  ),
+);
