@@ -18,4 +18,17 @@ class TypeCollection extends ResourceCollection
             return new TypeResource($type);
         });
     }
+
+    public function with($request)
+    {
+        return [
+            'included' => new SubTypeCollection(
+                $this->collection->pluck('sub_types')
+                    ->flatten()
+                    ->unique()
+                    ->values()
+                    ->sortBy("name")
+            )
+        ];
+    }
 }

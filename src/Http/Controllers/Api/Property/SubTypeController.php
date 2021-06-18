@@ -19,7 +19,7 @@ class SubTypeController extends Controller
      */
     public function index()
     {
-        return new SubTypeCollection(SubType::all());
+        return new SubTypeCollection(SubType::orderBy("name", "asc")->get());
     }
 
     /**

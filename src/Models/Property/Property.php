@@ -56,8 +56,8 @@ class Property extends Model
     private function slugBasedInContext(): string
     {
         $generate = sprintf(
-            "%s %s em %s - %s %s %s %s %s",
-            $this->business->name,
+            "%s em %s - %s %s %s %s %s",
+            // $this->business->name,
             Str::title($this->sub_type->name),
             Str::title($this->address->neighborhood->name),
             Str::title($this->address->neighborhood->city->state->name),

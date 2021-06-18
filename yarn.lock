@@ -1014,6 +1014,13 @@
   dependencies:
     ckeditor5 "^28.0.0"
 
+"@ckeditor/ckeditor5-html-embed@^28.0.0":
+  version "28.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-html-embed/-/ckeditor5-html-embed-28.0.0.tgz#e5d948c182e8223fa940ee86fab9fa83d161dff5"
+  integrity sha512-MrSWZWyPnXUEIWuzxSbdvuZ8xdvndRzC43svWrtYgwcL8vka1v/ajk09NmrwBo5Ri8tbU01tJpUNdWWgPoOEBg==
+  dependencies:
+    ckeditor5 "^28.0.0"
+
 "@ckeditor/ckeditor5-image@^28.0.0":
   version "28.0.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-image/-/ckeditor5-image-28.0.0.tgz#d2ee1461b9f50b46e317f3709afcf44955379e3a"
@@ -6571,6 +6578,11 @@ vue-template-compiler@^2.6.13:
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"
+
+vue-the-mask@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/vue-the-mask/-/vue-the-mask-0.11.1.tgz#91ee01008354ae57bccc79bb61b65f32d971d9d5"
+  integrity sha512-UquSfnSWejD0zAfcD+3jJ1chUAkOAyoxya9Lxh9acCRtrlmGcAIvd0cQYraWqKenbuZJUdum+S174atv2AuEHQ==
 
 vue@^2.6.14:
   version "2.6.14"

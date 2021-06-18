@@ -19,7 +19,7 @@ class TypeController extends Controller
      */
     public function index()
     {
-        return new TypeCollection(Type::all());
+        return new TypeCollection(Type::orderBy("name", "asc")->get());
     }
 
     /**

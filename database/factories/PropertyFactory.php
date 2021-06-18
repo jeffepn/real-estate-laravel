@@ -14,9 +14,9 @@ use JPAddress\Models\Address\State;
 
 $factory->define(Property::class, function (Faker $faker) {
     return [
-        'business_id' => function () {
-            return factory(Business::class)->create();
-        },
+        // 'business_id' => function () {
+        //     return factory(Business::class)->create();
+        // },
         'address_id' => function () {
             return factory(Address::class)->create([
                 'cep' => '99999999',

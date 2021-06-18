@@ -55,7 +55,7 @@
                   </div>
                 </th>
                 <td v-text="formateAddress(property)"></td>
-                <td v-text="property.business.name"></td>
+                <td></td>
                 <td
                   v-text="`${property.type.name} - ${property.sub_type.name}`"
                 ></td>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import RePagination from "@/components/Controls/Pagination";
+import RePagination from "@/components/controls/Pagination";
 export default {
   components: { RePagination },
   data() {
@@ -105,9 +105,9 @@ export default {
 
       const result = this.originalProperties.filter(
         (item) =>
-          item.business.name.search(
-            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
-          ) !== -1 ||
+          //   item.business.name.search(
+          //     new RegExp(this.search.replaceAll(" ", ".*"), "i"),
+          //   ) !== -1 ||
           item.type.name.search(
             new RegExp(this.search.replaceAll(" ", ".*"), "i"),
           ) !== -1 ||
@@ -126,7 +126,7 @@ export default {
         let { id, attributes, relationships } = currentValue;
 
         let property = Object.assign({}, { id }, attributes);
-        property.business = this.extractBusiness(relationships);
+        // property.business = this.extractBusiness(relationships);
         property.sub_type = this.extractSubType(relationships);
         property.type = this.extractType(relationships);
         property.address = this.extractAdress(relationships);

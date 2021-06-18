@@ -63,12 +63,12 @@ class PropertyResource extends JsonResource
                         'id' => $this->sub_type->id,
                     ]
                 ],
-                'business' => [
-                    'data' => [
-                        'type' => 'business',
-                        'id' => $this->business->id,
-                    ]
-                ],
+                // 'business' => [
+                //     'data' => [
+                //         'type' => 'business',
+                //         'id' => $this->business->id,
+                //     ]
+                // ],
                 'address' => [
                     'data' => [
                         'type' => 'address',
@@ -83,7 +83,7 @@ class PropertyResource extends JsonResource
         return [
             'included' => [
                 new SubTypeResource($this->sub_type),
-                new BusinessResource($this->business),
+                // new BusinessResource($this->business),
                 new AddressResource($this->address),
                 new NeighborhoodResource($this->address->neighborhood),
                 new CityResource($this->address->neighborhood->city),

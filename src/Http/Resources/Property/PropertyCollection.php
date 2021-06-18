@@ -27,9 +27,9 @@ class PropertyCollection extends ResourceCollection
     public function with($request)
     {
         $includes = [];
-        $businesses = $this->collection->pluck('business')->unique()->values()->map(function ($business) {
-            return new BusinessResource($business);
-        })->toArray();
+        // $businesses = $this->collection->pluck('business')->unique()->values()->map(function ($business) {
+        //     return new BusinessResource($business);
+        // })->toArray();
         $types = $this->collection->pluck('sub_type.type')->unique()->values()->map(function ($type) {
             return new TypeResource($type);
         })->toArray();
@@ -48,7 +48,7 @@ class PropertyCollection extends ResourceCollection
         $states = $this->collection->pluck('address.neighborhood.city.state')->unique()->values()->map(function ($state) {
             return new StateResource($state);
         })->toArray();
-        $includes = array_merge($includes, $businesses);
+        // $includes = array_merge($includes, $businesses);
         $includes = array_merge($includes, $types);
         $includes = array_merge($includes, $subTypes);
         $includes = array_merge($includes, $addresses);

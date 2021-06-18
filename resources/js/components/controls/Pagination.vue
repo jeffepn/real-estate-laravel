@@ -91,7 +91,11 @@ export default {
       return Math.ceil(this.total / this.selectPerPage);
     },
     minFromPage() {
-      return (this.page - 1) * this.selectPerPage + 1;
+      const result = (this.page - 1) * this.selectPerPage + 1;
+      if (this.total < 1) {
+        return 0;
+      }
+      return result;
     },
     maxFromPage() {
       const result = this.page * this.selectPerPage;

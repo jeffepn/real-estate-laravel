@@ -14,67 +14,75 @@
           </a>
         </div>
       </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-6 col-md-3 mb-2">
-            <div class="form-floating">
-              <select
-                class="form-select"
-                id="floatingSelect"
-                aria-label="Floating label select example"
-              >
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-              <label for="floatingSelect">Tipo</label>
+      <div class="card-body px-0">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="border-start-0 nav-link active"
+              id="data-tab"
+              data-bs-target="#data"
+              type="button"
+              role="tab"
+              aria-controls="data"
+              aria-selected="true"
+            >
+              Dados
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link "
+              id="details-tab"
+              data-bs-target="#details"
+              type="button"
+              role="tab"
+              aria-controls="details"
+              aria-selected="false"
+            >
+              Detalhes
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active px-2" id="data" role="tabpanel">
+            <div class="row mt-2">
+              <div class="col-sm-6 col-md-auto mb-2">
+                <div class="form-floating">
+                  <select
+                    class="form-select"
+                    id="floatingSelectType"
+                    v-model="type_id"
+                  >
+                    <option
+                      v-for="type in types"
+                      :key="type.id"
+                      :value="type.id"
+                      v-text="type.label"
+                    ></option>
+                  </select>
+                  <label for="floatingSelectType">Tipo</label>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-auto mb-2">
+                <div class="form-floating">
+                  <select
+                    class="form-select"
+                    id="floatingSelectSubType"
+                    v-model="form.sub_type_id"
+                  >
+                    <option
+                      v-for="subType in subTypes"
+                      :key="subType.id"
+                      :value="subType.id"
+                      v-text="subType.label"
+                    ></option>
+                  </select>
+                  <label for="floatingSelectSubType">Sub Tipo</label>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col-6 col-md-3 mb-2">
-            <div class="form-floating">
-              <select
-                class="form-select"
-                id="floatingSelect"
-                aria-label="Floating label select example"
-              >
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-              <label for="floatingSelect">Sub Tipo</label>
-            </div>
-          </div>
-          <div class="col-6 col-md-3 mb-2">
-            <div class="form-floating">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputBuildingArea"
-                v-model="form.building_area"
-              />
-              <label for="floatingInputBuildingArea">Área construída</label>
-            </div>
-          </div>
-          <div class="col-6 col-md-3 mb-2">
-            <div class="form-floating">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputTotalArea"
-                v-model="form.total_area"
-              />
-              <label for="floatingInputTotalArea">Área total</label>
-            </div>
-          </div>
-        </div>
-        <div class="card mt-3">
-          <div class="card-body">
-            <h6>Negócio</h6>
-            <div class="row ">
+            <h6 class="mt-2">Negócio</h6>
+            <div class="row">
               <div class="col-md-12 mb-2">
                 <div class="form-check form-check-inline">
                   <input
@@ -99,157 +107,229 @@
                   >
                 </div>
               </div>
-              <div class="col-sm-6 col-md-auto" v-show="form.rent">
-                <div class="form-floating mb-3">
-                  <money
-                    class="form-control"
-                    v-model="form.price_rent"
-                    v-bind="money"
-                    id="floatingPriceRent"
-                  ></money>
-                  <label for="floatingPriceRent">Preço de aluguel</label>
+              <div class="row collapse" :class="{ show: showPrices }">
+                <div class="col-sm-6 col-md-auto" v-show="form.rent">
+                  <div class="form-floating mb-3">
+                    <input
+                      class="form-control"
+                      v-model="form.price_rent"
+                      type="tel"
+                      v-money="money"
+                      id="floatingPriceRent"
+                    />
+                    <label for="floatingPriceRent">Preço de aluguel</label>
+                  </div>
                 </div>
-              </div>
-              <div class="col-sm-6 col-md-auto" v-show="form.sale">
-                <div class="form-floating mb-3">
-                  <money
-                    class="form-control"
-                    v-model="form.price_sale"
-                    v-bind="money"
-                    id="floatingPriceSale"
-                  ></money>
-                  <label for="floatingPriceSale">Preço de venda</label>
+                <div class="col-sm-6 col-md-auto" v-show="form.sale">
+                  <div class="form-floating mb-3">
+                    <input
+                      class="form-control"
+                      v-model="form.price_sale"
+                      type="tel"
+                      v-money="money"
+                      id="floatingPriceSale"
+                    />
+                    <label for="floatingPriceSale">Preço de venda</label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+            <h6 class="mt-2">Endereço</h6>
+            <re-address :form="formCreateEdit"></re-address>
 
-        <div class="row mt-3 flex-wrap">
-          <div class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2  row">
-            <p class="col-12">Dormitórios</p>
-            <div class="form-floating col-5 pe-1">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputMinDormitory"
-                v-model="form.min_dormitory"
-              />
-              <label for="floatingInputMinDormitory">Min.</label>
-            </div>
-            <div class="col-auto px-0 d-flex align-items-center">
-              <i class="fas fa-arrows-alt-h"></i>
-            </div>
-            <div class="form-floating col-5 ps-1">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputMaxDormitory"
-                v-model="form.max_dormitory"
-              />
-              <label for="floatingInputMaxDormitory">Max</label>
+            <div class="mb-2 col-12 text-end">
+              <button class="btn btn-primary" @click="next">
+                Próximo <span aria-hidden="true">&raquo;</span>
+              </button>
             </div>
           </div>
-          <div class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2  row">
-            <p class="col-12">Suítes</p>
-            <div class="form-floating col-5 pe-1">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputMinSuite"
-                v-model="form.min_suite"
-              />
-              <label for="floatingInputMinSuite">Min.</label>
+          <div class="tab-pane fade px-2" id="details" role="tabpanel">
+            <div class="row mt-2 ">
+              <div class="col-sm-6 col-md-3 mb-2">
+                <div class="form-floating">
+                  <input
+                    type="tel"
+                    v-money="decimal"
+                    class="form-control"
+                    id="floatingInputBuildingArea"
+                    v-model="form.building_area"
+                  />
+                  <label for="floatingInputBuildingArea">Área construída</label>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3 mb-2">
+                <div class="form-floating">
+                  <input
+                    type="tel"
+                    v-money="decimal"
+                    class="form-control"
+                    id="floatingInputTotalArea"
+                    v-model="form.total_area"
+                  />
+                  <label for="floatingInputTotalArea">Área total</label>
+                </div>
+              </div>
             </div>
-            <div class="col-auto px-0 d-flex align-items-center">
-              <i class="fas fa-arrows-alt-h"></i>
+
+            <div class="row mt-3 flex-wrap">
+              <div
+                class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex flex-column"
+              >
+                <div class="col-12">Dormitórios</div>
+                <div class="d-flex mt-2">
+                  <div class="form-floating col-5 pe-1">
+                    <input
+                      type="tel"
+                      v-money="integer"
+                      class="form-control"
+                      step="1"
+                      id="floatingInputMinDormitory"
+                      v-model="form.min_dormitory"
+                    />
+                    <label for="floatingInputMinDormitory">Min.</label>
+                  </div>
+                  <div class="col-auto px-0 d-flex align-items-center">
+                    <i class="fas fa-arrows-alt-h"></i>
+                  </div>
+                  <div class="form-floating col-5 ps-1">
+                    <input
+                      type="tel"
+                      v-money="integer"
+                      class="form-control"
+                      step="1"
+                      id="floatingInputMaxDormitory"
+                      v-model="form.max_dormitory"
+                    />
+                    <label for="floatingInputMaxDormitory">Max</label>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2  d-flex flex-column"
+              >
+                <div class="col-12">Suítes</div>
+
+                <div class="d-flex mt-2">
+                  <div class="form-floating col-5 pe-1">
+                    <input
+                      type="tel"
+                      v-money="integer"
+                      class="form-control"
+                      step="1"
+                      id="floatingInputMinSuite"
+                      v-model="form.min_suite"
+                    />
+                    <label for="floatingInputMinSuite">Min.</label>
+                  </div>
+                  <div class="col-auto px-0 d-flex align-items-center">
+                    <i class="fas fa-arrows-alt-h"></i>
+                  </div>
+                  <div class="form-floating col-5 ps-1">
+                    <input
+                      type="tel"
+                      v-money="integer"
+                      class="form-control"
+                      step="1"
+                      id="floatingInputMaxSuite"
+                      v-model="form.max_suite"
+                    />
+                    <label for="floatingInputMaxSuite">Max</label>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex flex-column"
+              >
+                <div class="col-12">Banheiros</div>
+
+                <div class="d-flex mt-2">
+                  <div class="form-floating col-5 pe-1">
+                    <input
+                      type="tel"
+                      v-money="integer"
+                      class="form-control"
+                      step="1"
+                      id="floatingInputMinBathroom"
+                      v-model="form.min_bathroom"
+                    />
+                    <label for="floatingInputMinBathroom">Min.</label>
+                  </div>
+                  <div class="col-auto px-0 d-flex align-items-center">
+                    <i class="fas fa-arrows-alt-h"></i>
+                  </div>
+                  <div class="form-floating col-5 ps-1">
+                    <input
+                      type="tel"
+                      v-money="integer"
+                      class="form-control"
+                      step="1"
+                      id="floatingInputMaxBathroom"
+                      v-model="form.max_bathroom"
+                    />
+                    <label for="floatingInputMaxBathroom">Max</label>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2  d-flex flex-column"
+              >
+                <div class="col-12">Garagens</div>
+                <div class="d-flex mt-2">
+                  <div class="form-floating col-5 pe-1">
+                    <input
+                      type="tel"
+                      v-money="integer"
+                      class="form-control"
+                      step="1"
+                      id="floatingInputMinGarage"
+                      v-model="form.min_garage"
+                    />
+                    <label for="floatingInputMinGarage">Min.</label>
+                  </div>
+                  <div class="col-auto px-0 d-flex align-items-center">
+                    <i class="fas fa-arrows-alt-h"></i>
+                  </div>
+                  <div class="form-floating col-5 ps-1">
+                    <input
+                      type="tel"
+                      v-money="integer"
+                      class="form-control"
+                      step="1"
+                      id="floatingInputMaxGarage"
+                      v-model="form.max_garage"
+                    />
+                    <label for="floatingInputMaxGarage">Max</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-2 col-12">
+                <div class="form-floating">
+                  <textarea
+                    class="form-control"
+                    placeholder="Comece a escrever..."
+                    id="floatingTextareaMinDescription"
+                    style="height: 100px"
+                    v-model="form.min_description"
+                  ></textarea>
+                  <label for="floatingTextareaMinDescription">
+                    Descrição para SEO. (sinopse do imóvel)
+                  </label>
+                </div>
+              </div>
+              <div class="mb-2 col-12">
+                <ckeditor
+                  :editor="editor"
+                  v-model="form.content"
+                  :config="editorConfig"
+                ></ckeditor>
+              </div>
+              <div class="mb-2 col-12 d-flex justify-content-between">
+                <button class="btn btn-outline-secondary" @click="back">
+                  <span aria-hidden="true">&laquo;</span> Voltar
+                </button>
+                <button class="btn btn-primary" @click="submit">Salvar</button>
+              </div>
             </div>
-            <div class="form-floating col-5 ps-1">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputMaxSuite"
-                v-model="form.max_suite"
-              />
-              <label for="floatingInputMaxSuite">Max</label>
-            </div>
-          </div>
-          <div class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2  row">
-            <p class="col-12">Banheiros</p>
-            <div class="form-floating col-5 pe-1">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputMinBathroom"
-                v-model="form.min_bathroom"
-              />
-              <label for="floatingInputMinBathroom">Min.</label>
-            </div>
-            <div class="col-auto px-0 d-flex align-items-center">
-              <i class="fas fa-arrows-alt-h"></i>
-            </div>
-            <div class="form-floating col-5 ps-1">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputMaxBathroom"
-                v-model="form.max_bathroom"
-              />
-              <label for="floatingInputMaxBathroom">Max</label>
-            </div>
-          </div>
-          <div class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2  row">
-            <p class="col-12">Garagens</p>
-            <div class="form-floating col-5 pe-1">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputMinGarage"
-                v-model="form.min_garage"
-              />
-              <label for="floatingInputMinGarage">Min.</label>
-            </div>
-            <div class="col-auto px-0 d-flex align-items-center">
-              <i class="fas fa-arrows-alt-h"></i>
-            </div>
-            <div class="form-floating col-5 ps-1">
-              <input
-                type="number"
-                class="form-control"
-                step="1"
-                id="floatingInputMaxGarage"
-                v-model="form.max_garage"
-              />
-              <label for="floatingInputMaxGarage">Max</label>
-            </div>
-          </div>
-          <div class="mb-2 col-12">
-            <div class="form-floating">
-              <textarea
-                class="form-control"
-                placeholder="Comece a escrever..."
-                id="floatingTextareaMinDescription"
-                style="height: 100px"
-                v-model="form.min_description"
-              ></textarea>
-              <label for="floatingTextareaMinDescription">
-                Descrição para SEO. (sinopse do imóvel)
-              </label>
-            </div>
-          </div>
-          <div class="mb-2 col-12">
-            <ckeditor
-              :editor="editor"
-              v-model="form.content"
-              :config="editorConfig"
-            ></ckeditor>
           </div>
         </div>
       </div>
@@ -258,13 +338,17 @@
 </template>
 
 <script>
-import { Money } from "v-money";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import ReAddress from "@/components/forms/Address";
+import Form from "@/supports/form.js";
+import { VMoney } from "v-money";
+import { mask } from "vue-the-mask";
 export default {
+  directives: { mask, money: VMoney },
   components: {
-    Money,
     ckeditor: CKEditor.component,
+    ReAddress,
   },
   props: {
     id: {
@@ -276,7 +360,11 @@ export default {
     return {
       editor: ClassicEditor,
       editorConfig: {
-        // The configuration of the editor.
+        allowedContent: true,
+        removePlugins: ["CKFinder"],
+        toolbar: {
+          removeItems: "uploadImage|mediaEmbed",
+        },
       },
       money: {
         decimal: ",",
@@ -285,7 +373,23 @@ export default {
         precision: 2,
         masked: false,
       },
+      decimal: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "",
+        precision: 2,
+        masked: false,
+      },
+      integer: {
+        decimal: "",
+        thousands: ".",
+        prefix: "",
+        precision: 0,
+        masked: false,
+      },
+      formCreateEdit: new Form(),
       form: {
+        sub_type_id: null,
         sale: false,
         rent: false,
         price_sale: 0,
@@ -303,6 +407,9 @@ export default {
         total_area: 0,
         content: "<p>Content of the editor.</p>",
       },
+      originalTypes: [],
+      originalTypesIncluded: [],
+      type_id: null,
     };
   },
   watch: {
@@ -312,30 +419,79 @@ export default {
   },
   computed: {
     edit() {
-      console.log("Id =", this.id);
       return this.id !== null;
     },
     title() {
       return this.edit ? "Editar Imóvel" : "Novo Imóvel";
     },
+    showPrices() {
+      return this.form.rent || this.form.sale;
+    },
+    types() {
+      const types = this.originalTypes.reduce((acumulator, currentValue) => {
+        acumulator.push({
+          id: currentValue.id,
+          label: currentValue.attributes.name,
+        });
+        return acumulator;
+      }, []);
+      if (types.length > 0) {
+        this.type_id = types[0].id;
+      }
+      return types;
+    },
+    subTypes() {
+      const subTypes = this.originalTypesIncluded.reduce(
+        (acumulator, currentValue) => {
+          if (
+            currentValue.type === "sub_type" &&
+            currentValue.relationships.type.data.id === this.type_id
+          ) {
+            acumulator.push({
+              id: currentValue.id,
+              label: currentValue.attributes.name,
+            });
+          }
+          return acumulator;
+        },
+        [],
+      );
+      if (subTypes.length > 0) {
+        this.form.sub_type_id = subTypes[0].id;
+      }
+      return subTypes;
+    },
+  },
+  methods: {
+    getTypes() {
+      this.$axios
+        .get(this.$route("jp_realestate.type.index"))
+        .then((response) => {
+          console.log(response.data);
+          this.originalTypes = response.data.data;
+          this.originalTypesIncluded = response.data.included;
+        });
+    },
+    back() {
+      var someTabTriggerEl = document.querySelector("#data-tab");
+      var tab = new bootstrap.Tab(someTabTriggerEl);
+      tab.show();
+    },
+    next() {
+      var someTabTriggerEl = document.querySelector("#details-tab");
+      var tab = new bootstrap.Tab(someTabTriggerEl);
+      tab.show();
+    },
+    submit() {},
   },
   mounted() {
-    this.editor
-      .create(document.querySelector("#editor"), {
-        removePlugins: ["CKFinder"],
-        toolbar: [
-          "bold",
-          "italic",
-          "bulletedList",
-          "numberedList",
-          "blockQuote",
-        ],
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.getTypes();
   },
 };
 </script>
 
-<style></style>
+<style>
+select {
+  min-width: 200px;
+}
+</style>
