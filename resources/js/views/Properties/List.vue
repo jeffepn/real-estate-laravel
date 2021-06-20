@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import RePagination from "@/components/controls/Pagination";
+import RePagination from "@/components/Controls/Pagination";
 export default {
   components: { RePagination },
   data() {

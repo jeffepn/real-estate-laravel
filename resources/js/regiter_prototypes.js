@@ -1,5 +1,6 @@
 import Vue from "vue";
-Vue.prototype.$eventBus = new Vue();
+window.eventBus = new Vue();
+Vue.prototype.$eventBus = window.eventBus;
 
 import axios from "axios";
 Vue.prototype.$axios = axios;

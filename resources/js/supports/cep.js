@@ -36,7 +36,6 @@ export const getCep = async (cep) => {
     },
   })
     .then(({ data }) => {
-      console.log("ViaCep", data);
       if (!data.hasOwnProperty("erro")) {
         result.error = false;
         result.data = data;

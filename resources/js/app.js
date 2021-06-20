@@ -5,7 +5,14 @@ import "@/bootstrap";
 import "@/register_components";
 // Regiter prototypes
 import "@/regiter_prototypes";
+// Regiter globals
+import "@/register_globals";
 
 new Vue({
   el: "#app",
+  data() {
+    return {
+      toast: [],
+    };
+  },
 });

@@ -45,98 +45,9 @@
         </ul>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active px-2" id="data" role="tabpanel">
-            <div class="row mt-2">
-              <div class="col-sm-6 col-md-auto mb-2">
-                <div class="form-floating">
-                  <select
-                    class="form-select"
-                    id="floatingSelectType"
-                    v-model="type_id"
-                  >
-                    <option
-                      v-for="type in types"
-                      :key="type.id"
-                      :value="type.id"
-                      v-text="type.label"
-                    ></option>
-                  </select>
-                  <label for="floatingSelectType">Tipo</label>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-auto mb-2">
-                <div class="form-floating">
-                  <select
-                    class="form-select"
-                    id="floatingSelectSubType"
-                    v-model="form.sub_type_id"
-                  >
-                    <option
-                      v-for="subType in subTypes"
-                      :key="subType.id"
-                      :value="subType.id"
-                      v-text="subType.label"
-                    ></option>
-                  </select>
-                  <label for="floatingSelectSubType">Sub Tipo</label>
-                </div>
-              </div>
-            </div>
-            <h6 class="mt-2">Negócio</h6>
-            <div class="row">
-              <div class="col-md-12 mb-2">
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="inlineCheckboxRent"
-                    v-model="form.rent"
-                  />
-                  <label class="form-check-label" for="inlineCheckboxRent"
-                    >Aluguel</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="inlineCheckboxSale"
-                    v-model="form.sale"
-                  />
-                  <label class="form-check-label" for="inlineCheckboxSale"
-                    >Venda</label
-                  >
-                </div>
-              </div>
-              <div class="row collapse" :class="{ show: showPrices }">
-                <div class="col-sm-6 col-md-auto" v-show="form.rent">
-                  <div class="form-floating mb-3">
-                    <input
-                      class="form-control"
-                      v-model="form.price_rent"
-                      type="tel"
-                      v-money="money"
-                      id="floatingPriceRent"
-                    />
-                    <label for="floatingPriceRent">Preço de aluguel</label>
-                  </div>
-                </div>
-                <div class="col-sm-6 col-md-auto" v-show="form.sale">
-                  <div class="form-floating mb-3">
-                    <input
-                      class="form-control"
-                      v-model="form.price_sale"
-                      type="tel"
-                      v-money="money"
-                      id="floatingPriceSale"
-                    />
-                    <label for="floatingPriceSale">Preço de venda</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <h6 class="mt-2">Endereço</h6>
-            <re-address :form="formCreateEdit"></re-address>
-
+            <re-form-data-property
+              :form="formCreateEdit"
+            ></re-form-data-property>
             <div class="mb-2 col-12 text-end">
               <button class="btn btn-primary" @click="next">
                 Próximo <span aria-hidden="true">&raquo;</span>
@@ -340,15 +251,15 @@
 <script>
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import ReAddress from "@/components/forms/Address";
 import Form from "@/supports/form.js";
 import { VMoney } from "v-money";
 import { mask } from "vue-the-mask";
+import ReFormDataProperty from "@/components/Forms/DataProperty.vue";
 export default {
   directives: { mask, money: VMoney },
   components: {
     ckeditor: CKEditor.component,
-    ReAddress,
+    ReFormDataProperty,
   },
   props: {
     id: {
@@ -366,13 +277,7 @@ export default {
           removeItems: "uploadImage|mediaEmbed",
         },
       },
-      money: {
-        decimal: ",",
-        thousands: ".",
-        prefix: "R$ ",
-        precision: 2,
-        masked: false,
-      },
+
       decimal: {
         decimal: ",",
         thousands: ".",
@@ -413,9 +318,7 @@ export default {
     };
   },
   watch: {
-    "form.content"(newValue) {
-      console.log(newValue);
-    },
+    "form.content"(newValue) {},
   },
   computed: {
     edit() {
@@ -423,9 +326,6 @@ export default {
     },
     title() {
       return this.edit ? "Editar Imóvel" : "Novo Imóvel";
-    },
-    showPrices() {
-      return this.form.rent || this.form.sale;
     },
     types() {
       const types = this.originalTypes.reduce((acumulator, currentValue) => {
@@ -467,7 +367,6 @@ export default {
       this.$axios
         .get(this.$route("jp_realestate.type.index"))
         .then((response) => {
-          console.log(response.data);
           this.originalTypes = response.data.data;
           this.originalTypesIncluded = response.data.included;
         });

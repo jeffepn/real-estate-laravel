@@ -1,17 +1,32 @@
 export default class {
-  constructor() {
+  constructor(data = {}) {
+    this.data = data;
     this.errors = {};
   }
 
   clearErrors() {
     this.errors = {};
   }
-
-  hasError(field) {
-    if (this.errors.hasOwnProperty(field)) {
+  clearFields() {
+    let aux = Object.assign({}, this.data);
+    Object.keys(aux).forEach((key) => {
+      if (this.has(aux, key)) {
+        aux[key] = null;
+      }
+    });
+    this.data = aux;
+  }
+  has(currentObject, field) {
+    if (currentObject.hasOwnProperty(field)) {
       return true;
     }
     return false;
+  }
+  hasError(field) {
+    return this.has(this.errors, field);
+  }
+  hasField(field) {
+    return this.has(this.data, field);
   }
 
   setError(field, message) {
@@ -23,6 +38,11 @@ export default class {
   clearError(field) {
     let aux = Object.assign({}, this.errors);
     delete aux[field];
+    this.errors = aux;
+  }
+  clearField(field) {
+    let aux = Object.assign({}, this.data);
+    aux[field] = null;
     this.errors = aux;
   }
 

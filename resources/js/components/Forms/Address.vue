@@ -76,7 +76,7 @@
           id="floatingInputNeighborhood"
           v-model="formData.neighborhood"
         />
-        <label for="floatingInputNeighborhood">Bairro</label>
+        <label for="floatingInputNeighborhood">Bairro*</label>
       </div>
     </div>
     <div class="col-sm-6 mb-2">
@@ -87,7 +87,7 @@
           id="floatingInputCity"
           v-model="formData.city"
         />
-        <label for="floatingInputCity">Cidade</label>
+        <label for="floatingInputCity">Cidade*</label>
       </div>
     </div>
     <div class="col-sm-6 mb-2">
@@ -98,7 +98,7 @@
           id="floatingInputState"
           v-model="formData.state"
         />
-        <label for="floatingInputState">Estado</label>
+        <label for="floatingInputState">Estado*</label>
       </div>
     </div>
   </div>
@@ -142,16 +142,13 @@ export default {
       if (result.error) {
         return this.form.setError("cep", result.message);
       }
-      console.log(result);
       this.formData.address = result.data.logradouro;
       this.formData.neighborhood = result.data.bairro;
       this.formData.city = result.data.localidade;
       this.formData.state = result.data.uf;
     },
   },
-  mounted() {
-    console.log(this.form);
-  },
+  mounted() {},
 };
 </script>
 

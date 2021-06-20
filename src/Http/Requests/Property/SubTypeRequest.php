@@ -31,6 +31,8 @@ class SubTypeRequest extends FormRequest
             'max' => 'Limite o campo a no máximo :max caracteres.',
             'name.required' => "É necessário fornecer um nome para o subtipo.",
             'name.unique' => "Já existe um subtipo com esse nome.",
+            'type_id.required' => "É necessário fornecer um tipo para o subtipo.",
+            'type_id.uuid' => "É necessário fornecer um tipo para o subtipo.",
         ];
     }
 

@@ -1,5 +1,7 @@
-export const message = (message, error = false) => {
-  console.log(message);
+export const message = (data) => {
+  window.eventBus.$emit("add-toast-master", {
+    data,
+  });
 };
 
 export default {
