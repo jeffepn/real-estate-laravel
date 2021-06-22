@@ -4,6 +4,7 @@ namespace Jeffpereira\RealEstate\Models\Property;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Traits\SetSlug;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
@@ -24,9 +25,13 @@ class Property extends Model
     }
 
     // Relationships
-    public function business(): BelongsTo
+    public function businesses(): BelongsToMany
     {
-        return $this->belongsTo(Business::class);
+        return $this->belongsToMany('Jeffpereira\RealEstate\Models\Property\Business')
+            ->using('Jeffpereira\RealEstate\Models\Property\BusinessProperty')
+            ->withPivot([
+                'value',
+            ]);
     }
 
     public function sub_type(): BelongsTo

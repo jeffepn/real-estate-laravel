@@ -38,7 +38,7 @@ class PropertyTest extends TestCase
         $business = factory(Business::class)->create();
         $subType = factory(SubType::class)->create();
         $property = Property::create([
-            'sub_type_id' => $subType->id, 'business_id' => $business->id,
+            'sub_type_id' => $subType->id,
             'address_id' => $address->id, 'min_description' => "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni necessitatibus non architecto adipisci quidem",
             'max_dormitory' => 3, 'max_bathroom' => 2, 'max_suite' => 1, 'max_garage' => 2
         ]);
@@ -46,8 +46,7 @@ class PropertyTest extends TestCase
             Str::slug(
                 Str::limit(
                     sprintf(
-                        "%s %s em %s - %s %s %s %s %s",
-                        $property->business->name,
+                        "%s em %s - %s %s %s %s %s",
                         Str::title($property->sub_type->name),
                         Str::title($property->address->neighborhood->name),
                         Str::title($property->address->neighborhood->city->state->name),

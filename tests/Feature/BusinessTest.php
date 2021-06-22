@@ -92,16 +92,16 @@ class BusinessTest extends TestCase
     /**
      * @test
      */
-    public function dont_destroy_business_with_one_or_more_properties()
-    {
-        $business = factory(Business::class)->create();
-        $this->assertNotNull(Business::first());
-        $business->properties()->save(factory(Property::class)->make());
-        $response = $this->deleteJson("$this->api/$business->id");
-        $response->assertStatus(400);
-        $this->assertNotNull(Business::first());
-        $this->assertEquals(Terminologies::get('all.business.not_delete_with_relations'), $response->json()['message']);
-    }
+    // public function dont_destroy_business_with_one_or_more_properties()
+    // {
+    //     $business = factory(Business::class)->create();
+    //     $this->assertNotNull(Business::first());
+    //     $business->properties()->save(factory(Property::class)->make());
+    //     $response = $this->deleteJson("$this->api/$business->id");
+    //     $response->assertStatus(400);
+    //     $this->assertNotNull(Business::first());
+    //     $this->assertEquals(Terminologies::get('all.business.not_delete_with_relations'), $response->json()['message']);
+    // }
 
     /**
      * @test

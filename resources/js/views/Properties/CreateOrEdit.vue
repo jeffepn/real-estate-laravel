@@ -2,7 +2,13 @@
   <div class="container">
     <div class="card my-5">
       <div
-        class="card-header d-flex flex-wrap justify-content-between align-items-center"
+        class="
+          card-header
+          d-flex
+          flex-wrap
+          justify-content-between
+          align-items-center
+        "
       >
         <h2 v-text="title"></h2>
         <div class="d-flex flex-wrap">
@@ -31,7 +37,7 @@
           </li>
           <li class="nav-item" role="presentation">
             <button
-              class="nav-link "
+              class="nav-link"
               id="details-tab"
               data-bs-target="#details"
               type="button"
@@ -45,9 +51,7 @@
         </ul>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active px-2" id="data" role="tabpanel">
-            <re-form-data-property
-              :form="formCreateEdit"
-            ></re-form-data-property>
+            <re-form-data-property :form="form"></re-form-data-property>
             <div class="mb-2 col-12 text-end">
               <button class="btn btn-primary" @click="next">
                 Próximo <span aria-hidden="true">&raquo;</span>
@@ -55,7 +59,54 @@
             </div>
           </div>
           <div class="tab-pane fade px-2" id="details" role="tabpanel">
-            <div class="row mt-2 ">
+            <div class="col-12 mt-2">
+              <h6>Negócio*</h6>
+            </div>
+            <div class="col-md-12 mb-2">
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="inlineCheckboxRent"
+                  v-model="form.data.rent"
+                />
+                <label class="form-check-label" for="inlineCheckboxRent"
+                  >Aluguel</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="inlineCheckboxSale"
+                  v-model="form.data.sale"
+                />
+                <label class="form-check-label" for="inlineCheckboxSale"
+                  >Venda</label
+                >
+              </div>
+            </div>
+            <div class="row collapse" :class="{ show: showPrices }">
+              <div class="col-sm-6 col-md-auto" v-show="form.data.rent">
+                <re-input
+                  type="number"
+                  placeholder="Preço de aluguel"
+                  prefix="R$ "
+                  :masked="false"
+                  v-model="form.data.price_rent"
+                ></re-input>
+              </div>
+              <div class="col-sm-6 col-md-auto" v-show="form.data.sale">
+                <re-input
+                  type="number"
+                  placeholder="Preço de venda"
+                  prefix="R$ "
+                  :masked="false"
+                  v-model="form.data.price_sale"
+                ></re-input>
+              </div>
+            </div>
+            <div class="row mt-2">
               <div class="col-sm-6 col-md-3 mb-2">
                 <div class="form-floating">
                   <input
@@ -84,7 +135,12 @@
 
             <div class="row mt-3 flex-wrap">
               <div
-                class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex flex-column"
+                class="
+                  mb-2
+                  col-sm-6 col-md-4 col-lg-3 col-xl-2
+                  d-flex
+                  flex-column
+                "
               >
                 <div class="col-12">Dormitórios</div>
                 <div class="d-flex mt-2">
@@ -116,7 +172,12 @@
                 </div>
               </div>
               <div
-                class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2  d-flex flex-column"
+                class="
+                  mb-2
+                  col-sm-6 col-md-4 col-lg-3 col-xl-2
+                  d-flex
+                  flex-column
+                "
               >
                 <div class="col-12">Suítes</div>
 
@@ -149,7 +210,12 @@
                 </div>
               </div>
               <div
-                class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex flex-column"
+                class="
+                  mb-2
+                  col-sm-6 col-md-4 col-lg-3 col-xl-2
+                  d-flex
+                  flex-column
+                "
               >
                 <div class="col-12">Banheiros</div>
 
@@ -182,7 +248,12 @@
                 </div>
               </div>
               <div
-                class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2  d-flex flex-column"
+                class="
+                  mb-2
+                  col-sm-6 col-md-4 col-lg-3 col-xl-2
+                  d-flex
+                  flex-column
+                "
               >
                 <div class="col-12">Garagens</div>
                 <div class="d-flex mt-2">
@@ -255,11 +326,16 @@ import Form from "@/supports/form.js";
 import { VMoney } from "v-money";
 import { mask } from "vue-the-mask";
 import ReFormDataProperty from "@/components/Forms/DataProperty.vue";
+import ReInput from "@/components/Controls/Inputs/Input";
 export default {
-  directives: { mask, money: VMoney },
+  directives: {
+    mask,
+    money: VMoney,
+  },
   components: {
     ckeditor: CKEditor.component,
     ReFormDataProperty,
+    ReInput,
   },
   props: {
     id: {
@@ -292,8 +368,26 @@ export default {
         precision: 0,
         masked: false,
       },
-      formCreateEdit: new Form(),
-      form: {
+      form: new Form({
+        sub_type_id: null,
+        sale: false,
+        rent: false,
+        price_sale: 0,
+        price_rent: 0,
+        min_dormitory: 0,
+        max_dormitory: 0,
+        min_suite: 0,
+        max_suite: 0,
+        min_bathroom: 0,
+        max_bathroom: 0,
+        min_garage: 0,
+        max_garage: 0,
+        min_description: "",
+        building_area: 0,
+        total_area: 0,
+        content: "<p>Content of the editor.</p>",
+      }),
+      form2: {
         sub_type_id: null,
         sale: false,
         rent: false,
@@ -319,8 +413,14 @@ export default {
   },
   watch: {
     "form.content"(newValue) {},
+    "form.data.sub_type_id"(newValue) {
+      console.log("Form master = ", newValue);
+    },
   },
   computed: {
+    showPrices() {
+      return this.form.data.rent || this.form.data.sale;
+    },
     edit() {
       return this.id !== null;
     },
@@ -377,9 +477,20 @@ export default {
       tab.show();
     },
     next() {
-      var someTabTriggerEl = document.querySelector("#details-tab");
-      var tab = new bootstrap.Tab(someTabTriggerEl);
-      tab.show();
+      console.log(this.form.data);
+      this.$axios
+        .post(this.$route("jp_realestate.property.store"), this.form.data)
+        .catch((error) => {
+          const { response } = error;
+          if (response && response.status === 422) {
+            return (this.form.errors = response.data.errors);
+          }
+          this.$toast({ type: "danger", message: response.data.message });
+          console.log("Response property = ", response);
+        });
+      //   var someTabTriggerEl = document.querySelector("#details-tab");
+      //   var tab = new bootstrap.Tab(someTabTriggerEl);
+      //   tab.show();
     },
     submit() {},
   },

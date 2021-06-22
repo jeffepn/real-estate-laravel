@@ -69,6 +69,12 @@
       </div>
     </div>
     <div class="col-sm-6 mb-2">
+      <re-input
+        v-model="form.data.neighborhood"
+        placeholder="Bairro"
+        :error="form.hasError('neighborhood')"
+        :error-message="form.firstError('neighborhood')"
+      ></re-input>
       <div class="form-floating">
         <input
           type="text"
@@ -107,8 +113,12 @@
 <script>
 import { getCep } from "@/supports/cep.js";
 import { mask } from "vue-the-mask";
+import ReInput from "@/components/Controls/Inputs/Input";
 export default {
   directives: { mask },
+  components: {
+    ReInput,
+  },
   props: {
     form: {
       type: Object,

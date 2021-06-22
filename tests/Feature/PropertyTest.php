@@ -29,7 +29,6 @@ class PropertyTest extends TestCase
     {
         $subType = factory(Type::class)->create()->sub_types()->save(factory(SubType::class)->make());
         factory(Property::class, 20)->create([
-            'business_id' => factory(Business::class)->create()->id,
             'sub_type_id' => $subType->id,
             'address_id' => $this->createAddress()->id,
             'max_dormitory' => function () {
@@ -47,7 +46,7 @@ class PropertyTest extends TestCase
                         'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
                         'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
                     ],
-                    'relationships' => ['sub_type', 'address', 'business'],
+                    'relationships' => ['sub_type', 'address'],
                 ]
             ],
             'included'
@@ -70,7 +69,7 @@ class PropertyTest extends TestCase
                     'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
                     'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
                 ],
-                'relationships' => ['sub_type', 'address', 'business'],
+                'relationships' => ['sub_type', 'address'],
             ],
             'included'
         ], $response->json());
@@ -96,7 +95,6 @@ class PropertyTest extends TestCase
                 'max_garage' => $property->max_garage,
             ],
             'relationships' => [
-                'business' => ['data' => ['type' => 'business', 'id' => $property->business_id]],
                 'sub_type' => ['data' => ['type' => 'sub_type', 'id' => $property->sub_type_id]],
                 'address' => ['data' => ['type' => 'address', 'id' => $property->address_id]],
             ]
@@ -113,7 +111,6 @@ class PropertyTest extends TestCase
         $response = $this->postJson(
             $this->api,
             [
-                'business_id' => $business->id,
                 'sub_type_id' => $subType->id,
                 'min_description' =>
                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
@@ -150,7 +147,7 @@ class PropertyTest extends TestCase
                     'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
                 ],
                 'relationships' => [
-                    'address', 'business', 'sub_type'
+                    'address', 'sub_type'
                 ]
             ],
             'included', 'error', 'message'
@@ -167,7 +164,6 @@ class PropertyTest extends TestCase
             ],
             'relationships' => [
                 'address' => ['data' => ['type' => 'address', 'id' => $property->address_id]],
-                'business' => ['data' => ['type' => 'business', 'id' => $property->business_id]],
                 'sub_type' => ['data' => ['type' => 'sub_type', 'id' => $property->sub_type_id]],
             ]
         ], $response->json()['data']);
@@ -193,7 +189,6 @@ class PropertyTest extends TestCase
         $subType = factory(SubType::class)->create();
         $address = $this->createAddress();
         $property = Property::create([
-            'business_id' => $business->id,
             'sub_type_id' => $subType->id,
             'address_id' => $address->id,
             'min_description' =>
@@ -233,7 +228,6 @@ class PropertyTest extends TestCase
             'id' => $property->id,
             'slug' => $property->slug,
             'code' => $property->code,
-            'business_id' => $property->business_id,
             'address_id' => $property->address_id,
             'sub_type_id' => $property->sub_type_id,
             'min_description' => "min description edit",
@@ -247,6 +241,7 @@ class PropertyTest extends TestCase
             'max_bathroom' => 7,
             'min_garage' => 5,
             'max_garage' => 9,
+            "active" => 0
         ], $data);
     }
 
@@ -272,7 +267,12 @@ class PropertyTest extends TestCase
         $subType = factory(SubType::class)->create(['name' => 'teste', 'type_id' => $type->id]);
         $data = [
             'slug' => 'test-slug',
-            'business_id' => $business->id,
+            'businesses' => [
+                [
+                    "id" => $business->id,
+                    "value" => 1000.00
+                ]
+            ],
             'sub_type_id' => $subType->id,
             'min_description' =>  Str::random(200),
             'content' => 'test content', 'items' => 'test items',
@@ -292,11 +292,10 @@ class PropertyTest extends TestCase
             "country" => "Brasil"
         ];
         $response = $this->postJson($this->api, $data);
+        // dd($response->json());
         $response->assertStatus(Response::HTTP_CREATED);
         $data['slug'] = 'test-slug-2';
         $array_validation = [
-            ['key' => 'business_id', 'value' => null],
-            ['key' => 'business_id', 'value' => 'kkk'],
             ['key' => 'sub_type_id', 'value' => null],
             ['key' => 'sub_type_id', 'value' => 'kkkk'],
             ['key' => 'min_description', 'value' => null],
@@ -341,8 +340,6 @@ class PropertyTest extends TestCase
             ['key' => 'city', 'value' => ''],
             ['key' => 'city', 'value' => 'f'],
             ['key' => 'city', 'value' => Str::random(101)],
-            ['key' => 'state', 'value' => null],
-            ['key' => 'state', 'value' => ''],
             ['key' => 'state', 'value' => 'f'],
             ['key' => 'state', 'value' => Str::random(101)],
             ['key' => 'initials', 'value' => null],

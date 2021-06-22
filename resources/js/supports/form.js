@@ -3,6 +3,14 @@ export default class {
     this.data = data;
     this.errors = {};
   }
+  // Fields
+
+  get(field){
+    if (this.data.hasOwnProperty(field)) {
+        return this.data[field];
+    }
+    return null;
+  }
 
   clearErrors() {
     this.errors = {};

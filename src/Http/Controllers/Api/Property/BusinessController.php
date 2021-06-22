@@ -79,9 +79,9 @@ class BusinessController extends Controller
     public function destroy(Business $business)
     {
         try {
-            if ($business->properties->count() > 0) {
-                return response(['error' => true, 'message' => Terminologies::get('all.business.not_delete_with_relations')], 400);
-            }
+            // if ($business->properties->count() > 0) {
+            //     return response(['error' => true, 'message' => Terminologies::get('all.business.not_delete_with_relations')], 400);
+            // }
             if ($business->delete()) {
                 return response()->noContent(200);
             }

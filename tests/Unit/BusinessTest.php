@@ -45,12 +45,12 @@ class BusinessTest extends TestCase
     /**
      * @test
      */
-    public function a_business_can_have_one_or_more_properties()
-    {
-        $business = factory(Business::class)->create();
-        $business->properties()->save(factory(Property::class)->make());
-        $this->assertEquals(1, $business->properties->count());
-        $business->properties()->saveMany(factory(Property::class, 20)->make());
-        $this->assertEquals(21, $business->refresh()->properties->count());
-    }
+    // public function a_business_can_have_one_or_more_properties()
+    // {
+    //     $business = factory(Business::class)->create();
+    //     $business->properties()->save(factory(Property::class)->make());
+    //     $this->assertEquals(1, $business->properties->count());
+    //     $business->properties()->saveMany(factory(Property::class, 20)->make());
+    //     $this->assertEquals(21, $business->refresh()->properties->count());
+    // }
 }

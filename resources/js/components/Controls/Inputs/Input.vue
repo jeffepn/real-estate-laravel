@@ -1,14 +1,13 @@
 <template>
   <div class="form-floating">
-    <input
+    <money
       v-if="isNumber"
-      class="form-control"
-      @input="handleInput"
-      :value="value"
-      type="tel"
-      v-money="optionsNumber"
       :id="idInput"
-    />
+      class="form-control"
+      @input="handleInputMoney"
+      :value="value"
+      v-bind="optionsNumber"
+    ></money>
     <input
       v-else
       class="form-control"
@@ -25,9 +24,15 @@
 </template>
 
 <script>
+import { Money } from "v-money";
 import { VMoney } from "v-money";
 export default {
-  directives: { money: VMoney },
+  components: {
+    Money,
+  },
+  directives: {
+    money: VMoney,
+  },
   props: {
     id: {
       type: String,
@@ -107,7 +112,11 @@ export default {
   },
   methods: {
     handleInput(e) {
+      console.log("Event ", e);
       this.$emit("input", e.target.value);
+    },
+    handleInputMoney(value) {
+      this.$emit("input", value);
     },
   },
 };

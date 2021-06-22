@@ -17,10 +17,6 @@ class CreatePropertiesTable extends Migration
         Schema::create('properties', function (Blueprint $table) {
             $table->engine = "InnoDB";
             $table->uuid('id')->primary();
-            /*$table->string('business_id', 36);
-            $table->foreign('business_id')
-                ->references('id')
-                ->on('businesses');*/
             $table->string('address_id', 36);
             $table->foreign('address_id')
                 ->references('id')
@@ -44,6 +40,7 @@ class CreatePropertiesTable extends Migration
             $table->integer('max_suite')->nullable();
             $table->integer('min_garage')->nullable();
             $table->integer('max_garage')->nullable();
+            $table->boolean("active")->default(false);
             $table->timestamps();
         });
     }

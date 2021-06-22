@@ -21,7 +21,9 @@ class PropertyRequest extends FormRequest
         $rulesItems = "{$sometimes}bail|nullable|integer|min:0";
         $rules = [
             "slug" => ["sometimes", "bail", "slug", "min:3", "max:150", Rule::unique('properties')->ignore($this->property)],
-            "business_id" => "{$sometimes}bail|required|uuid",
+            "businesses" => "sometimes|required",
+            "businesses.*.id" => "{$sometimes}bail|required|uuid",
+            "businesses.*.value" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
             "sub_type_id" => "{$sometimes}bail|required|uuid",
             "min_description" => "{$sometimes}bail|required|min:10|max:200",
             "total_area" => "{$sometimes}bail|nullable|numeric|between:1,99999999.99",
@@ -45,9 +47,8 @@ class PropertyRequest extends FormRequest
                 "longitude" => "sometimes|nullable|integer",
                 "neighborhood" => "{$sometimes}bail|required|min:2|max:100",
                 "city" => "{$sometimes}bail|required|min:2|max:100",
-                "state" => "{$sometimes}bail|required|min:2|max:100",
+                "state" => "{$sometimes}bail|min:2|max:100",
                 "initials" => "{$sometimes}bail|required|min:2|max:2",
-                "country" => "{$sometimes}bail|required|min:2|max:100",
             ]);
         }
         return $rules;
@@ -62,7 +63,7 @@ class PropertyRequest extends FormRequest
             'integer' => 'Forneça um número inteiro.',
             'between' => 'Faixa de valores disponíveis: 1 - 99999999.99.',
             'slug' => 'Formato de slug inválido. Tente algo parecido com formato-de-slug-correto-99.',
-            'business_id.required' => 'Escolha um tipo de negócio.',
+            'businesses.*.id.required' => 'Escolha um tipo de negócio.',
             'business_id.uuid' => 'Escolha um tipo de negócio.',
             'address_id.required' => 'Cadastre um endereço.',
             'address_id.uuid' => 'Cadastre um endereço.',
@@ -73,12 +74,25 @@ class PropertyRequest extends FormRequest
             'min_suite.min' => 'Forneça um número inteiro.',
             'min_bathroom.min' => 'Forneça um número inteiro.',
             'min_garage.min' => 'Forneça um número inteiro.',
-            'number.min' => 'Forneça um número maior do que 0.'
+            'number.min' => 'Forneça um número maior do que 0.',
+            'businesses.*.id' => [
+                'required' => 'Escolha um tipo de negócio',
+                'uuid' => 'Escolha um tipo de negócio',
+            ],
+            'businesses.*.value' => [
+                'between' => 'Faixa de valores disponíveis: 0 - 99999999.99.',
+                'uuid' => 'Escolha um tipo de negócio',
+            ],
+            // Address
+            "neighborhood.required" => "Forneça um bairro.",
+            "city.required" => "Forneça uma cidade.",
+            "initials.required" => "Forneça um estado.",
         ];
     }
     public function getData()
     {
         return $this->except([
+            "businesses",
             "address",
             "number",
             "complement",
@@ -115,9 +129,44 @@ class PropertyRequest extends FormRequest
         $this->merge([
             'neighborhood' => Str::upper($this->neighborhood),
             'city' => Str::upper($this->city),
-            'state' => Str::upper($this->state),
+            'state' => $this->state ? Str::upper($this->state) : $this->getStateByInitials($this->initials),
             'initials' => Str::upper($this->initials),
-            'country' => Str::upper($this->country),
+            'country' => $this->country ? Str::upper($this->country) : "BRASIL",
         ]);
+    }
+
+    private function getStateByInitials($initials)
+    {
+        $initials = Str::upper($initials);
+        $states = [
+            ["AC" => "Acre"],
+            ["AL" => "Alagoas"],
+            ["AP" => "Amapá"],
+            ["AM" => "Amazonas"],
+            ["BA" => "Bahia"],
+            ["CE" => "Ceará"],
+            ["DF" => "Distrito Federal"],
+            ["ES" => "Espírito Santo"],
+            ["GO" => "Goiás"],
+            ["MA" => "Maranhão"],
+            ["MT" => "Mato Grosso"],
+            ["MS" => "Mato Grosso do Sul"],
+            ["MG" => "Minas Gerais"],
+            ["PA" => "Pará"],
+            ["PB" => "Paraíba"],
+            ["PR" => "Paraná"],
+            ["PE" => "Pernambuco"],
+            ["PI" => "Piauí"],
+            ["RJ" => "Rio de Janeiro"],
+            ["RN" => "Rio Grande do Norte"],
+            ["RS" => "Rio Grande do Sul"],
+            ["RO" => "Rondônia"],
+            ["RR" => "Roraima"],
+            ["SC" => "Santa Catarina"],
+            ["SP" => "São Paulo"],
+            ["SE" => "Sergipe"],
+            ["TO" => "Tocantins"],
+        ];
+        return isset($states[$initials]) ? Str::upper($states[$initials]) : "UNDEFINED";
     }
 }

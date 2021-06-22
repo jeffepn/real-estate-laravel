@@ -38,6 +38,7 @@ class PropertyController extends Controller
     {
         try {
             $address = $this->generateAddress($request->getDataAddress());
+
             $data = $request->getData();
             $data['address_id'] = $address->id;
             if ($property = Property::create($data)) {
