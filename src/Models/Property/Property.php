@@ -20,7 +20,7 @@ class Property extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->code = $model->max('code') + 1;
+            $model->code = static::max('code') + 1;
         });
     }
 
@@ -52,7 +52,7 @@ class Property extends Model
         $slug = $this->slugBasedInContext();
         $check = Property::where('slug', $slug)->first();
         while ($check) {
-            $slug = $this->slugBasedInContext() . '-' . time() . rand(0, 9);
+            $slug = $this->slugBasedInContext() . '-' . ($this->code ? $this->code  : (static::max('code') + 1));
             $check = Property::where('slug', $slug)->first();
         }
         return $slug;
@@ -60,12 +60,14 @@ class Property extends Model
 
     private function slugBasedInContext(): string
     {
+        $subType = $this->sub_type ? $this->sub_type : SubType::find($this->sub_type_id);
+
         $generate = sprintf(
             "%s em %s - %s %s %s %s %s",
             // $this->business->name,
-            Str::title($this->sub_type->name),
+            Str::title($subType->name),
             Str::title($this->address->neighborhood->name),
-            Str::title($this->address->neighborhood->city->state->name),
+            Str::title($this->address->neighborhood->city->state->initials),
             $this->max_dormitory ? "$this->max_dormitory dormitório(s)," : '',
             $this->max_bathroom ? "$this->max_bathroom banheiro(s)," : '',
             $this->max_suite ? "$this->max_suite suite(s)," : '',

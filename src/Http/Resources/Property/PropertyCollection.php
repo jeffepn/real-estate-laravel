@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use JPAddress\Resources\AddressCollection;
 use JPAddress\Resources\AddressResource;
 use JPAddress\Resources\CityResource;
+use JPAddress\Resources\CountryResource;
 use JPAddress\Resources\NeighborhoodResource;
 use JPAddress\Resources\StateResource;
 
@@ -48,6 +49,9 @@ class PropertyCollection extends ResourceCollection
         $states = $this->collection->pluck('address.neighborhood.city.state')->unique()->values()->map(function ($state) {
             return new StateResource($state);
         })->toArray();
+        $countries = $this->collection->pluck('address.neighborhood.city.state.country')->unique()->values()->map(function ($country) {
+            return new CountryResource($country);
+        })->toArray();
         // $includes = array_merge($includes, $businesses);
         $includes = array_merge($includes, $types);
         $includes = array_merge($includes, $subTypes);
@@ -55,6 +59,7 @@ class PropertyCollection extends ResourceCollection
         $includes = array_merge($includes, $neighborhoods);
         $includes = array_merge($includes, $cities);
         $includes = array_merge($includes, $states);
+        $includes = array_merge($includes, $countries);
 
         return [
             'included' =>  $includes

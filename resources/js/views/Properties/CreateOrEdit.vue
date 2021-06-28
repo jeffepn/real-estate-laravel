@@ -53,39 +53,16 @@
           <div class="tab-pane fade show active px-2" id="data" role="tabpanel">
             <re-form-data-property :form="form"></re-form-data-property>
             <div class="mb-2 col-12 text-end">
-              <button class="btn btn-primary" @click="next">
+              <re-button :loading="loadingNext" @click="next">
                 Próximo <span aria-hidden="true">&raquo;</span>
-              </button>
+              </re-button>
             </div>
           </div>
           <div class="tab-pane fade px-2" id="details" role="tabpanel">
             <div class="col-12 mt-2">
-              <h6>Negócio*</h6>
+              <h6>Negócio(s)*</h6>
             </div>
-            <div class="col-md-12 mb-2">
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="inlineCheckboxRent"
-                  v-model="form.data.rent"
-                />
-                <label class="form-check-label" for="inlineCheckboxRent"
-                  >Aluguel</label
-                >
-              </div>
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="inlineCheckboxSale"
-                  v-model="form.data.sale"
-                />
-                <label class="form-check-label" for="inlineCheckboxSale"
-                  >Venda</label
-                >
-              </div>
-            </div>
+            <re-add-businesses class="col-md-12 mb-2"></re-add-businesses>
             <div class="row collapse" :class="{ show: showPrices }">
               <div class="col-sm-6 col-md-auto" v-show="form.data.rent">
                 <re-input
@@ -93,7 +70,6 @@
                   placeholder="Preço de aluguel"
                   prefix="R$ "
                   :masked="false"
-                  v-model="form.data.price_rent"
                 ></re-input>
               </div>
               <div class="col-sm-6 col-md-auto" v-show="form.data.sale">
@@ -102,7 +78,6 @@
                   placeholder="Preço de venda"
                   prefix="R$ "
                   :masked="false"
-                  v-model="form.data.price_sale"
                 ></re-input>
               </div>
             </div>
@@ -326,7 +301,9 @@ import Form from "@/supports/form.js";
 import { VMoney } from "v-money";
 import { mask } from "vue-the-mask";
 import ReFormDataProperty from "@/components/Forms/DataProperty.vue";
+import ReAddBusinesses from "@/components/Forms/Property/AddBusinesses";
 import ReInput from "@/components/Controls/Inputs/Input";
+import ReButton from "@/components/Controls/Buttons/ButtonDefault";
 export default {
   directives: {
     mask,
@@ -335,7 +312,9 @@ export default {
   components: {
     ckeditor: CKEditor.component,
     ReFormDataProperty,
+    ReAddBusinesses,
     ReInput,
+    ReButton,
   },
   props: {
     id: {
@@ -353,7 +332,7 @@ export default {
           removeItems: "uploadImage|mediaEmbed",
         },
       },
-
+      loadingNext: false,
       decimal: {
         decimal: ",",
         thousands: ".",
@@ -368,12 +347,10 @@ export default {
         precision: 0,
         masked: false,
       },
+      idProperty: this.id,
+      property: null,
       form: new Form({
         sub_type_id: null,
-        sale: false,
-        rent: false,
-        price_sale: 0,
-        price_rent: 0,
         min_dormitory: 0,
         max_dormitory: 0,
         min_suite: 0,
@@ -385,36 +362,26 @@ export default {
         min_description: "",
         building_area: 0,
         total_area: 0,
-        content: "<p>Content of the editor.</p>",
+        content: null,
+        address: null,
+        neighborhood: null,
+        city: null,
+        initials: null,
+        number: null,
+        not_number: null,
+        cep: null,
+        complement: null,
       }),
-      form2: {
-        sub_type_id: null,
-        sale: false,
-        rent: false,
-        price_sale: 0,
-        price_rent: 0,
-        min_dormitory: 0,
-        max_dormitory: 0,
-        min_suite: 0,
-        max_suite: 0,
-        min_bathroom: 0,
-        max_bathroom: 0,
-        min_garage: 0,
-        max_garage: 0,
-        min_description: "",
-        building_area: 0,
-        total_area: 0,
-        content: "<p>Content of the editor.</p>",
-      },
       originalTypes: [],
       originalTypesIncluded: [],
       type_id: null,
+      tabDetais: null,
+      tabData: null,
     };
   },
   watch: {
-    "form.content"(newValue) {},
-    "form.data.sub_type_id"(newValue) {
-      console.log("Form master = ", newValue);
+    property() {
+      this.initialiseProperty();
     },
   },
   computed: {
@@ -422,10 +389,21 @@ export default {
       return this.form.data.rent || this.form.data.sale;
     },
     edit() {
-      return this.id !== null;
+      return this.idProperty !== null;
     },
     title() {
       return this.edit ? "Editar Imóvel" : "Novo Imóvel";
+    },
+    request() {
+      return this.edit
+        ? this.$axios.patch(
+            this.$route("jp_realestate.property.update", [this.idProperty]),
+            this.form.data,
+          )
+        : this.$axios.post(
+            this.$route("jp_realestate.property.store"),
+            this.form.data,
+          );
     },
     types() {
       const types = this.originalTypes.reduce((acumulator, currentValue) => {
@@ -472,30 +450,103 @@ export default {
         });
     },
     back() {
-      var someTabTriggerEl = document.querySelector("#data-tab");
-      var tab = new bootstrap.Tab(someTabTriggerEl);
-      tab.show();
+      this.tabData.show();
     },
     next() {
       console.log(this.form.data);
-      this.$axios
-        .post(this.$route("jp_realestate.property.store"), this.form.data)
+      this.loadingNext = true;
+      this.form.clearErrors();
+      this.request
+        .then((response) => {
+          if (!this.edit) {
+            this.setProperty(response.data);
+          }
+          this.tabDetais.show();
+        })
         .catch((error) => {
           const { response } = error;
           if (response && response.status === 422) {
             return (this.form.errors = response.data.errors);
           }
-          this.$toast({ type: "danger", message: response.data.message });
-          console.log("Response property = ", response);
-        });
-      //   var someTabTriggerEl = document.querySelector("#details-tab");
-      //   var tab = new bootstrap.Tab(someTabTriggerEl);
-      //   tab.show();
+          console.log(error);
+          this.$toast.message({
+            type: "danger",
+            message: response.data.message,
+          });
+        })
+        .finally(() => (this.loadingNext = false));
     },
     submit() {},
+    initialiseProperty() {
+      this.idProperty = this.property.id;
+      history.pushState(
+        {},
+        null,
+        this.$route("jp_realestate.property.edit", [this.id]),
+      );
+      this.setDataBaseProperty();
+      console.log("Property", this.property);
+    },
+    setProperty({ data, included }) {
+      let subType = included.find((element) => element.type === "sub_type");
+      let address = included.find((element) => element.type === "address");
+      let neighborhood = included.find(
+        (element) => element.type === "neighborhood",
+      );
+      let city = included.find((element) => element.type === "city");
+      let state = included.find((element) => element.type === "state");
+      this.property = {
+        id: data.id,
+        slug: data.attributes.slug,
+        sub_type_id: subType.id,
+        code: data.attributes.code,
+        building_area: data.attributes.building_area,
+        total_area: data.attributes.total_area,
+        min_description: data.attributes.min_description,
+        content: data.attributes.content,
+        items: data.attributes.items,
+        min_dormitory: data.attributes.min_dormitory,
+        max_dormitory: data.attributes.max_dormitory,
+        min_bathroom: data.attributes.min_bathroom,
+        max_bathroom: data.attributes.max_bathroom,
+        min_suite: data.attributes.min_suite,
+        max_suite: data.attributes.max_suite,
+        min_garage: data.attributes.min_garage,
+        max_garage: data.attributes.max_garage,
+        address: address.attributes.address,
+        number: address.attributes.number,
+        not_number: address.attributes.not_number,
+        complement: address.attributes.complement,
+        neighborhood: neighborhood.attributes.name,
+        city: city.attributes.name,
+        initials: state.attributes.initials,
+      };
+      this.type_id = subType.relationships.type.data.id;
+    },
+    async getProperty() {
+      console.log("Agor busco");
+      await this.$axios
+        .get(this.$route("jp_realestate.property.show", [this.id]))
+        .then((response) => this.setProperty(response.data));
+    },
+    initialiseTabs() {
+      var someTabTriggerEl = document.querySelector("#details-tab");
+      this.tabDetais = new bootstrap.Tab(someTabTriggerEl);
+      someTabTriggerEl = document.querySelector("#data-tab");
+      this.tabData = new bootstrap.Tab(someTabTriggerEl);
+    },
+    setDataBaseProperty() {
+      this.form.data = this.property;
+    },
   },
+  beforeMount() {},
   mounted() {
     this.getTypes();
+    this.initialiseTabs();
+    console.log("Id initial", this.id);
+    if (this.id) {
+      this.getProperty();
+    }
   },
 };
 </script>

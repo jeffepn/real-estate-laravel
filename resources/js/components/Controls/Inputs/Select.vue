@@ -64,27 +64,33 @@ export default {
       this.selected = newValue;
     },
     data() {
-      this.selected = null;
-      this.checkIfFirstSelected();
+      this.checkDefault();
     },
   },
   methods: {
     handleChange(e) {
       this.$emit("input", e.target.value);
     },
-    checkIfFirstSelected() {
+    checkDefault() {
       if (this.selectFirst && this.data.length > 0 && this.value === null) {
-        this.selected = this.data[0].value;
-      } else {
+        return (this.selected = this.data[0].value);
+      }
+      if (this.verifyIfExistValueInData()) {
         this.selected = this.value;
       }
+      this.selected = null;
+    },
+    verifyIfExistValueInData() {
+      return this.data.find((element) => element.value === this.value)
+        ? true
+        : false;
     },
   },
   beforeMount() {
     this.idSelect = this.id ? this.id : `select-default-${this._uid}`;
   },
   mounted() {
-    this.checkIfFirstSelected();
+    this.checkDefault();
   },
 };
 </script>

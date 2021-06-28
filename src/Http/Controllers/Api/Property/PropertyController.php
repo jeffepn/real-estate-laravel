@@ -72,12 +72,13 @@ class PropertyController extends Controller
     public function update(PropertyRequest $request, Property $property)
     {
         try {
+            $property->address->update($request->getDataAddress());
             if ($property->update($request->getData())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . 'kkkkk'], 400);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage() . $th->getFile() . $th->getLine()], 400);
         }
     }
 

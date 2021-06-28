@@ -5,7 +5,9 @@ namespace Jeffpereira\RealEstate\Http\Resources\Property;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JPAddress\Resources\AddressResource;
 use JPAddress\Resources\CityResource;
+use JPAddress\Resources\CountryResource;
 use JPAddress\Resources\NeighborhoodResource;
+use JPAddress\Resources\StateResource;
 
 class PropertyResource extends JsonResource
 {
@@ -87,6 +89,8 @@ class PropertyResource extends JsonResource
                 new AddressResource($this->address),
                 new NeighborhoodResource($this->address->neighborhood),
                 new CityResource($this->address->neighborhood->city),
+                new StateResource($this->address->neighborhood->city->state),
+                new CountryResource($this->address->neighborhood->city->state->country),
             ],
             'error' => false,
             'message' => $this->message

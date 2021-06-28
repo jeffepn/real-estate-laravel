@@ -5,7 +5,7 @@
       :id="idInput"
       class="form-control"
       @input="handleInputMoney"
-      :value="value"
+      :value="value || 0"
       v-bind="optionsNumber"
     ></money>
     <input

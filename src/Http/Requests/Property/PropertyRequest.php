@@ -25,7 +25,7 @@ class PropertyRequest extends FormRequest
             "businesses.*.id" => "{$sometimes}bail|required|uuid",
             "businesses.*.value" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
             "sub_type_id" => "{$sometimes}bail|required|uuid",
-            "min_description" => "{$sometimes}bail|required|min:10|max:200",
+            "min_description" => "{$sometimes}bail|nullable|min:10|max:200",
             "total_area" => "{$sometimes}bail|nullable|numeric|between:1,99999999.99",
             "building_area" => "{$sometimes}bail|nullable|numeric|between:1,99999999.99",
             "min_dormitory" => $rulesItems,
@@ -45,10 +45,10 @@ class PropertyRequest extends FormRequest
                 "cep" => "sometimes|bail|nullable|formato_cep",
                 "latitude" => "sometimes|nullable|integer",
                 "longitude" => "sometimes|nullable|integer",
-                "neighborhood" => "{$sometimes}bail|required|min:2|max:100",
-                "city" => "{$sometimes}bail|required|min:2|max:100",
-                "state" => "{$sometimes}bail|min:2|max:100",
-                "initials" => "{$sometimes}bail|required|min:2|max:2",
+                "neighborhood" => "bail|required|min:2|max:100",
+                "city" => "bail|required|min:2|max:100",
+                "state" => "bail|min:2|max:100",
+                "initials" => "bail|required|min:2|max:2",
             ]);
         }
         return $rules;
@@ -95,6 +95,7 @@ class PropertyRequest extends FormRequest
             "businesses",
             "address",
             "number",
+            "not_number",
             "complement",
             "cep",
             "latitude",
@@ -112,6 +113,7 @@ class PropertyRequest extends FormRequest
         return $this->only([
             "address",
             "number",
+            "not_number",
             "complement",
             "cep",
             "latitude",
@@ -127,6 +129,9 @@ class PropertyRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
+            'building_area' => $this->building_area ? $this->building_area : null,
+            'total_area' => $this->total_area ? $this->total_area : null,
+            'number' => $this->not_number ? null : $this->number,
             'neighborhood' => Str::upper($this->neighborhood),
             'city' => Str::upper($this->city),
             'state' => $this->state ? Str::upper($this->state) : $this->getStateByInitials($this->initials),

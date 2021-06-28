@@ -68,42 +68,13 @@ export default {
   },
   data() {
     return {
-      selected: this.value,
+      selected: null,
       data: [],
       showModal: false,
     };
   },
   computed: {
     subTypes() {
-      if (this.typeId) {
-        return this.filterByTypeId();
-      }
-      return this.data.reduce((acumulator, currentValue) => {
-        acumulator.push({
-          value: currentValue.id,
-          label: currentValue.attributes.name,
-        });
-        return acumulator;
-      }, []);
-    },
-  },
-  watch: {
-    selected(newValue) {
-      this.$emit("input", newValue);
-    },
-    value(newValue) {
-      this.selected = newValue;
-    },
-  },
-  methods: {
-    async getData() {
-      await this.$axios(this.$route("jp_realestate.sub-type.index")).then(
-        ({ data }) => {
-          this.data = data.data;
-        },
-      );
-    },
-    filterByTypeId() {
       return this.data.reduce((acumulator, currentValue) => {
         if (currentValue.relationships.type.data.id === this.typeId) {
           acumulator.push({
@@ -113,6 +84,27 @@ export default {
         }
         return acumulator;
       }, []);
+    },
+  },
+  watch: {
+    selected(newValue) {
+      console.log("Sub type = ", newValue);
+      this.$emit("input", newValue);
+    },
+    value(newValue) {
+      this.selected = newValue;
+    },
+    subTypes() {
+      this.selected = null;
+    },
+  },
+  methods: {
+    async getData() {
+      await this.$axios(this.$route("jp_realestate.sub-type.index")).then(
+        ({ data }) => {
+          this.data = data.data;
+        },
+      );
     },
     submitSuccess() {
       this.getData();
@@ -127,6 +119,9 @@ export default {
   },
   mounted() {
     window.tooltip();
+    if (this.value) {
+      this.selected = this.value;
+    }
   },
 };
 </script>

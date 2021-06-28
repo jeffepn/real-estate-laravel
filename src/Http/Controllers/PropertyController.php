@@ -3,19 +3,8 @@
 namespace Jeffpereira\RealEstate\Http\Controllers;
 
 use Jeffpereira\RealEstate\Models\Property\Property;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
-use Jeffpereira\RealEstate\Http\Requests\Property\PropertyRequest;
-use Jeffpereira\RealEstate\Http\Resources\Property\PropertyCollection;
-use Jeffpereira\RealEstate\Http\Resources\Property\PropertyResource;
-use Jeffpereira\RealEstate\Utilities\Terminologies;
-use JPAddress\Models\Address\Address;
-use JPAddress\Models\Address\City;
-use JPAddress\Models\Address\Country;
-use JPAddress\Models\Address\Neighborhood;
-use JPAddress\Models\Address\State;
-use PHPUnit\Framework\Constraint\Count;
 
 class PropertyController extends Controller
 {
@@ -34,7 +23,7 @@ class PropertyController extends Controller
         return view('jpviews::properties.create_or_edit');
     }
     /**
-     * View create new resource.
+     * View create edit resource.
      */
     public function edit(Property $property): View
     {

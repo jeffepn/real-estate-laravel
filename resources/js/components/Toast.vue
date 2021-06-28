@@ -18,7 +18,7 @@
         <rect width="100%" height="100%" :fill="fill"></rect>
       </svg>
       <strong class="me-auto" v-text="title"></strong>
-      <small v-text="time"></small>
+      <small v-text="startTime.format('DD/MM/YYYY HH:mm:ss')"></small>
     </div>
     <div class="toast-body" v-html="message"></div>
   </div>
@@ -56,11 +56,6 @@ export default {
       fill: null,
       title: null,
     };
-  },
-  computed: {
-    time() {
-      return this.startTime.fromNow();
-    },
   },
   methods: {
     now() {

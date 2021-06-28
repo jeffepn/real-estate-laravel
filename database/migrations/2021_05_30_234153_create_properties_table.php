@@ -29,7 +29,7 @@ class CreatePropertiesTable extends Migration
             $table->unsignedInteger('code');
             $table->double('building_area', 8, 2)->nullable();
             $table->double('total_area', 8, 2)->nullable();
-            $table->string('min_description', 200);
+            $table->string('min_description', 200)->nullable();
             $table->text('content')->nullable();
             $table->text('items')->nullable();
             $table->integer('min_dormitory')->nullable();

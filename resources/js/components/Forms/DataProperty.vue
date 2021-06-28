@@ -1,14 +1,18 @@
 <template>
-  <div class="row mt-2">
-    <div class="col-sm-6 col-md-auto mb-2">
-      <re-choose-type v-model="type_id" :create="true"></re-choose-type>
-    </div>
-    <div class="col-sm-6 col-md-auto mb-2">
-      <re-choose-sub-type
-        :type-id="type_id"
-        v-model="form.data.sub_type_id"
-        :create="true"
-      ></re-choose-sub-type>
+  <div class="mt-2">
+    <div class="row">
+      <div class="col-sm-6 col-md-auto mb-2">
+        <re-choose-type v-model="type_id" :create="true"></re-choose-type>
+      </div>
+      <div class="col-sm-6 col-md-auto mb-2">
+        <re-choose-sub-type
+          :type-id="type_id"
+          v-model="form.data.sub_type_id"
+          :create="true"
+          :error="form.hasError('sub_type_id')"
+          :error-message="form.firstError('sub_type_id')"
+        ></re-choose-sub-type>
+      </div>
     </div>
     <div class="col-12 mt-2">
       <h6>Endereço</h6>
@@ -18,13 +22,11 @@
 </template>
 
 <script>
-import { VMoney } from "v-money";
 import ReAddress from "@/components/Forms/Address";
 import ReChooseType from "@/components/Entities/Choose/Type";
 import ReChooseSubType from "@/components/Entities/Choose/SubType";
 import ReInput from "@/components/Controls/Inputs/Input";
 export default {
-  directives: { money: VMoney },
   components: {
     ReAddress,
     ReChooseType,
@@ -39,23 +41,8 @@ export default {
   },
   data() {
     return {
-      //Config v-money - money Brazil
-      money: {
-        decimal: ",",
-        thousands: ".",
-        prefix: "R$ ",
-        precision: 2,
-        masked: false,
-      },
-      request: {
-        sub_type_id: null,
-      },
       type_id: null,
-      //   type_id: "8254d908-3c38-4637-b6d9-ffa18e4c434b",
     };
-  },
-  watch: {
-    type_id(newValue) {},
   },
 };
 </script>
