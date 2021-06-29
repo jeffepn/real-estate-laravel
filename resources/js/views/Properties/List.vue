@@ -2,7 +2,13 @@
   <div class="container">
     <div class="card my-5">
       <div
-        class="card-header d-flex flex-wrap justify-content-between align-items-center"
+        class="
+          card-header
+          d-flex
+          flex-wrap
+          justify-content-between
+          align-items-center
+        "
       >
         <h2>Imóveis</h2>
         <div class="d-flex flex-wrap">
@@ -46,7 +52,13 @@
                     <a class="btn btn-success btn-sm" href="#" role="button">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a class="btn btn-primary btn-sm" href="#" role="button">
+                    <a
+                      class="btn btn-primary btn-sm"
+                      :href="
+                        $route('jp_realestate.property.edit', [property.id])
+                      "
+                      role="button"
+                    >
                       <i class="fas fa-edit"></i>
                     </a>
                     <a class="btn btn-danger btn-sm" href="#" role="button">
@@ -166,7 +178,7 @@ export default {
       this.updatePage(1);
     },
     formateAddress(property) {
-      return `${property.address.neighborhood}, ${property.address.city} - ${property.address.state}`;
+      return `${property.address.neighborhood}, ${property.address.city} - ${property.address.initials}`;
     },
     extractBusiness(relationships) {
       let business = this.included.find((element) => {
@@ -230,6 +242,7 @@ export default {
       result.neighborhood = neighborhood.attributes.name;
       result.city = city.attributes.name;
       result.state = state.attributes.name;
+      result.initials = state.attributes.initials;
       return result;
     },
   },

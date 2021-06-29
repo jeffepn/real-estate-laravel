@@ -38,10 +38,14 @@ export default {
       type: Object,
       require: true,
     },
+    typeId: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
-      type_id: null,
+      type_id: this.typeId,
     };
   },
 };

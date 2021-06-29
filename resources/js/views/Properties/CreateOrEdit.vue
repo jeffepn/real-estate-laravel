@@ -48,21 +48,33 @@
               Detalhes
             </button>
           </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="businesses-tab"
+              data-bs-target="#businesses"
+              type="button"
+              role="tab"
+              aria-controls="businesses"
+              aria-selected="false"
+            >
+              Negócios
+            </button>
+          </li>
         </ul>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active px-2" id="data" role="tabpanel">
-            <re-form-data-property :form="form"></re-form-data-property>
+            <re-form-data-property
+              :form="form"
+              :type-id="this.type_id"
+            ></re-form-data-property>
             <div class="mb-2 col-12 text-end">
-              <re-button :loading="loadingNext" @click="next">
+              <re-button :loading="loadingNext" @click="next('details')">
                 Próximo <span aria-hidden="true">&raquo;</span>
               </re-button>
             </div>
           </div>
           <div class="tab-pane fade px-2" id="details" role="tabpanel">
-            <div class="col-12 mt-2">
-              <h6>Negócio(s)*</h6>
-            </div>
-            <re-add-businesses class="col-md-12 mb-2"></re-add-businesses>
             <div class="row collapse" :class="{ show: showPrices }">
               <div class="col-sm-6 col-md-auto" v-show="form.data.rent">
                 <re-input
@@ -281,10 +293,32 @@
                 ></ckeditor>
               </div>
               <div class="mb-2 col-12 d-flex justify-content-between">
-                <button class="btn btn-outline-secondary" @click="back">
+                <button class="btn btn-outline-secondary" @click="back('data')">
                   <span aria-hidden="true">&laquo;</span> Voltar
                 </button>
-                <button class="btn btn-primary" @click="submit">Salvar</button>
+
+                <div class="mb-2 col-12 text-end">
+                  <re-button :loading="loadingNext" @click="next('business')">
+                    Próximo <span aria-hidden="true">&raquo;</span>
+                  </re-button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade px-2" id="businesses" role="tabpanel">
+            <re-add-businesses class="col-md-12 mb-2"></re-add-businesses>
+            <div class="mb-2 col-12 d-flex justify-content-between">
+              <button
+                class="btn btn-outline-secondary"
+                @click="back('details ')"
+              >
+                <span aria-hidden="true">&laquo;</span> Voltar
+              </button>
+
+              <div class="mb-2 col-12 text-end">
+                <re-button :loading="loadingNext" @click="next">
+                  Próximo <span aria-hidden="true">&raquo;</span>
+                </re-button>
               </div>
             </div>
           </div>
@@ -375,8 +409,9 @@ export default {
       originalTypes: [],
       originalTypesIncluded: [],
       type_id: null,
-      tabDetais: null,
+      tabDetails: null,
       tabData: null,
+      tabBusinesses: null,
     };
   },
   watch: {
@@ -449,10 +484,23 @@ export default {
           this.originalTypesIncluded = response.data.included;
         });
     },
-    back() {
-      this.tabData.show();
+    setTabShow(tab) {
+      switch (tab) {
+        case "data":
+          this.tabData.show();
+          break;
+        case "details":
+          this.tabDetails.show();
+          break;
+        case "businesses":
+          this.tabBusinesses.show();
+          break;
+
+        default:
+          break;
+      }
     },
-    next() {
+    next(tab) {
       console.log(this.form.data);
       this.loadingNext = true;
       this.form.clearErrors();
@@ -461,7 +509,7 @@ export default {
           if (!this.edit) {
             this.setProperty(response.data);
           }
-          this.tabDetais.show();
+          this.setTabShow(tab);
         })
         .catch((error) => {
           const { response } = error;
@@ -531,9 +579,11 @@ export default {
     },
     initialiseTabs() {
       var someTabTriggerEl = document.querySelector("#details-tab");
-      this.tabDetais = new bootstrap.Tab(someTabTriggerEl);
+      this.tabDetails = new bootstrap.Tab(someTabTriggerEl);
       someTabTriggerEl = document.querySelector("#data-tab");
       this.tabData = new bootstrap.Tab(someTabTriggerEl);
+      someTabTriggerEl = document.querySelector("#businesses-tab");
+      this.tabBusinesses = new bootstrap.Tab(someTabTriggerEl);
     },
     setDataBaseProperty() {
       this.form.data = this.property;
