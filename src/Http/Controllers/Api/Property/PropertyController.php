@@ -48,7 +48,9 @@ class PropertyController extends Controller
             $data = $request->getData();
             $data['address_id'] = $address->id;
             if ($property = Property::create($data)) {
-                $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
+                if ($request->has('businesses')) {
+                    $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
+                }
                 return (new PropertyResource($property->refresh(), Terminologies::get('all.common.save_data')))
                     ->response()->setStatusCode(201);
             }
@@ -107,6 +109,12 @@ class PropertyController extends Controller
                 $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
             }
             $property->address->update($request->getDataAddress());
+            if (!$this->checkPublish($request, $property)) {
+                return response([
+                    'error' => 'true',
+                    'message' => Terminologies::get('all.property.not_publish_without_dependences')
+                ], 400);
+            }
             if ($property->update($request->getData())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
