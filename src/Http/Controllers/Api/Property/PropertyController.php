@@ -103,7 +103,9 @@ class PropertyController extends Controller
                     'message' => Terminologies::get('all.property.not_publish_without_dependences')
                 ], 400);
             }
-            $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
+            if ($request->has('businesses')) {
+                $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
+            }
             $property->address->update($request->getDataAddress());
             if ($property->update($request->getData())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
@@ -113,6 +115,7 @@ class PropertyController extends Controller
             return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage() . $th->getFile() . $th->getLine()], 400);
         }
     }
+
     public function checkPublish($request, $property)
     {
         if (!$request->active) {
