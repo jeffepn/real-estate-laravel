@@ -27,8 +27,8 @@ class CreatePropertiesTable extends Migration
                 ->on('sub_types');
             $table->string('slug', 150)->unique();
             $table->unsignedInteger('code');
-            $table->double('building_area', 8, 2)->nullable();
-            $table->double('total_area', 8, 2)->nullable();
+            $table->double('building_area', 10, 2)->nullable();
+            $table->double('total_area', 10, 2)->nullable();
             $table->string('min_description', 200)->nullable();
             $table->text('content')->nullable();
             $table->text('items')->nullable();
@@ -40,6 +40,7 @@ class CreatePropertiesTable extends Migration
             $table->integer('max_suite')->nullable();
             $table->integer('min_garage')->nullable();
             $table->integer('max_garage')->nullable();
+            $table->string('embed', 300)->nullable();
             $table->boolean("active")->default(false);
             $table->timestamps();
         });

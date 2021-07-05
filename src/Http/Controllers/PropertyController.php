@@ -2,6 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Illuminate\View\View;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
@@ -18,15 +19,15 @@ class PropertyController extends Controller
     /**
      * View create new resource.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('jpviews::properties.create_or_edit');
+        return view('jpviews::properties.create_or_edit', ['tab' => $request->tab ?? null]);
     }
     /**
      * View create edit resource.
      */
-    public function edit(Property $property): View
+    public function edit(Request $request, Property $property): View
     {
-        return view('jpviews::properties.create_or_edit', ["propertyId" => $property->id]);
+        return view('jpviews::properties.create_or_edit', ["propertyId" => $property->id, 'tab' => $request->tab ?? null]);
     }
 }

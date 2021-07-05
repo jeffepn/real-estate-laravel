@@ -49,25 +49,50 @@
                 <th>
                   <div class="actions">
                     <span v-text="`${property.code} - `"></span>
-                    <a class="btn btn-success btn-sm" href="#" role="button">
-                      <i class="fas fa-eye"></i>
-                    </a>
+                    <re-button
+                      classes="btn btn-success btn-sm"
+                      v-if="property.active"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Imóvel publicado. Clique para arquivar..."
+                      @click="active(property, false)"
+                    >
+                      <i class="fas fa-globe"></i>
+                    </re-button>
+                    <re-button
+                      v-else
+                      classes="btn btn-primary btn-sm"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Imóvel arquivado. Clique para publicar..."
+                      @click="active(property, true)"
+                    >
+                      <i class="fas fa-archive"></i>
+                    </re-button>
                     <a
                       class="btn btn-primary btn-sm"
                       :href="
                         $route('jp_realestate.property.edit', [property.id])
                       "
-                      role="button"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Editar"
                     >
                       <i class="fas fa-edit"></i>
                     </a>
-                    <a class="btn btn-danger btn-sm" href="#" role="button">
+                    <a
+                      class="btn btn-danger btn-sm"
+                      href="#"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Excluir"
+                    >
                       <i class="fas fa-trash"></i>
                     </a>
                   </div>
                 </th>
                 <td v-text="formateAddress(property)"></td>
-                <td></td>
+                <td v-text="businessesOfProperty(property)"></td>
                 <td
                   v-text="`${property.type.name} - ${property.sub_type.name}`"
                 ></td>
@@ -91,8 +116,9 @@
 
 <script>
 import RePagination from "@/components/Controls/Pagination";
+import ReButton from "@/components/Controls/Buttons/ButtonDefault";
 export default {
-  components: { RePagination },
+  components: { RePagination, ReButton },
   data() {
     return {
       search: null,
@@ -138,7 +164,7 @@ export default {
         let { id, attributes, relationships } = currentValue;
 
         let property = Object.assign({}, { id }, attributes);
-        // property.business = this.extractBusiness(relationships);
+        property.businesses = this.extractBusiness(relationships);
         property.sub_type = this.extractSubType(relationships);
         property.type = this.extractType(relationships);
         property.address = this.extractAdress(relationships);
@@ -153,10 +179,29 @@ export default {
       return !(this.search && this.search.trim().length);
     },
   },
-  mounted() {
-    this.getProperties();
-  },
   methods: {
+    active(property, active = false) {
+      this.$axios
+        .patch(this.$route("jp_realestate.property.update", [property.id]), {
+          active,
+        })
+        .then((response) => {
+          this.data = this.data.map((element) => {
+            if (element.id === property.id) {
+              element.attributes.active = active;
+            }
+            return element;
+          });
+        })
+        .catch(({ response }) => {
+          if (response) {
+            this.$toast.message({
+              type: "danger",
+              message: response.data.message,
+            });
+          }
+        });
+    },
     getProperties() {
       this.$axios
         .get(this.$route("jp_realestate.property.index"))
@@ -180,14 +225,34 @@ export default {
     formateAddress(property) {
       return `${property.address.neighborhood}, ${property.address.city} - ${property.address.initials}`;
     },
+    businessesOfProperty(property) {
+      return property.businesses.reduce((acumulator, currentValue) => {
+        acumulator +=
+          acumulator.trim().length === 0
+            ? ` ${currentValue.name} `
+            : ` | ${currentValue.name} `;
+        return acumulator;
+      }, "");
+    },
     extractBusiness(relationships) {
-      let business = this.included.find((element) => {
-        return (
-          element.type === "business" &&
-          element.id === relationships.business.data.id
+      let businessesProperty = relationships.businesses;
+      let included = this.included;
+      return businessesProperty.map(function (businessProperty) {
+        let businessPropertyFind = included.find(
+          (element) =>
+            element.type === "business_property" &&
+            element.id === businessProperty.data.id,
         );
+        let businessFind = included.find(
+          (element) =>
+            element.type === "business" &&
+            element.id === businessPropertyFind.attributes.business_id,
+        );
+        return {
+          id: businessFind.id,
+          name: businessFind.attributes.name,
+        };
       });
-      return Object.assign({}, { id: business.id }, business.attributes);
     },
     extractSubType(relationships) {
       let subType = this.included.find((element) => {
@@ -245,6 +310,12 @@ export default {
       result.initials = state.attributes.initials;
       return result;
     },
+  },
+  async beforeMount() {
+    await this.getProperties();
+  },
+  mounted() {
+    window.tooltip();
   },
 };
 </script>

@@ -88,7 +88,6 @@ export default {
   },
   watch: {
     selected(newValue) {
-      console.log("Sub type = ", newValue);
       this.$emit("input", newValue);
     },
     value(newValue) {

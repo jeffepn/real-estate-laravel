@@ -2,19 +2,25 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Jeffpereira\RealEstate\Models\Property\Property;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
+use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyRequest;
 use Jeffpereira\RealEstate\Http\Requests\Property\PropertyRequest;
+use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyResource;
 use Jeffpereira\RealEstate\Http\Resources\Property\PropertyCollection;
 use Jeffpereira\RealEstate\Http\Resources\Property\PropertyResource;
+use Jeffpereira\RealEstate\Models\Property\BusinessProperty;
+use Jeffpereira\RealEstate\Models\Property\ImageProperty;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 use JPAddress\Models\Address\Address;
 use JPAddress\Models\Address\City;
 use JPAddress\Models\Address\Country;
 use JPAddress\Models\Address\Neighborhood;
 use JPAddress\Models\Address\State;
-use PHPUnit\Framework\Constraint\Count;
+use Illuminate\Support\Str;
+use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyCollection;
 
 class PropertyController extends Controller
 {
@@ -42,6 +48,7 @@ class PropertyController extends Controller
             $data = $request->getData();
             $data['address_id'] = $address->id;
             if ($property = Property::create($data)) {
+                $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
                 return (new PropertyResource($property->refresh(), Terminologies::get('all.common.save_data')))
                     ->response()->setStatusCode(201);
             }
@@ -49,6 +56,24 @@ class PropertyController extends Controller
         } catch (\Throwable $th) {
             return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
         }
+    }
+
+    private function updateBusinessesOfProperty(Property $property, array $businesses)
+    {
+        $businesses = collect($businesses);
+        $businesses->map(function ($business) use ($property) {
+            BusinessProperty::updateOrCreate(
+                ['property_id' => $property->id, 'business_id' => $business['id']],
+                ['value' => $business['value']]
+            );
+        });
+        $property->businessesProperty->map(function ($businessProperty) use ($businesses) {
+            if ($businesses->filter(function ($business) use ($businessProperty) {
+                return $business['id'] === $businessProperty->business_id;
+            })->count() < 1) {
+                $businessProperty->delete();
+            }
+        });
     }
 
     /**
@@ -72,14 +97,32 @@ class PropertyController extends Controller
     public function update(PropertyRequest $request, Property $property)
     {
         try {
+            if (!$this->checkPublish($request, $property)) {
+                return response([
+                    'error' => 'true',
+                    'message' => Terminologies::get('all.property.not_publish_without_dependences')
+                ], 400);
+            }
+            $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
             $property->address->update($request->getDataAddress());
             if ($property->update($request->getData())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . 'kkkkk'], 400);
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
         } catch (\Throwable $th) {
             return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage() . $th->getFile() . $th->getLine()], 400);
         }
+    }
+    public function checkPublish($request, $property)
+    {
+        if (!$request->active) {
+            return true;
+        }
+        $haveBusinessesProperty = ($property->businessesProperty->count() > 0);
+        $haveImages = ($property->images->count() < 1);
+        $haveEmbed = ($request->has("embed") ? $request->embed : $property->embed);
+        $haveMedia = ($haveImages || $haveEmbed);
+        return $haveBusinessesProperty && $haveMedia ? true : false;
     }
 
     /**
@@ -114,5 +157,47 @@ class PropertyController extends Controller
             ])->id
         ])->id;
         return Address::create($dataAddress);
+    }
+
+    public function indexImage(Property $property)
+    {
+        return new ImagePropertyCollection($property->images);
+    }
+
+    public function uploadImage(ImagePropertyRequest $request)
+    {
+        try {
+            $property = Property::findOrFail($request->property_id);
+            $altImage =  $property->generateAltImage();
+            $resultUpload = Storage::disk(config('realestatelaravel.filesystem.disk'))
+                ->putFileAs(
+                    config('realestatelaravel.filesystem.path.properties'),
+                    $request->image,
+                    Str::slug($altImage) .  Str::uuid() . '.' . $request->image->extension()
+                );
+            $image = ImageProperty::create([
+                'property_id' => $property->id,
+                'way' => $resultUpload,
+                'alt' => $altImage
+            ]);
+            return (new ImagePropertyResource($image, Terminologies::get('all.common.save_data')))
+                ->response()->setStatusCode(201);
+        } catch (ModelNotFoundException $mn) {
+            return response()->noContent(400);
+        }
+    }
+
+    public function destroyImage(ImageProperty $imageProperty)
+    {
+        try {
+            $way = $imageProperty->way;
+            if ($imageProperty->delete()) {
+                Storage::disk(config('realestatelaravel.filesystem.disk'))->delete($way);
+                return response()->noContent(200);
+            }
+            return response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], 400);
+        } catch (\Throwable $th) {
+            return response(['error' => true, 'message' => $th->getMessage()], 400);
+        }
     }
 }

@@ -16,7 +16,7 @@
         :error-message="form.firstError('name')"
       ></re-input>
     </div>
-    <div class="col-12 text-end">
+    <div class="mt-2 col-12 text-end">
       <button type="button" class="btn btn-primary" @click="submit">
         Salvar
       </button>
@@ -40,11 +40,6 @@ export default {
         name: null,
       }),
     };
-  },
-  watch: {
-    "form.data.type_id"(newValue) {
-      console.log("Testando select = ", newValue);
-    },
   },
   methods: {
     submit() {

@@ -18,7 +18,7 @@ class BusinessController extends Controller
      */
     public function index()
     {
-        return new BusinessCollection(Business::all());
+        return new BusinessCollection(Business::orderBy('name')->get());
     }
 
     /**

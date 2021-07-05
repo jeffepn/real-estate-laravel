@@ -3,6 +3,8 @@
 namespace Jeffpereira\RealEstate\Http\Resources\Property;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Jeffpereira\RealEstate\Http\Resources\BusinessPropertyResource;
+use Jeffpereira\RealEstate\Models\Property\BusinessProperty;
 use JPAddress\Resources\AddressResource;
 use JPAddress\Resources\CityResource;
 use JPAddress\Resources\CountryResource;
@@ -57,6 +59,8 @@ class PropertyResource extends JsonResource
                 'max_suite' => $this->max_suite,
                 'min_garage' => $this->min_garage,
                 'max_garage' => $this->max_garage,
+                'embed' => $this->embed,
+                'active' => (bool)$this->active,
             ],
             'relationships' => [
                 'sub_type' => [
@@ -65,33 +69,43 @@ class PropertyResource extends JsonResource
                         'id' => $this->sub_type->id,
                     ]
                 ],
-                // 'business' => [
-                //     'data' => [
-                //         'type' => 'business',
-                //         'id' => $this->business->id,
-                //     ]
-                // ],
                 'address' => [
                     'data' => [
                         'type' => 'address',
                         'id' => $this->address->id,
                     ]
                 ],
+                'businesses' => $this->businessesProperty->map(function ($businessProperty) {
+                    return [
+                        'data' => [
+                            'type' => 'business_property',
+                            'id' => $businessProperty->id
+                        ]
+                    ];
+                }),
             ]
         ];
     }
     public function with($request)
     {
+        $includeds = [
+            new SubTypeResource($this->sub_type),
+            new AddressResource($this->address),
+            new NeighborhoodResource($this->address->neighborhood),
+            new CityResource($this->address->neighborhood->city),
+            new StateResource($this->address->neighborhood->city->state),
+            new CountryResource($this->address->neighborhood->city->state->country),
+        ];
+        $businessesProperty = $this->businessesProperty->map(function ($businessProperty) {
+            return new BusinessPropertyResource($businessProperty);
+        })->toArray();
+        $businesses = $this->businessesProperty->map(function ($businessProperty) {
+            return new BusinessResource($businessProperty->business);
+        })->toArray();
+        $includeds = array_merge($includeds, $businessesProperty);
+        $includeds = array_merge($includeds, $businesses);
         return [
-            'included' => [
-                new SubTypeResource($this->sub_type),
-                // new BusinessResource($this->business),
-                new AddressResource($this->address),
-                new NeighborhoodResource($this->address->neighborhood),
-                new CityResource($this->address->neighborhood->city),
-                new StateResource($this->address->neighborhood->city->state),
-                new CountryResource($this->address->neighborhood->city->state->country),
-            ],
+            'included' => $includeds,
             'error' => false,
             'message' => $this->message
         ];

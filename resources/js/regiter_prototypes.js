@@ -3,6 +3,10 @@ window.eventBus = new Vue();
 Vue.prototype.$eventBus = window.eventBus;
 
 import axios from "axios";
+axios.defaults.headers.common = {
+  Accept: "application/json",
+  "Content-Type": "application/json;charset=UTF-8",
+};
 Vue.prototype.$axios = axios;
 
 import RouteZiggy from "ziggy";

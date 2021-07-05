@@ -308,18 +308,22 @@ class PropertyTest extends TestCase
             ['key' => 'building_area', 'value' => 'kk'],
             ['key' => 'min_dormitory', 'value' => 'kk'],
             ['key' => 'min_dormitory', 'value' => -1],
+            ['key' => 'min_dormitory', 'value' => 4],
             ['key' => 'max_dormitory', 'value' => 'kk'],
             ['key' => 'max_dormitory', 'value' => -1],
             ['key' => 'min_suite', 'value' => 'kk'],
             ['key' => 'min_suite', 'value' => -1],
+            ['key' => 'min_suite', 'value' => 5],
             ['key' => 'max_suite', 'value' => 'kk'],
             ['key' => 'max_suite', 'value' => -1],
             ['key' => 'min_bathroom', 'value' => 'kk'],
             ['key' => 'min_bathroom', 'value' => -1],
+            ['key' => 'min_bathroom', 'value' => 7],
             ['key' => 'max_bathroom', 'value' => 'kk'],
             ['key' => 'max_bathroom', 'value' => -1],
             ['key' => 'min_garage', 'value' => 'kk'],
             ['key' => 'min_garage', 'value' => -1],
+            ['key' => 'min_garage', 'value' => 9],
             ['key' => 'max_garage', 'value' => 'kk'],
             ['key' => 'max_garage', 'value' => -1],
             ['key' => 'address', 'value' => Str::random(101)],
@@ -350,7 +354,6 @@ class PropertyTest extends TestCase
             $aux[$item['key']] = $item['value'];
             $response = $this->postJson($this->api, $aux);
             $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-            $this->assertEquals(1, count($response->json()['errors']));
         }
         $property = Property::first();
         // Test update slug, when is ignored

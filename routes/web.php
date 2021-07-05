@@ -1,6 +1,6 @@
 <?php
-Route::middleware('web')->group(function () {
-    Route::prefix(config('realestatelaravel.route.prefix-panel'))->group(function () {
+Route::middleware(config('realestatelaravel.middleware.web'))->group(function () {
+    Route::prefix('panel-realestate')->group(function () {
         Route::group(['namespace' => 'Jeffpereira\RealEstate\Http\Controllers'], function () {
             Route::get('dasboard', 'HomeController@dashboard')->name('jp_realestate.dashboard');
             // Property

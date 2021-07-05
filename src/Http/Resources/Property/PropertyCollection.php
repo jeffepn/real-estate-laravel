@@ -3,6 +3,7 @@
 namespace Jeffpereira\RealEstate\Http\Resources\Property;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Jeffpereira\RealEstate\Http\Resources\BusinessPropertyResource;
 use JPAddress\Resources\AddressCollection;
 use JPAddress\Resources\AddressResource;
 use JPAddress\Resources\CityResource;
@@ -28,9 +29,12 @@ class PropertyCollection extends ResourceCollection
     public function with($request)
     {
         $includes = [];
-        // $businesses = $this->collection->pluck('business')->unique()->values()->map(function ($business) {
-        //     return new BusinessResource($business);
-        // })->toArray();
+        $businessesProperty = $this->collection->pluck('businessesProperty')->unique()->flatten()->values()->map(function ($businessProperty) {
+            return new BusinessPropertyResource($businessProperty);
+        })->toArray();
+        $businesses = $this->collection->pluck('businessesProperty')->unique()->flatten()->values()->map(function ($businessProperty) {
+            return new BusinessResource($businessProperty->business);
+        })->toArray();
         $types = $this->collection->pluck('sub_type.type')->unique()->values()->map(function ($type) {
             return new TypeResource($type);
         })->toArray();
@@ -52,7 +56,8 @@ class PropertyCollection extends ResourceCollection
         $countries = $this->collection->pluck('address.neighborhood.city.state.country')->unique()->values()->map(function ($country) {
             return new CountryResource($country);
         })->toArray();
-        // $includes = array_merge($includes, $businesses);
+        $includes = array_merge($includes, $businessesProperty);
+        $includes = array_merge($includes, $businesses);
         $includes = array_merge($includes, $types);
         $includes = array_merge($includes, $subTypes);
         $includes = array_merge($includes, $addresses);

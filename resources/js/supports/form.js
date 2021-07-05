@@ -5,9 +5,9 @@ export default class {
   }
   // Fields
 
-  get(field){
+  get(field) {
     if (this.data.hasOwnProperty(field)) {
-        return this.data[field];
+      return this.data[field];
     }
     return null;
   }
@@ -57,6 +57,14 @@ export default class {
   firstError(field) {
     if (this.errors.hasOwnProperty(field)) {
       return this.errors[field][0];
+    }
+    return "";
+  }
+
+  firstKeyErrorAny() {
+    let keysErrors = Object.keys(this.errors);
+    if (keysErrors.length) {
+      return keysErrors[0];
     }
     return "";
   }

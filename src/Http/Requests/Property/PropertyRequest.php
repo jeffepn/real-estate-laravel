@@ -18,24 +18,23 @@ class PropertyRequest extends FormRequest
     {
         $edit = $this->method() == 'PUT' || $this->method() == 'PATCH';
         $sometimes = $edit ? 'sometimes|' : '';
-        $rulesItems = "{$sometimes}bail|nullable|integer|min:0";
         $rules = [
             "slug" => ["sometimes", "bail", "slug", "min:3", "max:150", Rule::unique('properties')->ignore($this->property)],
-            "businesses" => "sometimes|required",
             "businesses.*.id" => "{$sometimes}bail|required|uuid",
             "businesses.*.value" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
             "sub_type_id" => "{$sometimes}bail|required|uuid",
             "min_description" => "{$sometimes}bail|nullable|min:10|max:200",
-            "total_area" => "{$sometimes}bail|nullable|numeric|between:1,99999999.99",
-            "building_area" => "{$sometimes}bail|nullable|numeric|between:1,99999999.99",
-            "min_dormitory" => $rulesItems,
-            "max_dormitory" => $rulesItems,
-            "min_suite" => $rulesItems,
-            "max_suite" => $rulesItems,
-            "min_bathroom" => $rulesItems,
-            "max_bathroom" => $rulesItems,
-            "min_garage" => $rulesItems,
-            "max_garage" => $rulesItems,
+            "total_area" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
+            "building_area" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
+            "min_dormitory" => "{$sometimes}bail|nullable|integer|min:0|lte:max_dormitory",
+            "max_dormitory" => "{$sometimes}bail|nullable|integer|min:0",
+            "min_suite" => "{$sometimes}bail|nullable|integer|min:0|lte:max_suite",
+            "max_suite" => "{$sometimes}bail|nullable|integer|min:0",
+            "min_bathroom" => "{$sometimes}bail|nullable|integer|min:0|lte:max_bathroom",
+            "max_bathroom" => "{$sometimes}bail|nullable|integer|min:0",
+            "min_garage" => "{$sometimes}bail|nullable|integer|min:0|lte:max_garage",
+            "max_garage" => "{$sometimes}bail|nullable|integer|min:0",
+            "embed" => "{$sometimes}bail|nullable|url|max:300",
         ];
         if (!$edit) {
             $rules = array_merge($rules, [
@@ -57,13 +56,14 @@ class PropertyRequest extends FormRequest
     public function messages()
     {
         return [
+            "lte" => 'O valor mínimo deve ser menor ou igual ao máximo.',
             'min' => 'O campo deve ter no mínimo :min caracteres.',
             'max' => 'Limite o campo a no máximo :max caracteres.',
             'numeric' => 'Formato de número inválido.',
             'integer' => 'Forneça um número inteiro.',
-            'between' => 'Faixa de valores disponíveis: 1 - 99999999.99.',
+            'between' => 'Faixa de valores disponíveis: 0 - 99999999.99.',
             'slug' => 'Formato de slug inválido. Tente algo parecido com formato-de-slug-correto-99.',
-            'businesses.*.id.required' => 'Escolha um tipo de negócio.',
+            'url' => 'Formato de url inválido.',
             'business_id.uuid' => 'Escolha um tipo de negócio.',
             'address_id.required' => 'Cadastre um endereço.',
             'address_id.uuid' => 'Cadastre um endereço.',
@@ -89,7 +89,7 @@ class PropertyRequest extends FormRequest
             "initials.required" => "Forneça um estado.",
         ];
     }
-    public function getData()
+    public function getData(): array
     {
         return $this->except([
             "businesses",
@@ -108,7 +108,7 @@ class PropertyRequest extends FormRequest
         ]);
     }
 
-    public function getDataAddress()
+    public function getDataAddress(): array
     {
         return $this->only([
             "address",
@@ -125,6 +125,11 @@ class PropertyRequest extends FormRequest
             "country",
         ]);
     }
+    public function getDataBusinesses(): array
+    {
+        $data = $this->only(["businesses"]);
+        return empty($data) ? [] : $data['businesses'];
+    }
 
     public function prepareForValidation()
     {
@@ -140,7 +145,7 @@ class PropertyRequest extends FormRequest
         ]);
     }
 
-    private function getStateByInitials($initials)
+    private function getStateByInitials($initials): string
     {
         $initials = Str::upper($initials);
         $states = [

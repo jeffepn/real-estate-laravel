@@ -49,11 +49,11 @@ class PropertyTest extends TestCase
                         "%s em %s - %s %s %s %s %s",
                         Str::title($property->sub_type->name),
                         Str::title($property->address->neighborhood->name),
-                        Str::title($property->address->neighborhood->city->state->name),
-                        $property->max_dormitory ? "$property->max_dormitory dormitório(s)," : '',
-                        $property->max_bathroom ? "$property->max_bathroom banheiro(s)," : '',
-                        $property->max_suite ? "$property->max_suite suite(s)," : '',
-                        $property->max_garage ? "$property->max_garage garagem(ns)," : '',
+                        Str::title($property->address->neighborhood->city->state->initials),
+                        $property->max_dormitory ? "$property->max_dormitory dormitórios," : '',
+                        $property->max_bathroom ? "$property->max_bathroom banheiros," : '',
+                        $property->max_suite ? "$property->max_suite suites," : '',
+                        $property->max_garage ? "$property->max_garage garagens," : '',
                     ),
                     150
                 )

@@ -1,5 +1,5 @@
 <template>
-  <div class="form-check form-check-inline">
+  <div class="form-check">
     <input
       class="form-check-input"
       type="checkbox"

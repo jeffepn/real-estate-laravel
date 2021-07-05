@@ -32,7 +32,7 @@ export default {
     submit() {
       this.form.clearErrors();
       this.$axios
-        .post(this.$route("jp_realestate.type.store"), this.form.data)
+        .post(this.$route("jp_realestate.business.store"), this.form.data)
         .then((response) => {
           this.$toast.message({
             message: response.data.message,
@@ -58,7 +58,7 @@ export default {
     },
   },
   mounted() {
-    this.$eventBus.$on("clear-add-type", () => {
+    this.$eventBus.$on("clear-add-business", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });

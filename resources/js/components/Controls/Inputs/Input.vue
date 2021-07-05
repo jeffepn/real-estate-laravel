@@ -4,9 +4,10 @@
       v-if="isNumber"
       :id="idInput"
       class="form-control"
-      @input="handleInputMoney"
+      @input="handleInputNumber"
       :value="value || 0"
       v-bind="optionsNumber"
+      @keydown="$event.key === '-' ? $event.preventDefault() : null"
     ></money>
     <input
       v-else
@@ -112,10 +113,9 @@ export default {
   },
   methods: {
     handleInput(e) {
-      console.log("Event ", e);
       this.$emit("input", e.target.value);
     },
-    handleInputMoney(value) {
+    handleInputNumber(value) {
       this.$emit("input", value);
     },
   },
