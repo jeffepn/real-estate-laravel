@@ -1,6 +1,6 @@
 const mix = require("laravel-mix");
 const path = require("path");
-
+const CompressionPlugin = require("compression-webpack-plugin");
 mix
   .webpackConfig({
     resolve: {
@@ -11,6 +11,8 @@ mix
       },
       extensions: [".js", ".jsx", ".ts", ".tsx"],
     },
+    plugins: [new CompressionPlugin()],
   })
   .js("resources/js/app.js", "dist/js/realestatelaravel.js")
-  .sass("resources/scss/app.scss", "dist/css/realestatelaravel.css");
+  .sass("resources/scss/app.scss", "dist/css/realestatelaravel.css")
+  .vue();
