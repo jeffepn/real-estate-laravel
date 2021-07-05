@@ -12,11 +12,11 @@ Vue.component("re-container-toast", ReContainerToast);
 // List propetites
 Vue.component("re-list-properties", () =>
   import(
-    /* webpackChunkName: "js/list-properites" */ "@/views/Properties/List.vue"
+    /* webpackChunkName: "list-properites" */ "@/views/Properties/List.vue"
   ),
 );
 Vue.component("re-create-or-edit-properties", () =>
   import(
-    /* webpackChunkName: "js/create-or-edit-properites" */ "@/views/Properties/CreateOrEdit.vue"
+    /* webpackChunkName: "create-or-edit-properites" */ "@/views/Properties/CreateOrEdit.vue"
   ),
 );

@@ -1,6 +1,6 @@
 {
-    "/dist/js/realestatelaravel.js": "/dist/js/realestatelaravel.js",
-    "/dist/js/realestatelaravel/js/list-properites.js": "/dist/js/realestatelaravel/js/list-properites.js",
-    "/dist/js/realestatelaravel/js/create-or-edit-properites.js": "/dist/js/realestatelaravel/js/create-or-edit-properites.js",
-    "/dist/css/realestatelaravel.css": "/dist/css/realestatelaravel.css"
+    "/assets/js/realestatelaravel.js": "/assets/js/realestatelaravel.js",
+    "/assets/js/realestatelaravel/list-properites.js": "/assets/js/realestatelaravel/list-properites.js",
+    "/assets/js/realestatelaravel/create-or-edit-properites.js": "/assets/js/realestatelaravel/create-or-edit-properites.js",
+    "/assets/css/realestatelaravel.css": "/assets/css/realestatelaravel.css"
 }

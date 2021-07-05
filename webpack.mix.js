@@ -13,6 +13,6 @@ mix
     },
     plugins: [new CompressionPlugin()],
   })
-  .js("resources/js/app.js", "dist/js/realestatelaravel.js")
-  .sass("resources/scss/app.scss", "dist/css/realestatelaravel.css")
+  .js("resources/js/app.js", "assets/js/realestatelaravel.js")
+  .sass("resources/scss/app.scss", "assets/css/realestatelaravel.css")
   .vue();
