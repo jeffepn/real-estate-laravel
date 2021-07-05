@@ -74,6 +74,9 @@ export default {
   },
   methods: {
     getImages() {
+      if (!this.form.data.id) {
+        return;
+      }
       this.$axios
         .get(
           this.$route("jp_realestate.property.index-image_property", [

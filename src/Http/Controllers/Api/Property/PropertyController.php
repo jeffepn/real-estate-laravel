@@ -118,10 +118,12 @@ class PropertyController extends Controller
         if (!$request->active) {
             return true;
         }
+        // return $request->active;
         $haveBusinessesProperty = ($property->businessesProperty->count() > 0);
-        $haveImages = ($property->images->count() < 1);
+        $haveImages = ($property->images->count() > 0);
         $haveEmbed = ($request->has("embed") ? $request->embed : $property->embed);
         $haveMedia = ($haveImages || $haveEmbed);
+        // return false;
         return $haveBusinessesProperty && $haveMedia ? true : false;
     }
 

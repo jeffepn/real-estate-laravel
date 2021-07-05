@@ -333,11 +333,12 @@ export default {
       this.form.clearErrors();
       this.submit(this.form.data);
     },
-    publish() {
+    async publish() {
       this.loadingNext = true;
       this.form.clearErrors();
       let data = Object.assign({ active: true }, this.form.data);
-      this.submit(data);
+      await this.submit(data, "media");
+      this.active();
     },
     submit(data, tab = null) {
       let request = this.edit
@@ -369,6 +370,27 @@ export default {
           }
         })
         .finally(() => (this.loadingNext = false));
+    },
+
+    active() {
+      this.$axios
+        .patch(
+          this.$route("jp_realestate.property.update", [this.idProperty]),
+          {
+            active: true,
+          },
+        )
+        .then((response) => {
+          location.href = this.$route("jp_realestate.property.list");
+        })
+        .catch(({ response }) => {
+          if (response) {
+            this.$toast.message({
+              type: "danger",
+              message: response.data.message,
+            });
+          }
+        });
     },
     initialiseProperty() {
       this.idProperty = this.property.id;
