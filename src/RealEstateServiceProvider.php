@@ -26,7 +26,7 @@ class RealEstateServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    { 
+    {
         $this->loadDependences();
         $this->registerPublishes();
         $this->registerCustomRules();
@@ -50,7 +50,7 @@ class RealEstateServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadFactoriesFrom(__DIR__ . "/../database/factories");
-        $this->loadViewsFrom(__DIR__ . "/../resources/views", "jpviews");       
+        $this->loadViewsFrom(__DIR__ . "/../resources/views", "jpviews");
     }
 
     protected function registerCustomRules()
