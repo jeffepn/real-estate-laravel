@@ -89,7 +89,7 @@ class Property extends Model
             $this->max_dormitory ? $this->max_dormitory . " dormitórios," : '',
             $this->max_bathroom ? $this->max_bathroom . " banheiros," : '',
             $this->max_suite ? $this->max_suite . " suites," : '',
-            $this->max_garage ? $this->max_garage . " garagens," : '',
+            $this->max_garage ? $this->max_garage . " garagens," : ''
         );
         return Str::slug(Str::limit($generate, 150));
     }
