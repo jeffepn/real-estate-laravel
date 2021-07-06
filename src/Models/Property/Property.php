@@ -86,10 +86,10 @@ class Property extends Model
             Str::title($subType->name),
             Str::title($this->address->neighborhood->name),
             Str::title($this->address->neighborhood->city->state->initials),
-            $this->max_dormitory ? "$this->max_dormitory dormitórios," : '',
-            $this->max_bathroom ? "$this->max_bathroom banheiros," : '',
-            $this->max_suite ? "$this->max_suite suites," : '',
-            $this->max_garage ? "$this->max_garage garagens," : '',
+            $this->max_dormitory ? $this->max_dormitory . " dormitórios," : '',
+            $this->max_bathroom ? $this->max_bathroom . " banheiros," : '',
+            $this->max_suite ? $this->max_suite . " suites," : '',
+            $this->max_garage ? $this->max_garage . " garagens," : '',
         );
         return Str::slug(Str::limit($generate, 150));
     }
