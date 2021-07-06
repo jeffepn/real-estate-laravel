@@ -12,6 +12,8 @@ class ImageProperty extends Model
 
     protected $table = "image_properties";
 
+    protected $appends = ['way_url'];
+
     protected $guarded = [];
 
     public static function boot()
@@ -20,5 +22,10 @@ class ImageProperty extends Model
         self::deleting(function ($image) {
             Storage::disk(config('realestatelaravel.filesystem.disk'))->delete($image->way);
         });
+    }
+
+    public function getWayUrlAttribute()
+    {
+        return Storage::disk(config('realestatelaravel.filesystem.disk'))->url($this->way);
     }
 }
