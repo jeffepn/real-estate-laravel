@@ -12,5 +12,5 @@ return [
             'properties' => 'properties'
         ]
     ],
-    'url_home' => "http://google.com"
+    'url_home' => null
 ];
