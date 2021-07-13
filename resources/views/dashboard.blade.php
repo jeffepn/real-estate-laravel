@@ -2,6 +2,5 @@
 
 
 @section('content')
-Este é o content
 
 @endsection

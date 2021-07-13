@@ -11,6 +11,6 @@ return [
         'path' => [
             'properties' => 'properties'
         ]
-    ]
-
+    ],
+    'url_home' => "http://google.com"
 ];

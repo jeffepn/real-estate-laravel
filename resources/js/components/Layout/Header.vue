@@ -1,12 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a
-        class="navbar-brand"
-        href="#"
-        @click.prevent="$eventBus.$emit('loading-container-master', true)"
-        >Navbar</a
-      >
+      <a class="navbar-brand" :href="urlHome">Painel geral</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -29,15 +24,6 @@
             ></a>
           </li>
         </ul>
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
       </div>
     </div>
   </nav>
@@ -46,6 +32,12 @@
 <script>
 export default {
   name: "ReSidebar",
+  props: {
+    homeMaster: {
+      type: String,
+      default: null,
+    },
+  },
   data() {
     return {
       userName: "Jefferson",
@@ -64,6 +56,7 @@ export default {
           url: this.$route("jp_realestate.property.list"),
         },
       ],
+      urlHome: null,
     };
   },
   computed: {
@@ -85,6 +78,11 @@ export default {
     expandSidebar() {
       this.sidebar = "no-compress";
     },
+  },
+  mounted() {
+    this.urlHome = this.homeMaster
+      ? this.homeMaster
+      : this.$route("jp_realestate.dashboard");
   },
 };
 </script>
