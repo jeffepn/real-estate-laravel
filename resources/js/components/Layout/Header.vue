@@ -55,6 +55,11 @@ export default {
           icon: "<i class='fas fa-building'></i>",
           url: this.$route("jp_realestate.property.list"),
         },
+        {
+          label: "Banners",
+          icon: "<i class='fas fa-building'></i>",
+          url: this.$route("jp_realestate.banner.list"),
+        },
       ],
       urlHome: null,
     };

@@ -9,7 +9,7 @@ Vue.component("re-loading", ReLoading);
 Vue.component("re-container-toast", ReContainerToast);
 
 // Views
-// List propetites
+// Propetites
 Vue.component("re-list-properties", () =>
   import(
     /* webpackChunkName: "list-properites" */ "@/views/Properties/List.vue"
@@ -19,4 +19,8 @@ Vue.component("re-create-or-edit-properties", () =>
   import(
     /* webpackChunkName: "create-or-edit-properites" */ "@/views/Properties/CreateOrEdit.vue"
   ),
+);
+// Banners
+Vue.component("re-list-banners", () =>
+  import(/* webpackChunkName: "list-banners" */ "@/views/Banners/List.vue"),
 );
