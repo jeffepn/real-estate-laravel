@@ -10,8 +10,8 @@ class Banner extends Model
 {
     use UsesUuid;
 
-    //protected $fillable = ['way', 'title', 'content', 'link'];
-    protected $guarded = [];
+    protected $fillable = ['way', 'title', 'content', 'link'];
+    // protected $guarded = [];
 
     protected $appends = ['way_url'];
 

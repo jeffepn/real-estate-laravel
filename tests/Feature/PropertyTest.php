@@ -19,7 +19,7 @@ use JPAddress\Models\Address\Address;
 class PropertyTest extends TestCase
 {
     use RefreshDatabase;
-    protected $api = 'property';
+    protected $api = 'api/property';
 
 
     /**
@@ -35,7 +35,7 @@ class PropertyTest extends TestCase
                 return rand(1, 5);
             }
         ]);
-        $response = $this->getJson($this->api);
+        $response = $this->getJson(route('jp_realestate.property.index'));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => [
