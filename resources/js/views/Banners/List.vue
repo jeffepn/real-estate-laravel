@@ -25,9 +25,13 @@
               <i class="fas fa-search"></i>
             </span>
           </div>
-          <a href="#" class="btn btn-outline-primary ms-2">
+          <button
+            type="button"
+            class="btn btn-outline-primary ms-2"
+            @click="showModalFormBanner = true"
+          >
             <i class="fas fa-plus"></i> Novo
-          </a>
+          </button>
         </div>
       </div>
       <div class="card-body">
@@ -46,15 +50,15 @@
               <tr v-for="banner in banners" :key="banner.id">
                 <th>
                   <div class="actions">
-                    <a
-                      class="btn btn-primary btn-sm"
-                      :href="$route('jp_realestate.banner.edit', [banner.id])"
+                    <button
+                      class="btn btn-primary btn-sm me-2"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Editar"
+                      @click="openModalEditBanner(banner)"
                     >
                       <i class="fas fa-edit"></i>
-                    </a>
+                    </button>
                     <button
                       class="btn btn-danger btn-sm"
                       data-bs-toggle="tooltip"
@@ -99,15 +103,28 @@
     >
       <p>Tem certeza da exclusão do banner?</p>
     </re-modal>
+    <re-modal
+      :show="showModalFormBanner"
+      :title="titleModalBanner"
+      @close="closeModalBanner"
+      @cancel="closeModalBanner"
+      :footer="false"
+    >
+      <re-form-banner
+        :banner="bannerEdit"
+        @submitSuccess="successFormBanner"
+      ></re-form-banner>
+    </re-modal>
   </div>
 </template>
 
 <script>
 import RePagination from "@/components/Controls/Pagination";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
-import ReModal from "@components/Modal";
+import ReModal from "@/components/Modal";
+import ReFormBanner from "@/components/Forms/FormBanner";
 export default {
-  components: { RePagination, ReButton, ReModal },
+  components: { RePagination, ReButton, ReModal, ReFormBanner },
   data() {
     return {
       search: null,
@@ -118,7 +135,9 @@ export default {
         page: 1,
       },
       showModalDelete: false,
+      showModalFormBanner: false,
       idDelete: null,
+      bannerEdit: null,
     };
   },
   computed: {
@@ -132,14 +151,16 @@ export default {
         return this.originalBanners;
       }
 
-      const result = this.originalBanners.filter(
-        (item) =>
-          item.title.search(
-            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
-          ) !== -1 ||
-          item.content.search(
-            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
-          ) !== -1,
+      const result = this.originalBanners.filter((item) =>
+        item.title
+          ? item.title.search(
+              new RegExp(this.search.replaceAll(" ", ".*"), "i"),
+            ) !== -1
+          : false || item.content
+          ? item.content.search(
+              new RegExp(this.search.replaceAll(" ", ".*"), "i"),
+            ) !== -1
+          : false,
       );
       this.resetPage();
       return result;
@@ -158,6 +179,9 @@ export default {
     },
     searchIsEmpty() {
       return !(this.search && this.search.trim().length);
+    },
+    titleModalBanner() {
+      return this.bannerEdit ? "Editar Banner" : "Adicionar Banner";
     },
   },
   methods: {
@@ -198,6 +222,17 @@ export default {
         .catch((error) => {
           this.$toast.message(error.message, true);
         });
+    },
+    closeModalBanner() {
+      this.bannerEdit = null;
+      this.showModalFormBanner = false;
+    },
+    openModalEditBanner(banner) {
+      this.bannerEdit = banner;
+      this.showModalFormBanner = true;
+    },
+    successFormBanner() {
+      this.getBanners();
     },
   },
   async beforeMount() {

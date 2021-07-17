@@ -120,7 +120,7 @@ class PropertyController extends Controller
             }
             return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage() . $th->getFile() . $th->getLine()], 400);
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
         }
     }
 

@@ -9,7 +9,8 @@ return [
     'filesystem' => [
         'disk' => 'public',
         'path' => [
-            'properties' => 'properties'
+            'properties' => 'properties',
+            // 'banners' => 'banners'
         ]
     ],
     'url_home' => null
