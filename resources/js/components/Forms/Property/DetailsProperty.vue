@@ -13,6 +13,15 @@
       <div class="col-sm-6 col-md-3 mb-2">
         <re-input
           type="number"
+          v-model="form.data.useful_area"
+          placeholder="Área útil"
+          :error="form.hasError('useful_area')"
+          :error-message="form.firstError('useful_area')"
+        ></re-input>
+      </div>
+      <div class="col-sm-6 col-md-3 mb-2">
+        <re-input
+          type="number"
           v-model="form.data.total_area"
           placeholder="Área total"
           :error="form.hasError('total_area')"

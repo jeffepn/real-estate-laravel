@@ -134,6 +134,7 @@ class PropertyRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
+            'useful_area' => $this->useful_area ? $this->useful_area : null,
             'building_area' => $this->building_area ? $this->building_area : null,
             'total_area' => $this->total_area ? $this->total_area : null,
             'number' => $this->not_number ? null : $this->number,
