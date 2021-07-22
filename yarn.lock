@@ -1735,6 +1735,11 @@ autoprefixer@^10.0.1:
     normalize-range "^0.1.2"
     postcss-value-parser "^4.1.0"
 
+awe-dnd@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/awe-dnd/-/awe-dnd-0.3.4.tgz#5913d12e0bd32f3e7e4f6361a870e8ea623496eb"
+  integrity sha512-ZvwlnaUn1RFwYXQUxLZKtyKH2R+z+8an1B0cTVfDA6UP7i2JxDnxXNwecR56qhwQha39XDQDpgmqz9kQghhksQ==
+
 axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"

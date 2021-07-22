@@ -3,6 +3,7 @@
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
@@ -20,6 +21,7 @@ use JPAddress\Models\Address\Country;
 use JPAddress\Models\Address\Neighborhood;
 use JPAddress\Models\Address\State;
 use Illuminate\Support\Str;
+use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyUpdateOrderRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyCollection;
 
 class PropertyController extends Controller
@@ -196,6 +198,15 @@ class PropertyController extends Controller
         } catch (ModelNotFoundException $mn) {
             return response()->noContent(400);
         }
+    }
+
+    public function updateOrder(ImagePropertyUpdateOrderRequest $request)
+    {
+        foreach ($request->orders as $key => $contentOrder) {
+            $image = ImageProperty::findOrFail($contentOrder['id']);
+            $image->update(['order' => $contentOrder['order']]);
+        }
+        return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
     }
 
     public function destroyImage(ImageProperty $imageProperty)

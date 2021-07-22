@@ -59,7 +59,7 @@ class Property extends Model
 
     public function images(): HasMany
     {
-        return $this->hasMany(ImageProperty::class);
+        return $this->hasMany(ImageProperty::class)->orderBy('order');
     }
 
     protected function generateSlug()

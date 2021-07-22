@@ -20,6 +20,7 @@ Route::middleware(config('realestatelaravel.middleware.api'))->group(function ()
             Route::get("property/{property}/image-property", [PropertyController::class, "indexImage"])->name('property.index-image_property');
             Route::post("image-property", [PropertyController::class, "uploadImage"])->name('image_property.store');
             Route::delete("image-property/{imageProperty}", [PropertyController::class, "destroyImage"])->name('image_property.destroy');
+            Route::patch("image-property/update-order", [PropertyController::class, "updateOrder"])->name('image_property.update_order');
         });
     });
 });

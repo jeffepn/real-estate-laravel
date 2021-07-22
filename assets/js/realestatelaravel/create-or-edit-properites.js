@@ -1791,7 +1791,22 @@ function _asyncIterator(iterable) { var method; if (typeof Symbol !== "undefined
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+ // import VueDND from "awe-dnd";
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MediaProperty",
@@ -1984,10 +1999,27 @@ function _asyncIterator(iterable) { var method; if (typeof Symbol !== "undefined
           return element.id !== id;
         });
       });
+    },
+    updateOrderOfImages: function updateOrderOfImages(data) {
+      this.$axios.patch(this.$route("jp_realestate.image_property.update_order"), {
+        orders: data
+      });
     }
   },
   mounted: function mounted() {
+    var _this5 = this;
+
     this.getImages();
+    this.$dragging.$on("dragend", function () {
+      var data = _this5.images.map(function (image, index) {
+        return {
+          id: image.id,
+          order: index
+        };
+      });
+
+      _this5.updateOrderOfImages(data);
+    });
   }
 });
 
@@ -6536,7 +6568,18 @@ var render = function() {
       _vm._l(_vm.images, function(image, index) {
         return _c(
           "div",
-          { key: index, staticClass: "col-auto mb-2 position-relative" },
+          {
+            directives: [
+              {
+                name: "dragging",
+                rawName: "v-dragging",
+                value: { item: image, list: _vm.images, group: "image" },
+                expression: "{ item: image, list: images, group: 'image' }"
+              }
+            ],
+            key: index,
+            staticClass: "color-item col-auto mb-2 position-relative"
+          },
           [
             _c("img", {
               attrs: { width: "150", src: image.way, alt: image.alt }
