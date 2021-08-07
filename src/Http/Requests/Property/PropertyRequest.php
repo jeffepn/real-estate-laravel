@@ -20,8 +20,10 @@ class PropertyRequest extends FormRequest
         $sometimes = $edit ? 'sometimes|' : '';
         $rules = [
             "slug" => ["sometimes", "bail", "slug", "min:3", "max:150", Rule::unique('properties')->ignore($this->property)],
+            "code" => ['sometimes', "bail", "integer", Rule::unique('properties')->ignore($this->property)],
             "businesses.*.id" => "{$sometimes}bail|required|uuid",
             "businesses.*.value" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
+            "situation_id" => "{$sometimes}bail|uuid",
             "sub_type_id" => "{$sometimes}bail|required|uuid",
             "min_description" => "{$sometimes}bail|nullable|min:10|max:200",
             "total_area" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
@@ -64,6 +66,8 @@ class PropertyRequest extends FormRequest
             'between' => 'Faixa de valores disponíveis: 0 - 99999999.99.',
             'slug' => 'Formato de slug inválido. Tente algo parecido com formato-de-slug-correto-99.',
             'url' => 'Formato de url inválido.',
+            'code.integer' => 'Formato de código inválido.',
+            'code.unique' => 'Este código já está sendo usado por outro imóvel.',
             'business_id.uuid' => 'Escolha um tipo de negócio.',
             'address_id.required' => 'Cadastre um endereço.',
             'address_id.uuid' => 'Cadastre um endereço.',

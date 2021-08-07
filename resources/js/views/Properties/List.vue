@@ -50,7 +50,7 @@
                   <div class="actions">
                     <span v-text="`${property.code} - `"></span>
                     <re-button
-                      classes="btn btn-success btn-sm"
+                      classes="btn btn-success btn-sm ms-2"
                       v-if="property.active"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
@@ -61,7 +61,7 @@
                     </re-button>
                     <re-button
                       v-else
-                      classes="btn btn-primary btn-sm"
+                      classes="btn btn-primary btn-sm ms-2"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Imóvel arquivado. Clique para publicar..."

@@ -52,6 +52,11 @@ class Property extends Model
         return $this->belongsTo(SubType::class);
     }
 
+    public function situation(): BelongsTo
+    {
+        return $this->belongsTo(Situation::class);
+    }
+
     public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class);

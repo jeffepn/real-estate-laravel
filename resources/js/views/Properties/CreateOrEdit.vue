@@ -285,6 +285,7 @@ export default {
       let keyError = this.form.firstKeyErrorAny();
       switch (keyError) {
         case "sub_type_id":
+        case "code":
         case "cep":
         case "address":
         case "number":
@@ -401,6 +402,7 @@ export default {
       this.setDataBaseProperty();
     },
     setProperty({ data, included }) {
+      let situation = included.find((element) => element.type === "situation");
       let subType = included.find((element) => element.type === "sub_type");
       let address = included.find((element) => element.type === "address");
       let neighborhood = included.find(
@@ -414,6 +416,7 @@ export default {
       this.property = {
         id: data.id,
         slug: data.attributes.slug,
+        situation_id: situation.id,
         sub_type_id: subType.id,
         code: data.attributes.code,
         building_area: data.attributes.building_area,
