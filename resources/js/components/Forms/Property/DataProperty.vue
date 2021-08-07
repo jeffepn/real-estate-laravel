@@ -76,6 +76,11 @@ export default {
       }, []);
     },
   },
+  watch: {
+    typeId(newValue) {
+      this.type_id = newValue;
+    },
+  },
   data() {
     return {
       type_id: this.typeId,

@@ -75,10 +75,7 @@ export default {
       if (this.selectFirst && this.data.length > 0 && this.value === null) {
         return (this.selected = this.data[0].value);
       }
-      if (this.verifyIfExistValueInData()) {
-        this.selected = this.value;
-      }
-      this.selected = null;
+      this.selected = this.value;
     },
     verifyIfExistValueInData() {
       return this.data.find((element) => element.value === this.value)

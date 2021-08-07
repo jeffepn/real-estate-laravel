@@ -68,7 +68,7 @@ export default {
   },
   data() {
     return {
-      selected: null,
+      selected: this.value,
       data: [],
       showModal: false,
     };
@@ -93,9 +93,6 @@ export default {
     value(newValue) {
       this.selected = newValue;
     },
-    subTypes() {
-      this.selected = null;
-    },
   },
   methods: {
     async getData() {
@@ -113,14 +110,14 @@ export default {
       this.$eventBus.$emit("clear-add-sub-type");
     },
   },
-  async beforeMount() {
+  async created() {
     await this.getData();
-  },
-  mounted() {
-    window.tooltip();
     if (this.value) {
       this.selected = this.value;
     }
+  },
+  mounted() {
+    window.tooltip();
   },
 };
 </script>
