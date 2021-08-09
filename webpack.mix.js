@@ -22,7 +22,7 @@ mix
       },
       extensions: [".js", ".jsx", ".ts", ".tsx"],
     },
-    plugins: [new CompressionPlugin()], //new CleanWebpackPlugin()],
+    plugins: [new CompressionPlugin(), new CleanWebpackPlugin()],
     output: {
       filename: "[name].js",
       chunkFilename: "js/[name].[contenthash].js",

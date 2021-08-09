@@ -9,11 +9,10 @@ import "@/regiter_prototypes";
 import "@/register_globals";
 
 new Vue({
-    el: "#app",
-    data() {
-        return {
-            toast: [],
-            teste: null,
-        };
-    },
+  el: "#app",
+  data() {
+    return {
+      toast: [],
+    };
+  },
 });
