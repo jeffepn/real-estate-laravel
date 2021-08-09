@@ -1,4 +1,5 @@
 const mix = require("laravel-mix");
+const mixscss = require("laravel-mix");
 const path = require("path");
 const CompressionPlugin = require("compression-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
@@ -24,12 +25,11 @@ mix
     plugins: [new CompressionPlugin()], //new CleanWebpackPlugin()],
     output: {
       filename: "[name].js",
-      chunkFilename: `${jsOutputDir}/js/[name].[contenthash].js`,
-      //chunkFilename: "js/[name].[contenthash].js",
-      //path: path.resolve(__dirname, root),
-      //publicPath: "assets",
+      chunkFilename: "js/[name].[contenthash].js",
+      path: path.resolve(__dirname, root),
+      publicPath: "/assets/",
     },
   })
-  .js("resources/js/app.js", `${jsOutputDir}/js/realestatelaravel.js`)
-  .sass("resources/scss/app.scss", `${cssOutputDir}/css/realestatelaravel.css`)
+  .js("resources/js/app.js", "js/realestatelaravel.js")
+  .sass("resources/scss/app.scss", "css/realestatelaravel.css")
   .vue();

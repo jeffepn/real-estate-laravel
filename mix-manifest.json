@@ -1,7 +1,8 @@
 {
-    "/assets/js/realestatelaravel.js": "/assets/js/realestatelaravel.js",
-    "/assets/js/realestatelaravel/list-properites.js": "/assets/js/realestatelaravel/list-properites.js",
-    "/assets/js/realestatelaravel/create-or-edit-properites.js": "/assets/js/realestatelaravel/create-or-edit-properites.js",
-    "/assets/js/realestatelaravel/list-banners.js": "/assets/js/realestatelaravel/list-banners.js",
-    "/assets/css/realestatelaravel.css": "/assets/css/realestatelaravel.css"
+    "/js/realestatelaravel.js": "/js/realestatelaravel.js",
+    "/js/main.dec9031905cb2f5e41fb.js": "/js/main.dec9031905cb2f5e41fb.js",
+    "/js/list-properites.9f630db0128ff41df525.js": "/js/list-properites.9f630db0128ff41df525.js",
+    "/js/create-or-edit-properites.18281a633c6be4a432ef.js": "/js/create-or-edit-properites.18281a633c6be4a432ef.js",
+    "/js/list-banners.4b9c0352b6e5826920ed.js": "/js/list-banners.4b9c0352b6e5826920ed.js",
+    "/css/realestatelaravel.css": "/css/realestatelaravel.css"
 }
