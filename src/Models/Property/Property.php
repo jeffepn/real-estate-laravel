@@ -21,7 +21,9 @@ class Property extends Model
     {
         parent::boot();
         self::creating(function ($property) {
-            $property->code = static::max('code') + 1;
+            if (!$property->code) {
+                $property->code = static::max('code') + 1;
+            }
         });
         self::deleting(function ($property) {
             $property->images->map(function ($image) {

@@ -13,6 +13,15 @@
       <div class="col-sm-6 col-md-3 mb-2">
         <re-input
           type="number"
+          v-model="form.data.useful_area"
+          placeholder="Área útil"
+          :error="form.hasError('useful_area')"
+          :error-message="form.firstError('useful_area')"
+        ></re-input>
+      </div>
+      <div class="col-sm-6 col-md-3 mb-2">
+        <re-input
+          type="number"
           v-model="form.data.total_area"
           placeholder="Área total"
           :error="form.hasError('total_area')"
@@ -135,12 +144,15 @@
           id="floatingTextareaMinDescription"
           style="height: 100px"
           v-model="form.data.min_description"
-          :error="form.hasError('min_description')"
-          :error-message="form.firstError('min_description')"
         ></textarea>
         <label for="floatingTextareaMinDescription">
           Descrição para SEO. (sinopse do imóvel)
         </label>
+        <div
+          v-if="form.hasError('min_description')"
+          class="text-danger"
+          v-text="form.firstError('min_description')"
+        ></div>
       </div>
     </div>
     <div class="mb-2 col-12">

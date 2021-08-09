@@ -39,7 +39,7 @@ class RealEstateServiceProvider extends ServiceProvider
         ], 'realestatelaravel-config');
 
         $this->publishes([
-            __DIR__ . '/../assets/' => public_path('assets/'),
+            __DIR__ . '/../dist/' => public_path('assets/'),
         ], 'realestatelaravel-assets');
     }
 

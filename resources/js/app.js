@@ -1,4 +1,4 @@
-import Vue from "vue";
+/*import Vue from "vue";
 // Defaults bootstrap
 import "@/bootstrap";
 // Register components
@@ -13,6 +13,9 @@ new Vue({
   data() {
     return {
       toast: [],
+      teste: null,
     };
   },
-});
+});*/
+import(/* webpackChunkName: "main" */ "@/main.js");
+//require(/* webpackChunkName: "main" */ "./main");
