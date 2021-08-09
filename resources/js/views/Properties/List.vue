@@ -50,7 +50,7 @@
                   <div class="actions">
                     <span v-text="`${property.code} - `"></span>
                     <re-button
-                      classes="btn btn-success btn-sm"
+                      classes="btn btn-success btn-sm ms-2"
                       v-if="property.active"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
@@ -61,7 +61,7 @@
                     </re-button>
                     <re-button
                       v-else
-                      classes="btn btn-primary btn-sm"
+                      classes="btn btn-primary btn-sm ms-2"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Imóvel arquivado. Clique para publicar..."
@@ -80,15 +80,15 @@
                     >
                       <i class="fas fa-edit"></i>
                     </a>
-                    <a
+                    <button
                       class="btn btn-danger btn-sm"
-                      href="#"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Excluir"
+                      @click="openDelete(property.id)"
                     >
                       <i class="fas fa-trash"></i>
-                    </a>
+                    </button>
                   </div>
                 </th>
                 <td v-text="formateAddress(property)"></td>
@@ -111,14 +111,26 @@
         ></re-pagination>
       </div>
     </div>
+    <re-modal
+      :show="showModalDelete"
+      title="Atenção!"
+      text-button-cancel="Cancelar"
+      text-button-ok="Sim"
+      @close="idDelete = null"
+      @cancel="idDelete = null"
+      @ok="deleteBanner"
+    >
+      <p>Tem certeza da exclusão do banner?</p>
+    </re-modal>
   </div>
 </template>
 
 <script>
 import RePagination from "@/components/Controls/Pagination";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
+import ReModal from "@/components/Modal";
 export default {
-  components: { RePagination, ReButton },
+  components: { RePagination, ReButton, ReModal },
   data() {
     return {
       search: null,
@@ -128,6 +140,8 @@ export default {
         perPage: 10,
         page: 1,
       },
+      showModalDelete: false,
+      idDelete: null,
     };
   },
   computed: {
@@ -309,6 +323,24 @@ export default {
       result.state = state.attributes.name;
       result.initials = state.attributes.initials;
       return result;
+    },
+    openDelete(id) {
+      this.idDelete = id;
+      this.showModalDelete = true;
+    },
+    deleteBanner() {
+      this.$axios
+        .delete(this.$route("jp_realestate.property.destroy", [this.idDelete]))
+        .then((response) => {
+          this.data = this.data.filter(
+            (element) => element.id !== this.idDelete,
+          );
+          this.idDelete = null;
+          this.showModalDelete = false;
+        })
+        .catch((error) => {
+          this.$toast.message(error.message, true);
+        });
     },
   },
   async beforeMount() {

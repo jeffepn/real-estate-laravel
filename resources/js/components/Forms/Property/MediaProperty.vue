@@ -34,6 +34,20 @@
     </div>
     <div class="row">
       <div
+        class="color-item col-auto mb-2 position-relative"
+        v-for="(image, index) in images"
+        :key="index"
+        v-dragging="{ item: image, list: images, group: 'image' }"
+      >
+        <img width="150" :src="image.way" :alt="image.alt" />
+        <re-button
+          classes="btn btn-danger btn-circle button-trash"
+          @click="removeImage(image.id)"
+        >
+          <i class="fas fa-trash"></i>
+        </re-button>
+      </div>
+      <!-- <div
         class="col-auto mb-2 position-relative"
         v-for="(image, index) in images"
         :key="index"
@@ -45,7 +59,7 @@
         >
           <i class="fas fa-trash"></i>
         </re-button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -53,6 +67,7 @@
 <script>
 import ReInput from "@/components/Controls/Inputs/Input";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
+// import VueDND from "awe-dnd";
 export default {
   name: "MediaProperty",
   props: {
@@ -139,9 +154,26 @@ export default {
           this.images = this.images.filter((element) => element.id !== id);
         });
     },
+    updateOrderOfImages(data) {
+      this.$axios.patch(
+        this.$route("jp_realestate.image_property.update_order"),
+        {
+          orders: data,
+        },
+      );
+    },
   },
   mounted() {
     this.getImages();
+    this.$dragging.$on("dragend", () => {
+      let data = this.images.map((image, index) => {
+        return {
+          id: image.id,
+          order: index,
+        };
+      });
+      this.updateOrderOfImages(data);
+    });
   },
 };
 </script>

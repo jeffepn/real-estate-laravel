@@ -247,6 +247,7 @@ export default {
         min_garage: 0,
         max_garage: 0,
         min_description: "",
+        useful_area: 0,
         building_area: 0,
         total_area: 0,
         content: null,
@@ -284,6 +285,7 @@ export default {
       let keyError = this.form.firstKeyErrorAny();
       switch (keyError) {
         case "sub_type_id":
+        case "code":
         case "cep":
         case "address":
         case "number":
@@ -400,6 +402,7 @@ export default {
       this.setDataBaseProperty();
     },
     setProperty({ data, included }) {
+      let situation = included.find((element) => element.type === "situation");
       let subType = included.find((element) => element.type === "sub_type");
       let address = included.find((element) => element.type === "address");
       let neighborhood = included.find(
@@ -413,10 +416,12 @@ export default {
       this.property = {
         id: data.id,
         slug: data.attributes.slug,
+        situation_id: situation.id,
         sub_type_id: subType.id,
         code: data.attributes.code,
         building_area: data.attributes.building_area,
         total_area: data.attributes.total_area,
+        useful_area: data.attributes.useful_area,
         min_description: data.attributes.min_description,
         content: data.attributes.content,
         items: data.attributes.items,

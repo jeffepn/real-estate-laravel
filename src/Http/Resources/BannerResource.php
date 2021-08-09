@@ -7,6 +7,25 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class BannerResource extends JsonResource
 {
     /**
+     * Message response
+     *
+     * @var string
+     */
+    private $message;
+
+    /**
+     * Create a new resource instance.
+     *
+     * @param  mixed  $resource
+     * @return void
+     */
+    public function __construct($resource, $message = '')
+    {
+        parent::__construct($resource);
+        $this->message = $message;
+    }
+
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -24,6 +43,14 @@ class BannerResource extends JsonResource
                 'content' => $this->content,
                 'link' => $this->link,
             ]
+        ];
+    }
+
+    public function with($request)
+    {
+        return [
+            'error' => false,
+            'message' => $this->message
         ];
     }
 }

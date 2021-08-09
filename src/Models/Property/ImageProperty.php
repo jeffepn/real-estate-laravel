@@ -22,6 +22,9 @@ class ImageProperty extends Model
         self::deleting(function ($image) {
             Storage::disk(config('realestatelaravel.filesystem.disk'))->delete($image->way);
         });
+        self::creating(function ($image) {
+            $image->order = static::where('property_id', $image->property_id)->max('order') + 1;
+        });
     }
 
     public function getWayUrlAttribute()

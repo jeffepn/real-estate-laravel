@@ -46,6 +46,7 @@ class PropertyResource extends JsonResource
             'attributes' => [
                 'slug' => $this->slug,
                 'code' => $this->code,
+                'useful_area' => $this->useful_area,
                 'building_area' => $this->building_area,
                 'total_area' => $this->total_area,
                 'min_description' => $this->min_description,
@@ -63,6 +64,12 @@ class PropertyResource extends JsonResource
                 'active' => (bool)$this->active,
             ],
             'relationships' => [
+                'situation' => [
+                    'data' => [
+                        'type' => 'situation',
+                        'id' => $this->situation->id,
+                    ]
+                ],
                 'sub_type' => [
                     'data' => [
                         'type' => 'sub_type',
@@ -89,6 +96,7 @@ class PropertyResource extends JsonResource
     public function with($request)
     {
         $includeds = [
+            new SituationResource($this->situation),
             new SubTypeResource($this->sub_type),
             new AddressResource($this->address),
             new NeighborhoodResource($this->address->neighborhood),

@@ -54,6 +54,11 @@ class Property extends Model
         return $this->belongsTo(SubType::class);
     }
 
+    public function situation(): BelongsTo
+    {
+        return $this->belongsTo(Situation::class);
+    }
+
     public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class);
@@ -61,7 +66,7 @@ class Property extends Model
 
     public function images(): HasMany
     {
-        return $this->hasMany(ImageProperty::class);
+        return $this->hasMany(ImageProperty::class)->orderBy('order');
     }
 
     protected function generateSlug()

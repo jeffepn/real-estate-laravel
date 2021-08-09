@@ -3,16 +3,11 @@
 namespace Jeffpereira\RealEstate\Http\Resources\Property;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class ImagePropertyResource extends JsonResource
+class SituationResource extends JsonResource
 {
-    /**
-     * Message response
-     *
-     * @var string
-     */
+
     private $message;
 
     /**
@@ -26,7 +21,6 @@ class ImagePropertyResource extends JsonResource
         parent::__construct($resource);
         $this->message = $message;
     }
-
     /**
      * Transform the resource into an array.
      *
@@ -36,15 +30,15 @@ class ImagePropertyResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'type' => 'image-property',
+            'type' => 'situation',
             'id' => $this->id,
             'attributes' => [
-                'way' => Storage::disk(config('realestatelaravel.filesystem.disk'))->url($this->way),
-                'alt' => $this->alt,
-                'order' => $this->order,
+                'slug' => $this->slug,
+                'name' => Str::title($this->name),
             ]
         ];
     }
+
     public function with($request)
     {
         return [
