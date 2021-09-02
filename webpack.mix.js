@@ -1,5 +1,4 @@
 const mix = require("laravel-mix");
-const mixscss = require("laravel-mix");
 const path = require("path");
 const CompressionPlugin = require("compression-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");

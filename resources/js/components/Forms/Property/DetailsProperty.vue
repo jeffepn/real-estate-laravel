@@ -137,23 +137,13 @@
       </div>
     </div>
     <div class="mb-2 col-12">
-      <div class="form-floating">
-        <textarea
-          class="form-control"
-          placeholder="Comece a escrever..."
-          id="floatingTextareaMinDescription"
-          style="height: 100px"
-          v-model="form.data.min_description"
-        ></textarea>
-        <label for="floatingTextareaMinDescription">
-          Descrição para SEO. (sinopse do imóvel)
-        </label>
-        <div
-          v-if="form.hasError('min_description')"
-          class="text-danger"
-          v-text="form.firstError('min_description')"
-        ></div>
-      </div>
+      <re-textarea
+        :max-length="200"
+        v-model="form.data.min_description"
+        placeholder="Descrição para SEO. (sinopse do imóvel)"
+        :error="form.hasError('min_description')"
+        :error-message="form.firstError('min_description')"
+      ></re-textarea>
     </div>
     <div class="mb-2 col-12">
       <ckeditor
@@ -174,10 +164,12 @@
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ReInput from "@/components/Controls/Inputs/Input";
+import ReTextarea from "@/components/Controls/Inputs/Textarea";
 export default {
   components: {
     ckeditor: CKEditor.component,
     ReInput,
+    ReTextarea,
   },
   props: {
     form: {

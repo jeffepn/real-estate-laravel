@@ -55,6 +55,7 @@
           class="form-check-input"
           type="checkbox"
           id="inlineCheckboxRent"
+          disabled
           :checked="notNumber"
         />
         <label class="form-check-label" for="inlineCheckboxRent">S/N</label>

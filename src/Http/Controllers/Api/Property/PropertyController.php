@@ -110,7 +110,7 @@ class PropertyController extends Controller
             if ($request->has('businesses')) {
                 $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
             }
-            $property->address->update($request->getDataAddress());
+            $this->updateAddress($property->address, $request->getDataAddress());
             if (!$this->checkPublish($request, $property)) {
                 return response([
                     'error' => 'true',
@@ -170,6 +170,23 @@ class PropertyController extends Controller
             ])->id
         ])->id;
         return Address::create($dataAddress);
+    }
+
+    private function updateAddress(Address $address, array $dataAddress): Address
+    {
+        $dataAddress['neighborhood_id'] = Neighborhood::firstOrCreate([
+            'name' => $dataAddress['neighborhood'],
+            'city_id' => City::firstOrCreate([
+                "name" => $dataAddress['city'],
+                'state_id' => State::firstOrCreate([
+                    'name' => $dataAddress['state'],
+                    'initials' => $dataAddress['initials'],
+                    'country_id' => Country::firstOrCreate(['name' => $dataAddress['country']])->id
+                ])->id
+            ])->id
+        ])->id;
+        $address->update($dataAddress);
+        return $address;
     }
 
     public function indexImage(Property $property)
