@@ -39,7 +39,10 @@
         :key="index"
         v-dragging="{ item: image, list: images, group: 'image' }"
       >
-        <img width="150" :src="image.way" :alt="image.alt" />
+        <div
+          class="item-image"
+          :style="`background-image: url(${image.way})`"
+        ></div>
         <re-button
           classes="btn btn-danger btn-circle button-trash"
           @click="removeImage(image.id)"
@@ -47,19 +50,6 @@
           <i class="fas fa-trash"></i>
         </re-button>
       </div>
-      <!-- <div
-        class="col-auto mb-2 position-relative"
-        v-for="(image, index) in images"
-        :key="index"
-      >
-        <img width="150" :src="image.way" :alt="image.alt" />
-        <re-button
-          classes="btn btn-danger btn-circle button-trash"
-          @click="removeImage(image.id)"
-        >
-          <i class="fas fa-trash"></i>
-        </re-button>
-      </div> -->
     </div>
   </div>
 </template>
@@ -67,7 +57,7 @@
 <script>
 import ReInput from "@/components/Controls/Inputs/Input";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
-// import VueDND from "awe-dnd";
+
 export default {
   name: "MediaProperty",
   props: {
@@ -183,5 +173,12 @@ export default {
   position: absolute;
   right: 0;
   top: -5px;
+}
+.item-image {
+  width: 150px;
+  height: 150px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 </style>

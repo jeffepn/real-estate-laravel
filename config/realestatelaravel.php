@@ -10,8 +10,8 @@ return [
         'disk' => 'public',
         'path' => [
             'properties' => 'properties',
-            // 'banners' => 'banners'
-        ]
+        ],
     ],
+    'optmize_images' => env('RE_OPTIMIZE_IMAGE', true),
     'url_home' => null
 ];
