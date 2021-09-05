@@ -23,6 +23,7 @@ use JPAddress\Models\Address\State;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyUpdateOrderRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyCollection;
+use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 
 class PropertyController extends Controller
 {
@@ -182,6 +183,9 @@ class PropertyController extends Controller
         try {
             $property = Property::findOrFail($request->property_id);
             $altImage =  $property->generateAltImage();
+            if (config('realestatelaravel.optmize_images')) {
+                ImageOptimizer::optimize($request->file('image')->getRealPath());
+            }
             $resultUpload = Storage::disk(config('realestatelaravel.filesystem.disk'))
                 ->putFileAs(
                     config('realestatelaravel.filesystem.path.properties'),

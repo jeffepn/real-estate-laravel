@@ -15,7 +15,7 @@ class ImagePropertyRequest extends FormRequest
     public function rules()
     {
         return [
-            "image" => "required|mimes:jpeg,png|max:300",
+            "image" => "required|mimes:jpeg,png|max:10240",
             "property_id" => "required|uuid",
         ];
     }
