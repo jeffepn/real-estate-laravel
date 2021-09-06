@@ -67,7 +67,8 @@ class PropertyTest extends TestCase
                 'attributes' => [
                     'slug', 'code', 'building_area', 'total_area', 'min_description',
                     'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
-                    'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
+                    'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage',
+                    'useful_area', 'embed', 'active'
                 ],
                 'relationships' => ['sub_type', 'address'],
             ],
@@ -93,10 +94,17 @@ class PropertyTest extends TestCase
                 'max_suite' => $property->max_suite,
                 'min_garage' => $property->min_garage,
                 'max_garage' => $property->max_garage,
+                'useful_area' => $property->useful_area,
+                'embed' => $property->embed,
+                'active' => $property->active,
             ],
             'relationships' => [
                 'sub_type' => ['data' => ['type' => 'sub_type', 'id' => $property->sub_type_id]],
                 'address' => ['data' => ['type' => 'address', 'id' => $property->address_id]],
+                'situation' => ['data' => ['type' => 'situation', 'id' => $property->situation_id]],
+                'businesses' => $property->businesses->map(function ($business) {
+                    return  ['data' => ['type' => 'business', 'id' => $business->id]];
+                })->toArray(),
             ]
         ], $response->json()['data']);
     }
@@ -134,7 +142,9 @@ class PropertyTest extends TestCase
                 "city" => "Poços de Caldas",
                 "state" => "Minas Gerais",
                 "initials" => "MG",
-                "country" => "Brasil"
+                "country" => "Brasil",
+                'useful_area' => 200,
+                'embed' => 'http://google.com'
             ]
         );
         $response->assertStatus(201);
@@ -160,11 +170,16 @@ class PropertyTest extends TestCase
                 'slug' => $property->slug, 'code' => $property->code, 'building_area' => 105.49, 'total_area' => 200.50,
                 'min_description' => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
                 'min_dormitory' => 1, 'max_dormitory' => 3, 'min_suite' => 2, 'max_suite' => 4, 'min_bathroom' => 3, 'max_bathroom' => 6,
-                'min_garage' => 4, 'max_garage' => 8, 'content' => 'test content', 'items' => 'test items'
+                'min_garage' => 4, 'max_garage' => 8, 'content' => 'test content', 'items' => 'test items',
+                'useful_area' => 200,  'embed' => 'http://google.com', 'active' => false
             ],
             'relationships' => [
                 'address' => ['data' => ['type' => 'address', 'id' => $property->address_id]],
                 'sub_type' => ['data' => ['type' => 'sub_type', 'id' => $property->sub_type_id]],
+                'situation' => ['data' => ['type' => 'situation', 'id' => $property->situation_id]],
+                'businesses' => $property->businesses->map(function ($business) {
+                    return  ['data' => ['type' => 'business', 'id' => $business->id]];
+                })->toArray(),
             ]
         ], $response->json()['data']);
         $this->assertEquals('av. campos do jordão', $property->address->address);
@@ -230,6 +245,7 @@ class PropertyTest extends TestCase
             'code' => $property->code,
             'address_id' => $property->address_id,
             'sub_type_id' => $property->sub_type_id,
+            'situation_id' => $property->situation_id,
             'min_description' => "min description edit",
             'content' => 'test content edit', 'items' => 'test items edit',
             'building_area' => 115.49, 'total_area' => 210.50,
@@ -241,7 +257,10 @@ class PropertyTest extends TestCase
             'max_bathroom' => 7,
             'min_garage' => 5,
             'max_garage' => 9,
-            "active" => 0
+            "active" => 0,
+            'useful_area' => $property->useful_area,
+            'embed' => $property->embed,
+            'active' => $property->active,
         ], $data);
     }
 

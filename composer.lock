@@ -627,12 +627,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "3647f54490175f210e6246d1ee0a19c186757cf7"
+                "reference": "e668c9cd379325d7a4f95d6398bfc6b14e3b679e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/3647f54490175f210e6246d1ee0a19c186757cf7",
-                "reference": "3647f54490175f210e6246d1ee0a19c186757cf7",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/e668c9cd379325d7a4f95d6398bfc6b14e3b679e",
+                "reference": "e668c9cd379325d7a4f95d6398bfc6b14e3b679e",
                 "shasum": ""
             },
             "require": {
@@ -658,7 +658,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "v1.16-dev"
+                    "dev-main": "v1.17-dev"
                 }
             },
             "autoload": {
@@ -685,20 +685,20 @@
                 "issues": "https://github.com/FakerPHP/Faker/issues",
                 "source": "https://github.com/FakerPHP/Faker/tree/main"
             },
-            "time": "2021-08-11T19:03:52+00:00"
+            "time": "2021-09-06T15:00:42+00:00"
         },
         {
             "name": "jeffersonpereira/address",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/packages-jp-dev-web/php/address.git",
-                "reference": "d13a136dacf8abb11c4278887f5d9c4937e6d7f2"
+                "reference": "4eee682db641f10833bc802f4d958be8d9cc37be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/packages-jp-dev-web%2Fphp%2Faddress/repository/archive.zip?sha=d13a136dacf8abb11c4278887f5d9c4937e6d7f2",
-                "reference": "d13a136dacf8abb11c4278887f5d9c4937e6d7f2",
+                "url": "https://gitlab.com/api/v4/projects/packages-jp-dev-web%2Fphp%2Faddress/repository/archive.zip?sha=4eee682db641f10833bc802f4d958be8d9cc37be",
+                "reference": "4eee682db641f10833bc802f4d958be8d9cc37be",
                 "shasum": ""
             },
             "require": {
@@ -737,7 +737,7 @@
             "support": {
                 "issues": "https://gitlab.com/api/v4/projects/23351123/issues"
             },
-            "time": "2021-07-05T22:02:17+00:00"
+            "time": "2021-09-06T13:21:11+00:00"
         },
         {
             "name": "laravel/framework",
@@ -745,12 +745,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "c6077f2e4f0644154c2b5f2d2e4b64a180e5df18"
+                "reference": "b714888dc34dd91976adb606a6e2aafc19e63f31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/c6077f2e4f0644154c2b5f2d2e4b64a180e5df18",
-                "reference": "c6077f2e4f0644154c2b5f2d2e4b64a180e5df18",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/b714888dc34dd91976adb606a6e2aafc19e63f31",
+                "reference": "b714888dc34dd91976adb606a6e2aafc19e63f31",
                 "shasum": ""
             },
             "require": {
@@ -890,7 +890,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-08-31T18:39:23+00:00"
+            "time": "2021-09-06T13:53:57+00:00"
         },
         {
             "name": "laravellegends/pt-br-validator",
@@ -1298,12 +1298,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "95681e675906446864ba8130722b63792fe2d8f4"
+                "reference": "ba868db3b9419015be51f83b3e7b743639ec0bed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/95681e675906446864ba8130722b63792fe2d8f4",
-                "reference": "95681e675906446864ba8130722b63792fe2d8f4",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/ba868db3b9419015be51f83b3e7b743639ec0bed",
+                "reference": "ba868db3b9419015be51f83b3e7b743639ec0bed",
                 "shasum": ""
             },
             "require": {
@@ -1385,7 +1385,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-23T13:04:29+00:00"
+            "time": "2021-09-06T10:43:58+00:00"
         },
         {
             "name": "opis/closure",
@@ -5811,12 +5811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b"
+                "reference": "7a3568b9cb7fc86f1bf696c0aaf8d2c2d57bb54d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
-                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7a3568b9cb7fc86f1bf696c0aaf8d2c2d57bb54d",
+                "reference": "7a3568b9cb7fc86f1bf696c0aaf8d2c2d57bb54d",
                 "shasum": ""
             },
             "require": {
@@ -5894,7 +5894,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.9"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5"
             },
             "funding": [
                 {
@@ -5906,7 +5906,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-08-31T06:47:40+00:00"
+            "time": "2021-09-06T09:06:52+00:00"
         },
         {
             "name": "sebastian/cli-parser",

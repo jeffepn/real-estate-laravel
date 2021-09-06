@@ -16,10 +16,12 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 class TypeTest extends TestCase
 {
     use RefreshDatabase;
-    protected $api = 'type';
+    protected $api = 'api/type';
 
     /**
      * @test
+     * @group type
+     * @group type-show
      */
     public function verify_format_return_index()
     {
@@ -33,6 +35,7 @@ class TypeTest extends TestCase
 
     /**
      * @test
+     * @group type
      */
     public function verify_format_return_show()
     {
@@ -55,6 +58,7 @@ class TypeTest extends TestCase
     }
     /**
      * @test
+     * @group type
      */
     public function store_with_success()
     {
@@ -69,6 +73,7 @@ class TypeTest extends TestCase
 
     /**
      * @test
+     * @group type
      */
     public function update_with_success()
     {
@@ -80,6 +85,7 @@ class TypeTest extends TestCase
 
     /**
      * @test
+     * @group type
      */
     public function destroy_with_success()
     {
@@ -92,6 +98,7 @@ class TypeTest extends TestCase
 
     /**
      * @test
+     * @group type
      */
     public function dont_destroy_type_with_one_or_more_sub_type()
     {
@@ -106,6 +113,7 @@ class TypeTest extends TestCase
 
     /**
      * @test
+     * @group type
      */
     public function validate_name_request()
     {
