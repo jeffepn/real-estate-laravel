@@ -33,6 +33,12 @@ export default {
     ReInput,
     ReChooseType,
   },
+  props: {
+    show: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       form: new Form({
@@ -40,6 +46,13 @@ export default {
         name: null,
       }),
     };
+  },
+  watch: {
+    show() {
+      if (this.show) {
+        this.$eventBus.$emit("reload-add-type");
+      }
+    },
   },
   methods: {
     submit() {

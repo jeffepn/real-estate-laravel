@@ -29,7 +29,8 @@
       @close="closeModalAddSubType"
       :footer="false"
     >
-      <re-add-sub-type @submitSuccess="submitSuccess"> </re-add-sub-type>
+      <re-add-sub-type :show="showModal" @submitSuccess="submitSuccess">
+      </re-add-sub-type>
     </re-modal>
   </div>
 </template>

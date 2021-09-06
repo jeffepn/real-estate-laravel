@@ -108,6 +108,9 @@ export default {
     await this.getData();
   },
   mounted() {
+    this.$eventBus.$on("reload-add-type", () => {
+      this.getData();
+    });
     window.tooltip();
   },
 };
