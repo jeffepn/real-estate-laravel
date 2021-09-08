@@ -10,9 +10,9 @@ Package used to manage real estate / brokerage websites, built with the Laravel 
 
 ## Instalation
 
-> ```php
-> composer require jeffersonpereira/realestatelaravel
-> ```
+```php
+composer require jeffersonpereira/realestatelaravel
+```
 
 After installing the package it is necessary to run the command to publish assets and the configuration file.
 
