@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <main id="app">
+    <main id="content-realestate">
         @section('header')
         @include('jprealestate::layout.header')
         @show

@@ -1,11 +1,18 @@
 @extends(config('realestatelaravel.template'))
 
+@if (config('realestatelaravel.use_template'))
 
+@section(config('realestatelaravel.section_content'))
+{{ $slot }}
+@endsection
+
+@else
 @section(config('realestatelaravel.section_content'))
 <div id="content-realestate">
     {{ $slot }}
 </div>
 @endsection
+@endif
 
 @push('cssrealestate')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
