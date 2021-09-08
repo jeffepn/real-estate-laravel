@@ -9,7 +9,7 @@ import "@/regiter_prototypes";
 import "@/register_globals";
 
 new Vue({
-  el: "#app",
+  el: "#content-realestate",
   data() {
     return {
       toast: [],

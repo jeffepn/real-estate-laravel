@@ -1,6 +1,3 @@
-@extends('jpviews::layout.template')
-
-
-@section('content')
+@content
 <re-list-properties></re-list-properties>
-@endsection
+@endcontent

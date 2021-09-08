@@ -15,6 +15,6 @@ class HomeController extends Controller
     public function dashboard(): View
     {
 
-        return view('jpviews::dashboard');
+        return view('jprealestate::dashboard');
     }
 }

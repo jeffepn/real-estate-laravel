@@ -37,8 +37,12 @@ class Install extends Command
      */
     public function handle()
     {
+        $this->info('Initing instalation realestatelaravel...');
+
         $this->callSilent('vendor:publish', ['--force' => true, '--tag' => 'realestatelaravel-assets',]);
-        $this->callSilent('vendor:publish', ['--tag' => 'realestatelaravel-config']);
+        $this->callSilent('vendor:publish', ['--force' => true, '--tag' => 'realestatelaravel-config']);
+
+        $this->info('');
         $this->info('realestatelaravel was installed successfully.');
     }
 }

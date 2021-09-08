@@ -13,12 +13,12 @@
         "php": " >=7.2.5",
         "jeffersonpereira/address": "1.*",
         "laravellegends/pt-br-validator": "dev-master",
-        "fakerphp/faker": "^1.13",
         "doctrine/dbal": "4.0.x-dev",
         "tightenco/ziggy": "^1.2",
         "spatie/laravel-image-optimizer": "dev-master"
     },
     "require-dev": {
+        "fakerphp/faker": "^1.13",
         "orchestra/testbench": "^4.0",
         "laravel/legacy-factories": "^1.0@dev",
         "nunomaduro/collision": "^3.0"

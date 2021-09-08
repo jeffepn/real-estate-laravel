@@ -9,6 +9,6 @@ class BannerController extends Controller
 {
     public function list(): View
     {
-        return view('jpviews::banners.list');
+        return view('jprealestate::banners.list');
     }
 }

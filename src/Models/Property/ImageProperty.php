@@ -20,7 +20,7 @@ class ImageProperty extends Model
     {
         parent::boot();
         self::deleting(function ($image) {
-            Storage::disk(config('realestatelaravel.filesystem.disk'))->delete($image->way);
+            Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))->delete($image->way);
         });
         self::creating(function ($image) {
             $image->order = static::where('property_id', $image->property_id)->max('order') + 1;
@@ -29,6 +29,6 @@ class ImageProperty extends Model
 
     public function getWayUrlAttribute()
     {
-        return Storage::disk(config('realestatelaravel.filesystem.disk'))->url($this->way);
+        return Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))->url($this->way);
     }
 }

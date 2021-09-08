@@ -200,12 +200,12 @@ class PropertyController extends Controller
         try {
             $property = Property::findOrFail($request->property_id);
             $altImage =  $property->generateAltImage();
-            if (config('realestatelaravel.optmize_images')) {
+            if (config('realestatelaravel.filesystem.entities.properties.optmize')) {
                 ImageOptimizer::optimize($request->file('image')->getRealPath());
             }
-            $resultUpload = Storage::disk(config('realestatelaravel.filesystem.disk'))
+            $resultUpload = Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))
                 ->putFileAs(
-                    config('realestatelaravel.filesystem.path.properties'),
+                    config('realestatelaravel.filesystem.entities.properties.path'),
                     $request->image,
                     Str::slug($altImage) .  Str::uuid() . '.' . $request->image->extension()
                 );
@@ -233,9 +233,7 @@ class PropertyController extends Controller
     public function destroyImage(ImageProperty $imageProperty)
     {
         try {
-            $way = $imageProperty->way;
             if ($imageProperty->delete()) {
-                Storage::disk(config('realestatelaravel.filesystem.disk'))->delete($way);
                 return response()->noContent(200);
             }
             return response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], 400);

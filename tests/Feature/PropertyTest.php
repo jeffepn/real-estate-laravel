@@ -83,6 +83,7 @@ class PropertyTest extends TestCase
                 'code' => $property->code,
                 'building_area' => $property->building_area,
                 'total_area' => $property->total_area,
+                'ground_area' => $property->ground_area,
                 'min_description' => $property->min_description,
                 'content' => $property->content,
                 'items' => $property->items,
@@ -144,6 +145,7 @@ class PropertyTest extends TestCase
                 "initials" => "MG",
                 "country" => "Brasil",
                 'useful_area' => 200,
+                'ground_area' => 100,
                 'embed' => 'http://google.com'
             ]
         );
@@ -154,7 +156,7 @@ class PropertyTest extends TestCase
                 'attributes' => [
                     'slug', 'code', 'building_area', 'total_area', 'min_description',
                     'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
-                    'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
+                    'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage', 'ground_area', 'useful_area'
                 ],
                 'relationships' => [
                     'address', 'sub_type'
@@ -171,7 +173,7 @@ class PropertyTest extends TestCase
                 'min_description' => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
                 'min_dormitory' => 1, 'max_dormitory' => 3, 'min_suite' => 2, 'max_suite' => 4, 'min_bathroom' => 3, 'max_bathroom' => 6,
                 'min_garage' => 4, 'max_garage' => 8, 'content' => 'test content', 'items' => 'test items',
-                'useful_area' => 200,  'embed' => 'http://google.com', 'active' => false
+                'useful_area' => 200, 'ground_area' => 100, 'embed' => 'http://google.com', 'active' => false
             ],
             'relationships' => [
                 'address' => ['data' => ['type' => 'address', 'id' => $property->address_id]],
@@ -259,6 +261,7 @@ class PropertyTest extends TestCase
             'max_garage' => 9,
             "active" => 0,
             'useful_area' => $property->useful_area,
+            'ground_area' => $property->ground_area,
             'embed' => $property->embed,
             'active' => $property->active,
         ], $data);
