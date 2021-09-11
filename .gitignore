@@ -4,4 +4,5 @@ vendor/
 node_modules/
 laravel/
 assets/
+public/
 
