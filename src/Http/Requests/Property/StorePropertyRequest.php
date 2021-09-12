@@ -27,6 +27,8 @@ class StorePropertyRequest extends FormRequest
             "min_description" => "bail|nullable|min:10|max:200",
             "total_area" => "bail|nullable|numeric|between:0,99999999.99",
             "building_area" => "bail|nullable|numeric|between:0,99999999.99",
+            "useful_area" => "bail|nullable|numeric|between:0,99999999.99",
+            "ground_area" => "bail|nullable|numeric|between:0,99999999.99",
             "min_dormitory" => "bail|nullable|integer|min:0|lte:max_dormitory",
             "max_dormitory" => "bail|nullable|integer|min:0",
             "min_suite" => "bail|nullable|integer|min:0|lte:max_suite",
@@ -101,6 +103,7 @@ class StorePropertyRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
+            'ground_area' => $this->ground_area ? $this->ground_area : null,
             'useful_area' => $this->useful_area ? $this->useful_area : null,
             'building_area' => $this->building_area ? $this->building_area : null,
             'total_area' => $this->total_area ? $this->total_area : null,

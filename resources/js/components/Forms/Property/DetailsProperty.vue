@@ -28,6 +28,15 @@
           :error-message="form.firstError('total_area')"
         ></re-input>
       </div>
+      <div class="col-sm-6 col-md-3 mb-2">
+        <re-input
+          type="number"
+          v-model="form.data.ground_area"
+          placeholder="Área do terreno"
+          :error="form.hasError('ground_area')"
+          :error-message="form.firstError('ground_area')"
+        ></re-input>
+      </div>
     </div>
     <div class="row">
       <div class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex flex-column">
