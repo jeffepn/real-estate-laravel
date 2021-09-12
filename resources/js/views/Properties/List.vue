@@ -189,7 +189,7 @@ export default {
       return !(this.search && this.search.trim().length);
     },
     urlCreate() {
-      return window.route("jp_realestate.property.create");
+      return window.reroute("jp_realestate.property.create");
     },
   },
   methods: {
@@ -214,8 +214,8 @@ export default {
         });
     },
     getProperties() {
-      axios
-        .get(window.route("jp_realestate.property.index"))
+      reaxios
+        .get(window.reroute("jp_realestate.property.index"))
         .then((response) => {
           this.data = response.data.data;
           this.included = response.data.included;
@@ -326,8 +326,10 @@ export default {
       this.showModalDelete = true;
     },
     deleteBanner() {
-      axios
-        .delete(window.route("jp_realestate.property.destroy", [this.idDelete]))
+      reaxios
+        .delete(
+          window.reroute("jp_realestate.property.destroy", [this.idDelete]),
+        )
         .then((response) => {
           this.data = this.data.filter(
             (element) => element.id !== this.idDelete,
@@ -340,14 +342,14 @@ export default {
         });
     },
     generateUrlEdit(propertyId) {
-      return window.route("jp_realestate.property.edit", [propertyId]);
+      return window.reroute("jp_realestate.property.edit", [propertyId]);
     },
   },
   async beforeMount() {
     await this.getProperties();
   },
   mounted() {
-    window.tooltip();
+    window.retooltip();
   },
 };
 </script>

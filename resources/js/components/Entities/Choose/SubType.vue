@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     async getData() {
-      await axios(window.route("jp_realestate.sub-type.index")).then(
+      await reaxios(window.reroute("jp_realestate.sub-type.index")).then(
         ({ data }) => {
           this.data = data.data;
         },
@@ -118,7 +118,7 @@ export default {
     }
   },
   mounted() {
-    window.tooltip();
+    window.retooltip();
   },
 };
 </script>

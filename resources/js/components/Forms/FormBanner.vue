@@ -125,11 +125,11 @@ export default {
         formData.append("_method", "PUT");
       }
       return this.edit
-        ? axios.post(
-            window.route("jp_realestate.banner.update", [this.banner.id]),
+        ? reaxios.post(
+            window.reroute("jp_realestate.banner.update", [this.banner.id]),
             formData,
           )
-        : axios.post(window.route("jp_realestate.banner.store"), formData);
+        : reaxios.post(window.reroute("jp_realestate.banner.store"), formData);
     },
     successSubmit(data) {
       this.$emit("submitSuccess", data);

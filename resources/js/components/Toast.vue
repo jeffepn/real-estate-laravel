@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     now() {
-      return window.moment();
+      return window.remoment();
     },
     initialise() {
       this.idToast = this.id ? this.id : `id-toast-master-${this._uid}`;

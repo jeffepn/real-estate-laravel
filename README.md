@@ -1,6 +1,6 @@
 # Real Estate Laravel - With Bootstrap 5
 
-<p><a href="https://packagist.org/packages/jeffersonpereira/address" rel="nofollow noindex noopener external ugc"><img src="https://img.shields.io/static/v1?label=packagist&message=1.3.3&color=blue&style=%3CSTYLE%3E&logo=%3CLOGO%3E" alt="Latest Version on Packagist"></a>
+<p><a href="https://packagist.org/packages/jeffersonpereira/address" rel="nofollow noindex noopener external ugc"><img src="https://img.shields.io/static/v1?label=packagist&message=1.3.4&color=blue&style=%3CSTYLE%3E&logo=%3CLOGO%3E" alt="Latest Version on Packagist"></a>
 <a href="#" rel="nofollow noindex noopener external ugc"><img src="https://img.shields.io/static/v1?label=license&message=MIT&color=success&style=%3CSTYLE%3E&logo=%3CLOGO%3E" alt="Software License"></a>
 </p>
 

@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     async getSituations() {
-      await axios(window.route("jp_realestate.situation.index")).then(
+      await reaxios(window.reroute("jp_realestate.situation.index")).then(
         ({ data }) => {
           this.situationsRequest = data.data;
         },

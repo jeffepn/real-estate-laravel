@@ -186,8 +186,8 @@ export default {
   },
   methods: {
     getBanners() {
-      axios
-        .get(window.route("jp_realestate.banner.index"))
+      reaxios
+        .get(window.reroute("jp_realestate.banner.index"))
         .then((response) => {
           this.data = response.data.data;
           this.included = response.data.included;
@@ -210,8 +210,8 @@ export default {
       this.showModalDelete = true;
     },
     deleteBanner() {
-      axios
-        .delete(window.route("jp_realestate.banner.destroy", [this.idDelete]))
+      reaxios
+        .delete(window.reroute("jp_realestate.banner.destroy", [this.idDelete]))
         .then((response) => {
           this.data = this.data.filter(
             (element) => element.id !== this.idDelete,
@@ -239,7 +239,7 @@ export default {
     await this.getBanners();
   },
   mounted() {
-    window.tooltip();
+    window.retooltip();
   },
 };
 </script>

@@ -31,8 +31,8 @@ export default {
   methods: {
     submit() {
       this.form.clearErrors();
-      axios
-        .post(window.route("jp_realestate.type.store"), this.form.data)
+      reaxios
+        .post(window.reroute("jp_realestate.type.store"), this.form.data)
         .then((response) => {
           this.$toast.message({
             message: response.data.message,

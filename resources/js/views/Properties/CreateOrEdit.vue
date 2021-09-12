@@ -235,7 +235,7 @@ export default {
       return this.edit ? "Editar Imóvel" : "Novo Imóvel";
     },
     urlBack() {
-      return window.route("jp_realestate.property.list");
+      return window.reroute("jp_realestate.property.list");
     },
   },
   methods: {
@@ -350,18 +350,18 @@ export default {
     submit(data, tab = null) {
       delete data["active"];
       let request = this.edit
-        ? axios.patch(
-            window.route("jp_realestate.property.update", [this.idProperty]),
+        ? reaxios.patch(
+            window.reroute("jp_realestate.property.update", [this.idProperty]),
             data,
           )
-        : axios.post(window.route("jp_realestate.property.store"), data);
+        : reaxios.post(window.reroute("jp_realestate.property.store"), data);
       request
         .then((response) => {
           if (!this.edit) {
             this.setProperty(response.data);
           }
           if (!tab) {
-            location.href = window.route("jp_realestate.property.list");
+            location.href = window.reroute("jp_realestate.property.list");
           }
           this.setTabShow(tab);
         })
@@ -383,7 +383,7 @@ export default {
     setActive() {
       this.active(this.idProperty, true)
         .then((response) => {
-          //   location.href = window.route("jp_realestate.property.list");
+          location.href = window.reroute("jp_realestate.property.list");
         })
         .catch(({ response }) => {
           if (response) {
@@ -398,7 +398,7 @@ export default {
     initialiseProperty() {
       this.idProperty = this.property.id;
       this.setUrlHistory(
-        window.route("jp_realestate.property.edit", [this.idProperty]),
+        window.reroute("jp_realestate.property.edit", [this.idProperty]),
       );
       this.setDataBaseProperty();
     },
@@ -456,8 +456,8 @@ export default {
       this.type_id = subType.relationships.type.data.id;
     },
     async getProperty() {
-      await axios
-        .get(window.route("jp_realestate.property.show", [this.id]))
+      await reaxios
+        .get(window.reroute("jp_realestate.property.show", [this.id]))
         .then((response) => this.setProperty(response.data));
     },
     initialiseTabs() {

@@ -90,9 +90,11 @@ export default {
   },
   methods: {
     async getData() {
-      await axios(window.route("jp_realestate.type.index")).then(({ data }) => {
-        this.data = data.data;
-      });
+      await reaxios(window.reroute("jp_realestate.type.index")).then(
+        ({ data }) => {
+          this.data = data.data;
+        },
+      );
     },
     submitSuccess() {
       this.getData();
@@ -109,7 +111,7 @@ export default {
     this.$eventBus.$on("reload-add-type", () => {
       this.getData();
     });
-    window.tooltip();
+    window.retooltip();
   },
 };
 </script>
