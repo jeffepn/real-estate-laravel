@@ -25,10 +25,7 @@
               <i class="fas fa-search"></i>
             </span>
           </div>
-          <a
-            :href="$route('jp_realestate.property.create')"
-            class="btn btn-outline-primary ms-2"
-          >
+          <a :href="urlCreate" class="btn btn-outline-primary ms-2">
             <i class="fas fa-plus"></i> Novo
           </a>
         </div>
@@ -55,7 +52,7 @@
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Imóvel publicado. Clique para arquivar..."
-                      @click="active(property, false)"
+                      @click="setActive(property, false)"
                     >
                       <i class="fas fa-globe"></i>
                     </re-button>
@@ -65,15 +62,13 @@
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Imóvel arquivado. Clique para publicar..."
-                      @click="active(property, true)"
+                      @click="setActive(property, true)"
                     >
                       <i class="fas fa-archive"></i>
                     </re-button>
                     <a
                       class="btn btn-primary btn-sm"
-                      :href="
-                        $route('jp_realestate.property.edit', [property.id])
-                      "
+                      :href="generateUrlEdit(property.id)"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Editar"
@@ -126,6 +121,7 @@
 </template>
 
 <script>
+import { active } from "@/supports/property.js";
 import RePagination from "@/components/Controls/Pagination";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
 import ReModal from "@/components/Modal";
@@ -192,18 +188,14 @@ export default {
     searchIsEmpty() {
       return !(this.search && this.search.trim().length);
     },
+    urlCreate() {
+      return window.route("jp_realestate.property.create");
+    },
   },
   methods: {
-    active(property, active = false) {
-      this.$axios
-        .patch(
-          this.$route("jp_realestate.property.active_or_inactive", [
-            property.id,
-          ]),
-          {
-            active,
-          },
-        )
+    active,
+    setActive(property, active = false) {
+      this.active(property.id, active)
         .then((response) => {
           this.data = this.data.map((element) => {
             if (element.id === property.id) {
@@ -222,8 +214,8 @@ export default {
         });
     },
     getProperties() {
-      this.$axios
-        .get(this.$route("jp_realestate.property.index"))
+      axios
+        .get(window.route("jp_realestate.property.index"))
         .then((response) => {
           this.data = response.data.data;
           this.included = response.data.included;
@@ -334,8 +326,8 @@ export default {
       this.showModalDelete = true;
     },
     deleteBanner() {
-      this.$axios
-        .delete(this.$route("jp_realestate.property.destroy", [this.idDelete]))
+      axios
+        .delete(window.route("jp_realestate.property.destroy", [this.idDelete]))
         .then((response) => {
           this.data = this.data.filter(
             (element) => element.id !== this.idDelete,
@@ -346,6 +338,9 @@ export default {
         .catch((error) => {
           this.$toast.message(error.message, true);
         });
+    },
+    generateUrlEdit(propertyId) {
+      return window.route("jp_realestate.property.edit", [propertyId]);
     },
   },
   async beforeMount() {

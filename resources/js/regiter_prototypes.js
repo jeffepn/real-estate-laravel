@@ -7,11 +7,11 @@ axios.defaults.headers.common = {
   Accept: "application/json",
   "Content-Type": "application/json;charset=UTF-8",
 };
-Vue.prototype.$axios = axios;
+window.axios = axios;
 
 import RouteZiggy from "ziggy";
 import { Ziggy } from "@/routes";
-Vue.prototype.$route = (name, params) => RouteZiggy(name, params, false, Ziggy);
+window.route = (name, params) => RouteZiggy(name, params, false, Ziggy);
 
 import toast from "@/toast";
 Vue.prototype.$toast = toast;

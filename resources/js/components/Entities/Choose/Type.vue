@@ -90,11 +90,9 @@ export default {
   },
   methods: {
     async getData() {
-      await this.$axios(this.$route("jp_realestate.type.index")).then(
-        ({ data }) => {
-          this.data = data.data;
-        },
-      );
+      await axios(window.route("jp_realestate.type.index")).then(({ data }) => {
+        this.data = data.data;
+      });
     },
     submitSuccess() {
       this.getData();

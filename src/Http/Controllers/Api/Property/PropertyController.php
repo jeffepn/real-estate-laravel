@@ -2,29 +2,19 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Jeffpereira\RealEstate\Models\Property\Property;
-use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
-use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyRequest;
 use Jeffpereira\RealEstate\Http\Requests\Property\PropertyRequest;
-use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyResource;
 use Jeffpereira\RealEstate\Http\Resources\Property\PropertyCollection;
 use Jeffpereira\RealEstate\Http\Resources\Property\PropertyResource;
 use Jeffpereira\RealEstate\Models\Property\BusinessProperty;
-use Jeffpereira\RealEstate\Models\Property\ImageProperty;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
-use JPAddress\Models\Address\Address;
-use JPAddress\Models\Address\City;
-use JPAddress\Models\Address\Country;
-use JPAddress\Models\Address\Neighborhood;
-use JPAddress\Models\Address\State;
-use Illuminate\Support\Str;
-use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyUpdateOrderRequest;
-use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyCollection;
-use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
+use Jeffpereira\RealEstate\Http\Requests\Property\StorePropertyRequest;
+use Jeffpereira\RealEstate\Http\Requests\Property\UpdatePropertyRequest;
 
 class PropertyController extends Controller
 {
@@ -33,7 +23,7 @@ class PropertyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): JsonResource
     {
         return new PropertyCollection(Property::orderBy('code', "desc")->get());
     }
@@ -44,7 +34,7 @@ class PropertyController extends Controller
      * @param  PropertyRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PropertyRequest $request)
+    public function store(StorePropertyRequest $request)
     {
         try {
             $address = Property::createAddress($request->all());
@@ -95,19 +85,15 @@ class PropertyController extends Controller
      * @param  \App\Models\Property  $property
      * @return \Illuminate\Http\Response
      */
-    public function show(Property $property)
+    public function show(Property $property): JsonResource
     {
         return new PropertyResource($property);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  PropertyRequest  $request
-     * @param  \App\Models\Property  $property
-     * @return \Illuminate\Http\Response
      */
-    public function update(PropertyRequest $request, Property $property)
+    public function update(UpdatePropertyRequest $request, Property $property): Response
     {
         try {
 
@@ -123,7 +109,7 @@ class PropertyController extends Controller
         }
     }
 
-    public function activeOrInactive(Request $request, Property $property)
+    public function activeOrInactive(Request $request, Property $property): Response
     {
         try {
             $this->validate($request, ["active" => "required|boolean"]);
@@ -144,7 +130,7 @@ class PropertyController extends Controller
      * @param  \App\Models\Property  $property
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Property $property)
+    public function destroy(Property $property): Response
     {
         try {
             return $property->delete()

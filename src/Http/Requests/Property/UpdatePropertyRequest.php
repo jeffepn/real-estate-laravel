@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Jeffpereira\RealEstate\Models\Property\Property;
 
-class PropertyRequest extends FormRequest
+class UpdatePropertyRequest extends FormRequest
 {
 
     /**
@@ -17,42 +17,36 @@ class PropertyRequest extends FormRequest
      */
     public function rules()
     {
-        $edit = $this->method() == 'PUT' || $this->method() == 'PATCH';
-        $sometimes = $edit ? 'sometimes|' : '';
         $rules = [
             "slug" => ["sometimes", "bail", "slug", "min:3", "max:150", Rule::unique('properties')->ignore($this->property)],
             "code" => ['sometimes', "bail", "integer", Rule::unique('properties')->ignore($this->property)],
-            "businesses.*.id" => "{$sometimes}bail|required|uuid",
-            "businesses.*.value" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
-            "situation_id" => "{$sometimes}bail|uuid",
-            "sub_type_id" => "{$sometimes}bail|required|uuid",
-            "min_description" => "{$sometimes}bail|nullable|min:10|max:200",
-            "total_area" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
-            "building_area" => "{$sometimes}bail|nullable|numeric|between:0,99999999.99",
-            "min_dormitory" => "{$sometimes}bail|nullable|integer|min:0|lte:max_dormitory",
-            "max_dormitory" => "{$sometimes}bail|nullable|integer|min:0",
-            "min_suite" => "{$sometimes}bail|nullable|integer|min:0|lte:max_suite",
-            "max_suite" => "{$sometimes}bail|nullable|integer|min:0",
-            "min_bathroom" => "{$sometimes}bail|nullable|integer|min:0|lte:max_bathroom",
-            "max_bathroom" => "{$sometimes}bail|nullable|integer|min:0",
-            "min_garage" => "{$sometimes}bail|nullable|integer|min:0|lte:max_garage",
-            "max_garage" => "{$sometimes}bail|nullable|integer|min:0",
-            "embed" => "{$sometimes}bail|nullable|url|max:300",
+            "businesses.*.id" => "sometimes|bail|required|uuid",
+            "businesses.*.value" => "sometimes|bail|nullable|numeric|between:0,99999999.99",
+            "situation_id" => "sometimes|bail|uuid",
+            "sub_type_id" => "sometimes|bail|required|uuid",
+            "min_description" => "sometimes|bail|nullable|min:10|max:200",
+            "total_area" => "sometimes|bail|nullable|numeric|between:0,99999999.99",
+            "building_area" => "sometimes|bail|nullable|numeric|between:0,99999999.99",
+            "min_dormitory" => "sometimes|bail|nullable|integer|min:0|lte:max_dormitory",
+            "max_dormitory" => "sometimes|bail|nullable|integer|min:0",
+            "min_suite" => "sometimes|bail|nullable|integer|min:0|lte:max_suite",
+            "max_suite" => "sometimes|bail|nullable|integer|min:0",
+            "min_bathroom" => "sometimes|bail|nullable|integer|min:0|lte:max_bathroom",
+            "max_bathroom" => "sometimes|bail|nullable|integer|min:0",
+            "min_garage" => "sometimes|bail|nullable|integer|min:0|lte:max_garage",
+            "max_garage" => "sometimes|bail|nullable|integer|min:0",
+            "embed" => "sometimes|bail|nullable|url|max:300",
+            "address" => "sometimes|bail|nullable|max:100",
+            "number" => "sometimes|nullable|integer|min:1",
+            "complement" => "max:15",
+            "cep" => "sometimes|bail|nullable|formato_cep",
+            "latitude" => "sometimes|nullable|integer",
+            "longitude" => "sometimes|nullable|integer",
+            "neighborhood" => "bail|required|min:2|max:100",
+            "city" => "bail|required|min:2|max:100",
+            "state" => "bail|min:2|max:100",
+            "initials" => "bail|required|min:2|max:2",
         ];
-        if (!$edit) {
-            $rules = array_merge($rules, [
-                "address" => "sometimes|bail|nullable|max:100",
-                "number" => "sometimes|nullable|integer|min:1",
-                "complement" => "max:15",
-                "cep" => "sometimes|bail|nullable|formato_cep",
-                "latitude" => "sometimes|nullable|integer",
-                "longitude" => "sometimes|nullable|integer",
-                "neighborhood" => "bail|required|min:2|max:100",
-                "city" => "bail|required|min:2|max:100",
-                "state" => "bail|min:2|max:100",
-                "initials" => "bail|required|min:2|max:2",
-            ]);
-        }
         return $rules;
     }
 

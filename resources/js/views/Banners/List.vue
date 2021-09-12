@@ -186,8 +186,8 @@ export default {
   },
   methods: {
     getBanners() {
-      this.$axios
-        .get(this.$route("jp_realestate.banner.index"))
+      axios
+        .get(window.route("jp_realestate.banner.index"))
         .then((response) => {
           this.data = response.data.data;
           this.included = response.data.included;
@@ -210,8 +210,8 @@ export default {
       this.showModalDelete = true;
     },
     deleteBanner() {
-      this.$axios
-        .delete(this.$route("jp_realestate.banner.destroy", [this.idDelete]))
+      axios
+        .delete(window.route("jp_realestate.banner.destroy", [this.idDelete]))
         .then((response) => {
           this.data = this.data.filter(
             (element) => element.id !== this.idDelete,

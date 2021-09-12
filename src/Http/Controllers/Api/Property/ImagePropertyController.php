@@ -3,7 +3,6 @@
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
@@ -11,7 +10,6 @@ use Jeffpereira\RealEstate\Models\Property\Property;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyRequest;
-use Jeffpereira\RealEstate\Http\Requests\Property\PropertyRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyResource;
 use Jeffpereira\RealEstate\Models\Property\ImageProperty;
 use Jeffpereira\RealEstate\Utilities\Terminologies;

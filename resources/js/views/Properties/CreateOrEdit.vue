@@ -12,10 +12,7 @@
       >
         <h2 v-text="title"></h2>
         <div class="d-flex flex-wrap">
-          <a
-            :href="$route('jp_realestate.property.list')"
-            class="btn btn-outline-secondary ms-2"
-          >
+          <a :href="urlBack" class="btn btn-outline-secondary ms-2">
             <span aria-hidden="true">&laquo;</span> Voltar
           </a>
         </div>
@@ -144,7 +141,7 @@
               </div>
               <div class="col-auto text-end">
                 <re-button
-                  v-if="!form.data.active"
+                  v-if="!propertyIsActive"
                   classes="btn btn-success mb-2 "
                   :loading="loadingNext"
                   @click="save('media')"
@@ -152,15 +149,15 @@
                   Salvar Rascunho <i class="fas fa-save"></i>
                 </re-button>
                 <re-button
-                  v-if="!form.data.active"
+                  v-if="!propertyIsActive"
                   class="mb-2"
-                  :loading="loadingNext"
+                  :loading="loadingPublish"
                   @click="publish('media')"
                 >
                   Publicar <i class="fas fa-globe"></i>
                 </re-button>
                 <re-button
-                  v-if="form.data.active"
+                  v-if="propertyIsActive"
                   class="mb-2"
                   :loading="loadingNext"
                   @click="save('media')"
@@ -178,6 +175,7 @@
 
 <script>
 import Form from "@/supports/form.js";
+import { active } from "@/supports/property.js";
 import ReFormDataProperty from "@/components/Forms/Property/DataProperty.vue";
 import ReFormDetailsProperty from "@/components/Forms/Property/DetailsProperty.vue";
 import ReBusinessProperty from "@/components/Forms/Property/BusinessProperty.vue";
@@ -209,6 +207,7 @@ export default {
     return {
       loadingNext: false,
       loadingBack: false,
+      loadingPublish: false,
       loadingMaster: true,
       idProperty: this.id,
       property: null,
@@ -229,12 +228,18 @@ export default {
     edit() {
       return this.idProperty !== null;
     },
+    propertyIsActive() {
+      return this.property && this.property.active;
+    },
     title() {
       return this.edit ? "Editar Imóvel" : "Novo Imóvel";
     },
-    request() {},
+    urlBack() {
+      return window.route("jp_realestate.property.list");
+    },
   },
   methods: {
+    active,
     initialiseInitialForm() {
       return new Form({
         sub_type_id: null,
@@ -335,27 +340,27 @@ export default {
       this.form.clearErrors();
       this.submit(this.form.data);
     },
-    async publish() {
-      this.loadingNext = true;
+    async publish(tab) {
+      this.loadingPublish = true;
       this.form.clearErrors();
-      let data = Object.assign({ active: true }, this.form.data);
-      await this.submit(data, "media");
-      this.active();
+      await this.submit(this.form.data, tab);
+      this.setActive();
     },
     submit(data, tab = null) {
+      delete data["active"];
       let request = this.edit
-        ? this.$axios.patch(
-            this.$route("jp_realestate.property.update", [this.idProperty]),
+        ? axios.patch(
+            window.route("jp_realestate.property.update", [this.idProperty]),
             data,
           )
-        : this.$axios.post(this.$route("jp_realestate.property.store"), data);
+        : axios.post(window.route("jp_realestate.property.store"), data);
       request
         .then((response) => {
           if (!this.edit) {
             this.setProperty(response.data);
           }
           if (!tab) {
-            location.href = this.$route("jp_realestate.property.list");
+            location.href = window.route("jp_realestate.property.list");
           }
           this.setTabShow(tab);
         })
@@ -374,16 +379,10 @@ export default {
         .finally(() => (this.loadingNext = false));
     },
 
-    active() {
-      this.$axios
-        .patch(
-          this.$route("jp_realestate.property.update", [this.idProperty]),
-          {
-            active: true,
-          },
-        )
+    setActive() {
+      this.active(this.idProperty, true)
         .then((response) => {
-          location.href = this.$route("jp_realestate.property.list");
+          //   location.href = window.route("jp_realestate.property.list");
         })
         .catch(({ response }) => {
           if (response) {
@@ -392,12 +391,13 @@ export default {
               message: response.data.message,
             });
           }
-        });
+        })
+        .finally(() => (this.loadingPublish = false));
     },
     initialiseProperty() {
       this.idProperty = this.property.id;
       this.setUrlHistory(
-        this.$route("jp_realestate.property.edit", [this.idProperty]),
+        window.route("jp_realestate.property.edit", [this.idProperty]),
       );
       this.setDataBaseProperty();
     },
@@ -454,8 +454,8 @@ export default {
       this.type_id = subType.relationships.type.data.id;
     },
     async getProperty() {
-      await this.$axios
-        .get(this.$route("jp_realestate.property.show", [this.id]))
+      await axios
+        .get(window.route("jp_realestate.property.show", [this.id]))
         .then((response) => this.setProperty(response.data));
     },
     initialiseTabs() {

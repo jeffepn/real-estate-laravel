@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     async getData() {
-      await this.$axios(this.$route("jp_realestate.sub-type.index")).then(
+      await axios(window.route("jp_realestate.sub-type.index")).then(
         ({ data }) => {
           this.data = data.data;
         },

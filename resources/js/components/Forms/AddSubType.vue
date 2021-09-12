@@ -57,8 +57,8 @@ export default {
   methods: {
     submit() {
       this.form.clearErrors();
-      this.$axios
-        .post(this.$route("jp_realestate.sub-type.store"), this.form.data)
+      axios
+        .post(window.route("jp_realestate.sub-type.store"), this.form.data)
         .then((response) => {
           this.$toast.message({
             message: response.data.message,

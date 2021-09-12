@@ -82,8 +82,8 @@ export default {
       if (!this.form.data.id) {
         return;
       }
-      this.$axios
-        .get(this.$route("jp_realestate.image_property.index"), {
+      axios
+        .get(window.route("jp_realestate.image_property.index"), {
           params: {
             property_id: this.form.data.id,
           },
@@ -116,8 +116,8 @@ export default {
       let dataForm = new FormData();
       dataForm.append("image", file);
       dataForm.append("property_id", this.form.data.id);
-      await this.$axios
-        .post(this.$route("jp_realestate.image_property.store"), dataForm, {
+      await axios
+        .post(window.route("jp_realestate.image_property.store"), dataForm, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -138,19 +138,16 @@ export default {
         });
     },
     removeImage(id) {
-      this.$axios
-        .delete(this.$route("jp_realestate.image_property.destroy", [id]))
+      axios
+        .delete(window.route("jp_realestate.image_property.destroy", [id]))
         .then(() => {
           this.images = this.images.filter((element) => element.id !== id);
         });
     },
     updateOrderOfImages(data) {
-      this.$axios.patch(
-        this.$route("jp_realestate.image_property.update_order"),
-        {
-          orders: data,
-        },
-      );
+      axios.patch(window.route("jp_realestate.image_property.update_order"), {
+        orders: data,
+      });
     },
   },
   mounted() {

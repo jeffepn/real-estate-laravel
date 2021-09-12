@@ -78,8 +78,8 @@ export default {
   },
   methods: {
     async getBusinesses() {
-      await this.$axios
-        .get(this.$route("jp_realestate.business.index"))
+      await axios
+        .get(window.route("jp_realestate.business.index"))
         .then((response) => {
           this.originalBusinesses = response.data.data;
           this.formatBusinesses();
