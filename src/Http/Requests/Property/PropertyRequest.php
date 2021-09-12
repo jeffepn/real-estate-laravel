@@ -5,6 +5,7 @@ namespace Jeffpereira\RealEstate\Http\Requests\Property;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Jeffpereira\RealEstate\Models\Property\Property;
 
 class PropertyRequest extends FormRequest
 {
@@ -95,44 +96,13 @@ class PropertyRequest extends FormRequest
     }
     public function getData(): array
     {
-        return $this->except([
-            "businesses",
-            "address",
-            "number",
-            "not_number",
-            "complement",
-            "cep",
-            "latitude",
-            "longitude",
-            "neighborhood",
-            "city",
-            "state",
-            "initials",
-            "country",
-        ]);
-    }
-
-    public function getDataAddress(): array
-    {
-        return $this->only([
-            "address",
-            "number",
-            "not_number",
-            "complement",
-            "cep",
-            "latitude",
-            "longitude",
-            "neighborhood",
-            "city",
-            "state",
-            "initials",
-            "country",
-        ]);
-    }
-    public function getDataBusinesses(): array
-    {
-        $data = $this->only(["businesses"]);
-        return empty($data) ? [] : $data['businesses'];
+        return $this->except(
+            array_merge(
+                ["businesses"],
+                Property::$columnsAddress,
+                Property::$columnsCreateUpdateNeighborhood
+            )
+        );
     }
 
     public function prepareForValidation()

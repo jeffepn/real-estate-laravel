@@ -5,6 +5,7 @@ use Jeffpereira\RealEstate\Http\Controllers\Api\Property\PropertyController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\SubTypeController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\TypeController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\BannerController;
+use Jeffpereira\RealEstate\Http\Controllers\Api\Property\ImagePropertyController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\SituationController;
 
 Route::middleware(config('realestatelaravel.middleware.api'))->group(function () {
@@ -16,13 +17,11 @@ Route::middleware(config('realestatelaravel.middleware.api'))->group(function ()
                 "type" => TypeController::class,
                 "sub-type" => SubTypeController::class,
                 "property" => PropertyController::class,
+                "image_property" => ImagePropertyController::class,
                 "banner" => BannerController::class,
             ]);
-
-            Route::get("property/{property}/image-property", [PropertyController::class, "indexImage"])->name('property.index-image_property');
-            Route::post("image-property", [PropertyController::class, "uploadImage"])->name('image_property.store');
-            Route::delete("image-property/{imageProperty}", [PropertyController::class, "destroyImage"])->name('image_property.destroy');
-            Route::patch("image-property/update-order", [PropertyController::class, "updateOrder"])->name('image_property.update_order');
+            Route::patch("property/{property}/active_or_inactive", [PropertyController::class, "activeOrInactive"])->name('property.active_or_inactive');
+            Route::patch("image-property/update-order", [ImagePropertyController::class, "updateOrder"])->name('image_property.update_order');
         });
     });
 });

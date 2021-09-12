@@ -196,9 +196,14 @@ export default {
   methods: {
     active(property, active = false) {
       this.$axios
-        .patch(this.$route("jp_realestate.property.update", [property.id]), {
-          active,
-        })
+        .patch(
+          this.$route("jp_realestate.property.active_or_inactive", [
+            property.id,
+          ]),
+          {
+            active,
+          },
+        )
         .then((response) => {
           this.data = this.data.map((element) => {
             if (element.id === property.id) {

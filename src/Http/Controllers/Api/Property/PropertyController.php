@@ -4,6 +4,7 @@ namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
@@ -46,39 +47,46 @@ class PropertyController extends Controller
     public function store(PropertyRequest $request)
     {
         try {
-            $address = $this->generateAddress($request->getDataAddress());
+            $address = Property::createAddress($request->all());
 
             $data = $request->getData();
             $data['address_id'] = $address->id;
-            if ($property = Property::create($data)) {
-                if ($request->has('businesses')) {
-                    $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
-                }
-                return (new PropertyResource($property->refresh(), Terminologies::get('all.common.save_data')))
-                    ->response()->setStatusCode(201);
+            $property = Property::create($data);
+            if ($request->has('businesses')) {
+                $this->updateBusinessesOfProperty($property, $request->all());
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return (new PropertyResource($property->refresh(), Terminologies::get('all.common.save_data')))
+                ->response()->setStatusCode(201);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            logger("Error store PropertyController: " . $th->getMessage(), $th->getTrace());
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 500);
         }
     }
 
-    private function updateBusinessesOfProperty(Property $property, array $businesses)
+    private function updateBusinessesOfProperty(Property $property, array $data)
     {
-        $businesses = collect($businesses);
-        $businesses->map(function ($business) use ($property) {
+        if (!Arr::has($data, 'businesses')) {
+            return;
+        }
+
+        $businesses = collect($data['businesses']);
+        $businesses->each(function ($business) use ($property) {
             BusinessProperty::updateOrCreate(
                 ['property_id' => $property->id, 'business_id' => $business['id']],
                 ['value' => $business['value']]
             );
         });
-        $property->businessesProperty->map(function ($businessProperty) use ($businesses) {
-            if ($businesses->filter(function ($business) use ($businessProperty) {
-                return $business['id'] === $businessProperty->business_id;
-            })->count() < 1) {
-                $businessProperty->delete();
-            }
-        });
+
+        $property->businessesProperty
+            ->each(function ($businessProperty) use ($businesses) {
+                $business = $businessProperty
+                    ->business()
+                    ->whereNotIn('id', $businesses->pluck('id'))
+                    ->first();
+                if ($business) {
+                    $businessProperty->delete();
+                }
+            });
     }
 
     /**
@@ -102,41 +110,32 @@ class PropertyController extends Controller
     public function update(PropertyRequest $request, Property $property)
     {
         try {
-            if (!$this->checkPublish($request, $property)) {
-                return response([
-                    'error' => 'true',
-                    'message' => Terminologies::get('all.property.not_publish_without_dependences')
-                ], 400);
-            }
+
             if ($request->has('businesses')) {
-                $this->updateBusinessesOfProperty($property, $request->getDataBusinesses());
+                $this->updateBusinessesOfProperty($property, $request->all());
             }
-            $this->updateAddress($property->address, $request->getDataAddress());
-            if (!$this->checkPublish($request, $property)) {
-                return response([
-                    'error' => 'true',
-                    'message' => Terminologies::get('all.property.not_publish_without_dependences')
-                ], 400);
-            }
-            if ($property->update($request->getData())) {
-                return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
-            }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            $property->updateAddres($request->all());
+            $property->update($request->getData());
+            return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], 400);
+            logger("Error update PropertyController: " . $th->getMessage(), $th->getTrace());
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], 500);
         }
     }
 
-    public function checkPublish($request, $property)
+    public function activeOrInactive(Request $request, Property $property)
     {
-        if (!$request->active) {
-            return true;
+        try {
+            $this->validate($request, ["active" => "required|boolean"]);
+            $property->update(['active' => $request->active]);
+            return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
+        } catch (\Throwable $th) {
+            logger("Error activeOrInactive PropertyController: " . $th->getMessage(), $th->getTrace());
+            return response([
+                'error' => 'true',
+                'message' => Terminologies::get('all.property.not_publish_without_dependences')
+            ], 500);
         }
-        $haveBusinessesProperty = ($property->businessesProperty->count() > 0);
-        $haveImages = ($property->images->count() > 0);
-        $haveEmbed = ($request->has("embed") ? $request->embed : $property->embed);
-        $haveMedia = ($haveImages || $haveEmbed);
-        return $haveBusinessesProperty && $haveMedia ? true : false;
     }
 
     /**
@@ -148,97 +147,12 @@ class PropertyController extends Controller
     public function destroy(Property $property)
     {
         try {
-            if ($property->delete()) {
-                return response()->noContent(200);
-            }
-            return response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], 400);
+            return $property->delete()
+                ? response()->noContent(200)
+                : response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], 400);
         } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => $th->getMessage()], 400);
-        }
-    }
-
-    private function generateAddress(array $dataAddress): Address
-    {
-        $dataAddress['neighborhood_id'] = Neighborhood::firstOrCreate([
-            'name' => $dataAddress['neighborhood'],
-            'city_id' => City::firstOrCreate([
-                "name" => $dataAddress['city'],
-                'state_id' => State::firstOrCreate([
-                    'name' => $dataAddress['state'],
-                    'initials' => $dataAddress['initials'],
-                    'country_id' => Country::firstOrCreate(['name' => $dataAddress['country']])->id
-                ])->id
-            ])->id
-        ])->id;
-        return Address::create($dataAddress);
-    }
-
-    private function updateAddress(Address $address, array $dataAddress): Address
-    {
-        $dataAddress['neighborhood_id'] = Neighborhood::firstOrCreate([
-            'name' => $dataAddress['neighborhood'],
-            'city_id' => City::firstOrCreate([
-                "name" => $dataAddress['city'],
-                'state_id' => State::firstOrCreate([
-                    'name' => $dataAddress['state'],
-                    'initials' => $dataAddress['initials'],
-                    'country_id' => Country::firstOrCreate(['name' => $dataAddress['country']])->id
-                ])->id
-            ])->id
-        ])->id;
-        $address->update($dataAddress);
-        return $address;
-    }
-
-    public function indexImage(Property $property)
-    {
-        return new ImagePropertyCollection($property->images);
-    }
-
-    public function uploadImage(ImagePropertyRequest $request)
-    {
-        try {
-            $property = Property::findOrFail($request->property_id);
-            $altImage =  $property->generateAltImage();
-            if (config('realestatelaravel.filesystem.entities.properties.optmize')) {
-                ImageOptimizer::optimize($request->file('image')->getRealPath());
-            }
-            $resultUpload = Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))
-                ->putFileAs(
-                    config('realestatelaravel.filesystem.entities.properties.path'),
-                    $request->image,
-                    Str::slug($altImage) .  Str::uuid() . '.' . $request->image->extension()
-                );
-            $image = ImageProperty::create([
-                'property_id' => $property->id,
-                'way' => $resultUpload,
-                'alt' => $altImage
-            ]);
-            return (new ImagePropertyResource($image, Terminologies::get('all.common.save_data')))
-                ->response()->setStatusCode(201);
-        } catch (ModelNotFoundException $mn) {
-            return response()->noContent(400);
-        }
-    }
-
-    public function updateOrder(ImagePropertyUpdateOrderRequest $request)
-    {
-        foreach ($request->orders as $key => $contentOrder) {
-            $image = ImageProperty::findOrFail($contentOrder['id']);
-            $image->update(['order' => $contentOrder['order']]);
-        }
-        return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
-    }
-
-    public function destroyImage(ImageProperty $imageProperty)
-    {
-        try {
-            if ($imageProperty->delete()) {
-                return response()->noContent(200);
-            }
-            return response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], 400);
-        } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => $th->getMessage()], 400);
+            logger("Error destroy PropertyController: " . $th->getMessage(), $th->getTrace());
+            return response(['error' => true, 'message' => $th->getMessage()], 500);
         }
     }
 }

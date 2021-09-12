@@ -7,33 +7,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use Jeffpereira\RealEstate\Models\Traits\AbstractAddress;
 use Jeffpereira\RealEstate\Models\Traits\SetSlug;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 use JPAddress\Models\Address\Address;
 
 class Property extends Model
 {
-    use UsesUuid, SetSlug;
+    use UsesUuid, SetSlug, AbstractAddress;
 
     protected $guarded = [];
-
-    public static function boot()
-    {
-        parent::boot();
-        self::creating(function ($property) {
-            if (!$property->code) {
-                $property->code = static::max('code') + 1;
-            }
-        });
-        self::deleting(function ($property) {
-            $property->images->map(function ($image) {
-                $image->delete();
-            });
-            $property->businessesProperty->map(function ($businesseProperty) {
-                $businesseProperty->delete();
-            });
-        });
-    }
 
     // Relationships
     public function businesses(): BelongsToMany
@@ -110,5 +93,10 @@ class Property extends Model
             Str::title($this->address->neighborhood->city->name),
             Str::title($this->address->neighborhood->city->state->name)
         );
+    }
+
+    private function getInstanceAddress(): Address
+    {
+        return $this->address;
     }
 }

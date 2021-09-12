@@ -5,6 +5,10 @@ namespace Jeffpereira\RealEstate;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use Jeffpereira\RealEstate\Models\Property\ImageProperty;
+use Jeffpereira\RealEstate\Models\Property\Property;
+use Jeffpereira\RealEstate\Observers\Property\ImagePropertyObserver;
+use Jeffpereira\RealEstate\Observers\Property\PropertyObserver;
 
 class RealEstateServiceProvider extends ServiceProvider
 {
@@ -31,8 +35,9 @@ class RealEstateServiceProvider extends ServiceProvider
     {
         $this->loadDependences();
         $this->registerPublishes();
+        $this->registerComponents();
         $this->registerCustomRules();
-        Blade::component('jprealestate::components.layout.content', 'content');
+        $this->registerObservers();
     }
 
     protected function registerPublishes()
@@ -63,5 +68,16 @@ class RealEstateServiceProvider extends ServiceProvider
         Validator::extend('slug', function ($attribute, $value, $parameters, $validator) {
             return preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $value);
         });
+    }
+
+    protected function registerObservers()
+    {
+        Property::observe(PropertyObserver::class);
+        ImageProperty::observe(ImagePropertyObserver::class);
+    }
+
+    protected function registerComponents()
+    {
+        Blade::component('jprealestate::components.layout.content', 'content');
     }
 }

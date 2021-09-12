@@ -10,25 +10,16 @@ class ImageProperty extends Model
 {
     use UsesUuid;
 
+    const CONFIG_DISK = "realestatelaravel.filesystem.entities.properties.disk";
+
     protected $table = "image_properties";
 
     protected $appends = ['way_url'];
 
     protected $guarded = [];
 
-    public static function boot()
-    {
-        parent::boot();
-        self::deleting(function ($image) {
-            Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))->delete($image->way);
-        });
-        self::creating(function ($image) {
-            $image->order = static::where('property_id', $image->property_id)->max('order') + 1;
-        });
-    }
-
     public function getWayUrlAttribute()
     {
-        return Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))->url($this->way);
+        return Storage::disk(config(self::CONFIG_DISK))->url($this->way);
     }
 }

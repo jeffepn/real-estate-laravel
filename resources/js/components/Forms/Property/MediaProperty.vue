@@ -83,11 +83,11 @@ export default {
         return;
       }
       this.$axios
-        .get(
-          this.$route("jp_realestate.property.index-image_property", [
-            this.form.data.id,
-          ]),
-        )
+        .get(this.$route("jp_realestate.image_property.index"), {
+          params: {
+            property_id: this.form.data.id,
+          },
+        })
         .then((response) => {
           this.images = response.data.data.reduce(
             (acumulator, currentValue) => {
