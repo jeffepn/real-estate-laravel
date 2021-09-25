@@ -39,9 +39,6 @@ class PropertyObserver
         if (!$property->active || ($haveBusinessesProperty && $haveMedia)) {
             return true;
         }
-        logger("haveBusinessesProperty", [$haveBusinessesProperty]);
-        logger("haveMedia", [$haveMedia]);
-        logger("property->active", [$property->active]);
-        throw new \Exception(Terminologies::get('all.property.not_publish_without_dependences') . "kkkk");
+        throw new \Exception(Terminologies::get('all.property.not_publish_without_dependences'));
     }
 }
