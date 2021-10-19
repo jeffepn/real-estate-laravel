@@ -43,4 +43,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scope>
+.form-check {
+  input,
+  label {
+    cursor: pointer;
+  }
+}
+</style>

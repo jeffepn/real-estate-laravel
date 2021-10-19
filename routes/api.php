@@ -1,5 +1,7 @@
 <?php
 // Controllers
+
+use Jeffpereira\RealEstate\Http\Controllers\Api\AppSettingController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\BusinessController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\PropertyController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\SubTypeController;
@@ -7,6 +9,7 @@ use Jeffpereira\RealEstate\Http\Controllers\Api\Property\TypeController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\BannerController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\ImagePropertyController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\SituationController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(config('realestatelaravel.middleware.api'))->group(function () {
     Route::prefix('api')->group(function () {
@@ -19,6 +22,7 @@ Route::middleware(config('realestatelaravel.middleware.api'))->group(function ()
                 "property" => PropertyController::class,
                 "image_property" => ImagePropertyController::class,
                 "banner" => BannerController::class,
+                "app_setting" => AppSettingController::class,
             ]);
             Route::patch("property/{property}/active_or_inactive", [PropertyController::class, "activeOrInactive"])->name('property.active_or_inactive');
             Route::patch("image-property/update-order", [ImagePropertyController::class, "updateOrder"])->name('image_property.update_order');

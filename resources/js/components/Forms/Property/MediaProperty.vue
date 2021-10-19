@@ -26,6 +26,25 @@
         />
       </div>
     </div>
+    <div class="col-12 mb-2">
+      <div class="mb-3">
+        <re-checkbox
+          label="Usar Marca D'água"
+          v-model="useWatterMark"
+        ></re-checkbox>
+      </div>
+      <div class="col-auto mb-3" v-show="useWatterMark">
+        <label for="formFileImage" class="form-label">
+          Adicione a Marca D'água
+        </label>
+        <input
+          class="form-control"
+          type="file"
+          id="formFileImageWatermark"
+          @change="onFileWattermarkChange"
+        />
+      </div>
+    </div>
     <div class="col-12">
       <p v-if="loadingFiles">
         <i class="fas fa-spinner fa-pulse me-2"></i> Carregando arquivos...
@@ -56,6 +75,7 @@
 
 <script>
 import ReInput from "@/components/Controls/Inputs/Input";
+import ReCheckbox from "@/components/Controls/Inputs/Checkbox";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
 
 export default {
@@ -69,11 +89,13 @@ export default {
   components: {
     ReInput,
     ReButton,
+    ReCheckbox,
   },
   data() {
     return {
       images: [],
       loadingFiles: false,
+      useWatterMark: false,
       errors: [],
     };
   },
@@ -103,6 +125,16 @@ export default {
         });
     },
     async onFileChange(e) {
+      this.errors = [];
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.loadingFiles = true;
+      for await (let file of files) {
+        this.setImage(file);
+      }
+      this.loadingFiles = false;
+    },
+    async onFileWattermarkChange(e) {
       this.errors = [];
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
