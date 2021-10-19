@@ -24,7 +24,7 @@ class AppSettingService
     {
         return AppSettings::create([
             'name' => $data['name'],
-            'value' => json_encode(Arr::get($data, 'value', []))
+            'value' => Arr::get($data, 'value', [])
         ]);
     }
 }

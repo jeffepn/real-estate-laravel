@@ -9,9 +9,14 @@ class AppSettings extends Model
 {
     use UsesUuid;
 
-    protected $guarded = [];
+    protected $fillable = ['name', 'value'];
 
     protected $casts = [
         'value' => 'array'
     ];
+
+    public function getValueAttribute($value)
+    {
+        return json_decode($value, true);
+    }
 }

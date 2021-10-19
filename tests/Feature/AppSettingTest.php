@@ -22,10 +22,31 @@ class AppSettingTest extends TestCase
         parent::setUp();
         $this->api = route('jp_realestate.app_setting.store');
     }
+
+
     /**
      * @test
+     * @group store
      * @group now
-     * @return void
+     */
+    public function testStoreWatterMark()
+    {
+        Storage::fake(config('realestatelaravel.filesystem.disk'));
+        $data = [
+            'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
+            'image_watter' => UploadedFile::fake()->image('watter.jpg')
+        ];
+        $response = $this->postJson($this->api, $data);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $appSettings = AppSettings::first();
+        $this->assertNotNull($appSettings);
+        $this->assertEquals(AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY, $appSettings->name);
+        $this->assertNotNull($appSettings->value['image']);
+    }
+
+    /**
+     * @test
+     * @group validation
      */
     public function testValidationWatterMark()
     {
