@@ -33,18 +33,28 @@
         <re-edit-watter-mark></re-edit-watter-mark>
       </div>
     </div>
+
+    <div class="col-12 mb-2">
+      <strong> Adicionar imagens </strong>
+    </div>
     <div class="col-12 mb-2">
       <div class="mb-3">
-        <label for="formFileImage" class="form-label">
+        <!-- <label for="formFileImage" class="form-label">
           Adicionar imagens
-        </label>
-        <input
-          class="form-control"
-          type="file"
-          id="formFileImage"
-          multiple
-          @change="onFileChange"
-        />
+        </label> -->
+        <div class="square-upload">
+          <input
+            type="file"
+            name="fileImage"
+            id="fileImage"
+            ref="fileImage"
+            accept="image"
+            @change="onFileChange"
+          />
+          <label class="square-upload-add" for="fileImage">
+            <i class="fas fa-upload"></i>
+          </label>
+        </div>
       </div>
     </div>
     <div class="col-12">
@@ -207,5 +217,60 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+$sizeSquareWatterMark: 50px;
+.square-upload {
+  width: $sizeSquareWatterMark;
+  height: $sizeSquareWatterMark;
+  background: gray;
+  color: #000;
+  position: relative;
+  display: flex;
+  img {
+    width: auto;
+    height: auto;
+    max-width: 150px;
+    max-height: 300px;
+  }
+  input[name="fileImage"] {
+    display: none;
+  }
+  &-add {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  &-buttons-actions {
+    background: inherit;
+    color: inherit;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  &-edit {
+    @extend .square-upload-buttons-actions;
+    $position: -5px;
+    right: $position;
+    top: $position;
+    background: blue;
+    color: #fff;
+  }
+  &-delete {
+    @extend .square-upload-buttons-actions;
+    $position: -5px;
+    right: $position;
+    bottom: $position;
+    background: red;
+    color: #fff;
+  }
 }
 </style>
