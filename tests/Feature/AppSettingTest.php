@@ -68,7 +68,7 @@ class AppSettingTest extends TestCase
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
             'image_watter' => UploadedFile::fake()->image('watter.jpg')
         ];
-        $response = $this->patchJson($this->api . "/" . $appSettings->id, $data);
+        $response = $this->patchJson($this->api . "/" . AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY, $data);
         $response->assertStatus(Response::HTTP_OK);
         $appSettingsUpdated = AppSettings::first();
         $this->assertNotEquals($appSettings->value['image'], $appSettingsUpdated->value['image']);
@@ -95,7 +95,7 @@ class AppSettingTest extends TestCase
         ]);
         $this->assertNotNull(AppSettings::first());
         $this->storage->assertExists('images/watter.jpg');
-        $response = $this->deleteJson($this->api . "/" . $appSettings->id);
+        $response = $this->deleteJson($this->api . "/" . AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY);
         $response->assertStatus(Response::HTTP_OK);
         $this->assertNull(AppSettings::first());
         $this->storage->assertMissing('images/watter.jpg');

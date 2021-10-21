@@ -26,6 +26,15 @@ class RealEstateServiceProvider extends ServiceProvider
     {
         $this->commands($this->commands);
         $this->mergeConfigFrom(__DIR__ . '/../config/realestatelaravel.php', 'realestatelaravel');
+        /*
+        * Register the service provider for the dependency.
+        */
+        $this->app->register('Intervention\Image\ImageServiceProvider');
+        /*
+        * Create aliases for the dependency.
+        */
+        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+        $loader->alias('Image', 'Intervention\Image\Facades\Image');
     }
 
     /**

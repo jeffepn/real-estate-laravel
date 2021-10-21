@@ -17,9 +17,14 @@ use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyUpdateOrderRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyCollection;
 use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
+use Intervention\Image\Facades\Image;
+use Intervention\Image\Image as InterventionImage;
+use Jeffpereira\RealEstate\Enum\AppSettingsEnum;
+use Jeffpereira\RealEstate\Models\AppSettings;
 
 class ImagePropertyController extends Controller
 {
+    const POSITION_WATTER_MARK = 'center';
     /**
      * Display a listing of the resource.
      */
@@ -37,18 +42,10 @@ class ImagePropertyController extends Controller
         try {
             $property = Property::findOrFail($request->property_id);
             $altImage =  $property->generateAltImage();
-            if (config('realestatelaravel.filesystem.entities.properties.optmize')) {
-                ImageOptimizer::optimize($request->file('image')->getRealPath());
-            }
-            $resultUpload = Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))
-                ->putFileAs(
-                    config('realestatelaravel.filesystem.entities.properties.path'),
-                    $request->image,
-                    Str::slug($altImage) .  Str::uuid() . '.' . $request->image->extension()
-                );
+
             $image = ImageProperty::create([
                 'property_id' => $property->id,
-                'way' => $resultUpload,
+                'way' => $this->storageImage($request, $altImage),
                 'alt' => $altImage
             ]);
             return (new ImagePropertyResource($image, Terminologies::get('all.common.save_data')))
@@ -102,5 +99,36 @@ class ImagePropertyController extends Controller
             $image->update(['order' => $contentOrder['order']]);
         }
         return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
+    }
+
+    private function storageImage(ImagePropertyRequest $request, string $altImage): string
+    {
+        $img = Image::make($request->image);
+        if ($request->use_watter_mark) {
+            $img = $this->insertWatterMark($img);
+        }
+        if (config('realestatelaravel.filesystem.entities.properties.optmize')) {
+            $img->resize(null, 1080, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+        }
+
+        $img->encode('jpg', config('realestatelaravel.filesystem.entities.properties.optmize') ? 60 : 100);
+        $nameImage = config('realestatelaravel.filesystem.entities.properties.path') . '/' . Str::slug($altImage) .  Str::uuid() . $img->extension;
+        Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))
+            ->put($nameImage, $img);
+        return $nameImage;
+    }
+    private function insertWatterMark(InterventionImage $img): InterventionImage
+    {
+        $appSetting = AppSettings::whereName(AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY)
+            ->first();
+        return $appSetting
+            ? $img->insert(
+                Storage::disk(config('realestatelaravel.filesystem.disk'))->get($appSetting->value['image']),
+                self::POSITION_WATTER_MARK
+            )
+            : $img;
     }
 }

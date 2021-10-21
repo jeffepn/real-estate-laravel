@@ -14,6 +14,27 @@
     </div>
     <div class="col-12 mb-2">
       <div class="mb-3">
+        <re-checkbox
+          label="Usar Marca D'água"
+          v-model="useWatterMark"
+        ></re-checkbox>
+        <small>
+          Caso seja necessário a incorporação de uma
+          <strong> marca d'água</strong> a suas imagens, será necessário
+          carregá-la antes da escolha de suas imagens.
+          <br />
+          <i>
+            <b class="text-danger"> Obs:</b> No momento, somente existe suporte
+            para a <strong>centralização</strong> da marca d'água.
+          </i>
+        </small>
+      </div>
+      <div class="col-auto mb-3" v-show="useWatterMark">
+        <re-edit-watter-mark></re-edit-watter-mark>
+      </div>
+    </div>
+    <div class="col-12 mb-2">
+      <div class="mb-3">
         <label for="formFileImage" class="form-label">
           Adicionar imagens
         </label>
@@ -23,25 +44,6 @@
           id="formFileImage"
           multiple
           @change="onFileChange"
-        />
-      </div>
-    </div>
-    <div class="col-12 mb-2">
-      <div class="mb-3">
-        <re-checkbox
-          label="Usar Marca D'água"
-          v-model="useWatterMark"
-        ></re-checkbox>
-      </div>
-      <div class="col-auto mb-3" v-show="useWatterMark">
-        <label for="formFileImage" class="form-label">
-          Adicione a Marca D'água
-        </label>
-        <input
-          class="form-control"
-          type="file"
-          id="formFileImageWatermark"
-          @change="onFileWattermarkChange"
         />
       </div>
     </div>
@@ -77,6 +79,7 @@
 import ReInput from "@/components/Controls/Inputs/Input";
 import ReCheckbox from "@/components/Controls/Inputs/Checkbox";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
+import ReEditWatterMark from "@/components/Entities/AppSettings/WatterMark/Edit";
 
 export default {
   name: "MediaProperty",
@@ -90,6 +93,7 @@ export default {
     ReInput,
     ReButton,
     ReCheckbox,
+    ReEditWatterMark,
   },
   data() {
     return {
@@ -134,20 +138,11 @@ export default {
       }
       this.loadingFiles = false;
     },
-    async onFileWattermarkChange(e) {
-      this.errors = [];
-      var files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-      this.loadingFiles = true;
-      for await (let file of files) {
-        this.setImage(file);
-      }
-      this.loadingFiles = false;
-    },
     async setImage(file) {
       let dataForm = new FormData();
       dataForm.append("image", file);
       dataForm.append("property_id", this.form.data.id);
+      dataForm.append("use_watter_mark", this.useWatterMark);
       await reaxios
         .post(window.reroute("jp_realestate.image_property.store"), dataForm, {
           headers: {

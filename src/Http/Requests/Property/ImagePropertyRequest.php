@@ -27,4 +27,11 @@ class ImagePropertyRequest extends FormRequest
             'property_id.exists' => "Forneça um id de um imóvel válido.",
         ];
     }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'use_watter_mark' => $this->use_watter_mark && $this->use_watter_mark != 'false' ? true : false
+        ]);
+    }
 }

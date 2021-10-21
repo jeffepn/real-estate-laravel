@@ -7,6 +7,8 @@ use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 
 class AppSettings extends Model
 {
+    const NAME_KEY_ROUTE = 'name';
+
     use UsesUuid;
 
     protected $fillable = ['name', 'value'];
@@ -18,5 +20,10 @@ class AppSettings extends Model
     public function getValueAttribute($value)
     {
         return json_decode($value, true);
+    }
+
+    public function getRouteKeyName()
+    {
+        return self::NAME_KEY_ROUTE;
     }
 }

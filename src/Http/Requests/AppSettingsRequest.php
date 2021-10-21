@@ -21,6 +21,8 @@ class AppSettingsRequest extends FormRequest
     public function rules()
     {
         $nameMethod = self::PREFIX_METHOD_RULES . Str::studly($this->name ?? 'name_method_not_found');
+        logger('  $nameMethod: ' .  $nameMethod);
+        logger('  $this->name: ' .  $this->name);
         return method_exists($this, $nameMethod)
             ? $this->$nameMethod()
             : $this->rulesDefault();
@@ -32,7 +34,7 @@ class AppSettingsRequest extends FormRequest
             'max' => "Limite o campo a no máximo :max caracteres.",
             'name.required' => 'Forneça o nome da configuração.',
             'name.in' => 'O nome da configuração dever ser uma das seguintes: [' . implode(', ', AppSettingsEnum::getAll()) . ']    ',
-            'image_watter' => "A imagem não é válida.",
+            'image_watter.image' => "A imagem não é válida.",
             'image_watter.required' => 'Forneça uma imagem.',
             'image_watter.max' => 'Escolha uma imagem com menos de :max kB.',
             'image_watter.mimes' => "Formatos de imagens aceitos: jpg, jpeg e png.",

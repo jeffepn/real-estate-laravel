@@ -25,6 +25,11 @@ class AppSettingController extends Controller
         $this->appSettingService = $appSettingService;
     }
 
+    public function show(AppSettings $app_setting)
+    {
+        return new AppSettingResource($app_setting);
+    }
+
     public function store(AppSettingsRequest $request)
     {
         try {
