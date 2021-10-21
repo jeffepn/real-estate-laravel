@@ -10,6 +10,7 @@ use Jeffpereira\RealEstate\Services\AppSettingService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Resources\AppSettingResource;
+use Jeffpereira\RealEstate\Models\AppSettings;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class AppSettingController extends Controller
@@ -35,10 +36,37 @@ class AppSettingController extends Controller
                 ->response()->setStatusCode(201);
         } catch (\Throwable $th) {
             logger()->error("Erro in store  AppSettingController: " . $th->getMessage(), $th->getTrace());
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], 400);
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
         }
     }
 
+    public function update(AppSettingsRequest $request, AppSettings $app_setting)
+    {
+        try {
+            $appSettings = $this->appSettingService->update(
+                array_merge(['id' => $app_setting->id], $this->wrapperDataSettings($request))
+            );
+
+            return (new AppSettingResource($appSettings, Terminologies::get('all.common.save_data')))
+                ->response()->setStatusCode(200);
+        } catch (\Throwable $th) {
+            logger()->error("Erro in update AppSettingController: " . $th->getMessage(), $th->getTrace());
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        }
+    }
+
+
+    public function destroy(AppSettings $app_setting)
+    {
+        try {
+            return $app_setting->delete()
+                ? response()->noContent(200)
+                : response(['error' => true, 'message' => Terminologies::get('all.app_setting.not_delete')], 400);
+        } catch (\Throwable $th) {
+            logger("Error destroy AppSettingController: " . $th->getMessage(), $th->getTrace());
+            return response(['error' => true, 'message' => $th->getMessage()], 500);
+        }
+    }
 
     private function wrapperDataSettings(AppSettingsRequest $request): array
     {

@@ -2,7 +2,9 @@
 
 namespace Jeffpereira\RealEstate\Tests;
 
+use Faker\Provider\pt_BR\Address as Pt_BRAddress;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Config;
 use Jeffpereira\RealEstate\RealEstateServiceProvider;
 use JPAddress\JPAddressServiceProvider;
@@ -17,6 +19,7 @@ use LaravelLegends\PtBrValidator\ValidatorProvider;
 // When testing inside of a Laravel installation, the base class would be Tests\TestCase
 class TestCase extends \Orchestra\Testbench\TestCase
 {
+    use WithFaker;
     //protected $loadEnvironmentVariables = true;
 
     // When testing inside of a Laravel installation, this is not needed
@@ -32,6 +35,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         parent::setUp();
         $this->artisan('config:clear')->run();
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
+        $this->faker->addProvider(new Pt_BRAddress($this->faker));
     }
     /**
      * Define environment setup.

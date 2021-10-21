@@ -3,21 +3,29 @@
 namespace Jeffpereira\RealEstate\Services;
 
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Jeffpereira\RealEstate\Models\AppSettings;
 use Illuminate\Support\Str;
 
 class AppSettingService
 {
-    const PREFIX_METHOD_REGISTER = 'register';
 
     public function create(array $data): AppSettings
     {
-        $nameMethod = self::PREFIX_METHOD_REGISTER . Str::studly(Arr::get($data, 'name'));
-        if (method_exists($this, $nameMethod)) {
-            return $this->$nameMethod($data);
+        return AppSettings::create($data);
+    }
+
+    public function update(array $data): ?AppSettings
+    {
+        try {
+            $appSettings = AppSettings::findOrFail(Arr::get($data, 'id'));
+            $appSettings->update(Arr::except($data, ['id']));
+            return $appSettings;
+        } catch (ModelNotFoundException $th) {
+            throw new Exception($th->getMessage());
+            return null;
         }
-        throw new Exception("The methos not exists - $nameMethod");
     }
 
     public function registerWattermarkImageProperty(array $data): AppSettings

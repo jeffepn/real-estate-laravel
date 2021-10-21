@@ -18,10 +18,13 @@ use JPAddress\Models\Address\Address;
 
 class PropertyTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
     protected $api = 'api/property';
 
-
+    // protected function setUp(): void
+    // {
+    //     parent::setUp();
+    // }
     /**
      * @test
      */
@@ -233,6 +236,9 @@ class PropertyTest extends TestCase
             'max_bathroom' => 7,
             'min_garage' => 5,
             'max_garage' => 9,
+            'neighborhood' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'initials' => $this->faker->stateAbbr(),
         ]);
         $response->assertStatus(200);
         $data = $property->refresh()->toArray();
@@ -313,8 +319,8 @@ class PropertyTest extends TestCase
             "initials" => "MG",
             "country" => "Brasil"
         ];
+
         $response = $this->postJson($this->api, $data);
-        // dd($response->json());
         $response->assertStatus(Response::HTTP_CREATED);
         $data['slug'] = 'test-slug-2';
         $array_validation = [
@@ -379,7 +385,17 @@ class PropertyTest extends TestCase
         }
         $property = Property::first();
         // Test update slug, when is ignored
-        $response = $this->patchJson("$this->api/$property->id", ['slug' => 'test-slug']);
+        $response = $this->patchJson(
+            "$this->api/$property->id",
+            [
+                'slug' => 'test-slug',
+                "neighborhood" => "Jd Santa Maria",
+                "city" => "Poços de Caldas",
+                "state" => "Minas Gerais",
+                "initials" => "MG",
+                "country" => "Brasil"
+            ]
+        );
         $response->assertStatus(Response::HTTP_OK);
     }
 }

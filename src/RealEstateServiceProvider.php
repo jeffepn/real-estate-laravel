@@ -5,8 +5,10 @@ namespace Jeffpereira\RealEstate;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use Jeffpereira\RealEstate\Models\AppSettings;
 use Jeffpereira\RealEstate\Models\Property\ImageProperty;
 use Jeffpereira\RealEstate\Models\Property\Property;
+use Jeffpereira\RealEstate\Observers\AppSettingsObserver;
 use Jeffpereira\RealEstate\Observers\Property\ImagePropertyObserver;
 use Jeffpereira\RealEstate\Observers\Property\PropertyObserver;
 
@@ -74,6 +76,7 @@ class RealEstateServiceProvider extends ServiceProvider
     {
         Property::observe(PropertyObserver::class);
         ImageProperty::observe(ImagePropertyObserver::class);
+        AppSettings::observe(AppSettingsObserver::class);
     }
 
     protected function registerComponents()

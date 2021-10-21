@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -17,19 +18,27 @@ class AppSettingTest extends TestCase
     use RefreshDatabase, WithFaker;
     private $api;
 
+    /**
+     * @var Storage
+     */
+    private $storage;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->api = route('jp_realestate.app_setting.store');
+        Storage::fake(config('realestatelaravel.filesystem.disk'));
+        $this->storage = Storage::disk(config('realestatelaravel.filesystem.disk'));
     }
 
 
     /**
      * @test
+     * @group app-setting
      * @group store
-     * @group now
+     * @group store-app-setting
      */
-    public function testStoreWatterMark()
+    public function storeSettingWatterMark()
     {
         Storage::fake(config('realestatelaravel.filesystem.disk'));
         $data = [
@@ -43,12 +52,61 @@ class AppSettingTest extends TestCase
         $this->assertEquals(AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY, $appSettings->name);
         $this->assertNotNull($appSettings->value['image']);
     }
+    /**
+     * @test
+     * @group app-setting
+     * @group store
+     */
+    public function updateSettingWatterMark()
+    {
+        $appSettings = AppSettings::create([
+            'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
+            'value' => ['image' => $this->faker->imageUrl()]
+        ]);
+        Storage::fake(config('realestatelaravel.filesystem.disk'));
+        $data = [
+            'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
+            'image_watter' => UploadedFile::fake()->image('watter.jpg')
+        ];
+        $response = $this->patchJson($this->api . "/" . $appSettings->id, $data);
+        $response->assertStatus(Response::HTTP_OK);
+        $appSettingsUpdated = AppSettings::first();
+        $this->assertNotEquals($appSettings->value['image'], $appSettingsUpdated->value['image']);
+    }
 
     /**
      * @test
+     * @group app-setting
+     * @group destroy
+     * @group now
+     */
+    public function destroySetting()
+    {
+        $appSettings = AppSettings::create([
+            'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
+            'value' => [
+                'image' =>  $this->storage
+                    ->putFileAs(
+                        'images',
+                        UploadedFile::fake()->image('watter.jpg'),
+                        'watter.jpg'
+                    )
+            ]
+        ]);
+        $this->assertNotNull(AppSettings::first());
+        $this->storage->assertExists('images/watter.jpg');
+        $response = $this->deleteJson($this->api . "/" . $appSettings->id);
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertNull(AppSettings::first());
+        $this->storage->assertMissing('images/watter.jpg');
+    }
+
+    /**
+     * @test
+     * @group app-setting
      * @group validation
      */
-    public function testValidationWatterMark()
+    public function validationSettingWatterMark()
     {
         Storage::fake(config('realestatelaravel.filesystem.disk'));
         $data = [
