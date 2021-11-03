@@ -7,13 +7,13 @@
       @input="handleInputNumber"
       :value="value || 0"
       v-bind="optionsNumber"
-      @keydown="$event.key === '-' ? $event.preventDefault() : null"
     ></money>
     <input
       v-else
       class="form-control"
       :class="{ 'is-invalid': error }"
       @input="handleInput"
+      @keyup.enter="$emit('pressEnter')"
       :value="value"
       type="text"
       :maxlength="maxLength ? maxLength : 524288"
@@ -108,9 +108,6 @@ export default {
       return `${this.placeholder} ${lengthInput}/${this.maxLength}`;
     },
   },
-  beforeMount() {
-    this.idInput = this.id ? this.id : `input-default-${this._uid}`;
-  },
   methods: {
     handleInput(e) {
       this.$emit("input", e.target.value);
@@ -118,6 +115,22 @@ export default {
     handleInputNumber(value) {
       this.$emit("input", value);
     },
+    checkClikEnterInputNumber(ev) {
+      let keyCode = ev.keyCode ? ev.keyCode : ev.which;
+      if (keyCode === 13) {
+        this.$emit("pressEnter");
+      }
+    },
+  },
+  created() {
+    this.idInput = this.id ? this.id : `input-default-${this._uid}`;
+  },
+  mounted() {
+    if (this.isNumber) {
+      document
+        .getElementById(this.idInput)
+        .addEventListener("keyup", this.checkClikEnterInputNumber);
+    }
   },
 };
 </script>

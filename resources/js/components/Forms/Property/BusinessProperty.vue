@@ -39,6 +39,7 @@
             type="number"
             v-model="business.value"
             @input="handleInput"
+            @pressEnter="$emit('pressEnter')"
           ></re-input>
         </div>
       </div>

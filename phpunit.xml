@@ -11,7 +11,7 @@
 >
     <php>
         <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
-        <env name="DB_ENV" value="local"/>
+        <env name="DB_ENV" value="testing"/>
          <!-- <env name="DB_CONNECTION" value="sqlite"/> -->
         <!-- <env name="DB_CONNECTION" value="testbench"/> -->
         <!-- <env name="DB_CONNECTION" value="mysql"/> -->

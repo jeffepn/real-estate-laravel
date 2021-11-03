@@ -2,21 +2,15 @@
   <div class="row">
     <div class="d-flex align-items-center">
       <div class="col pe-3 mb-2">
-        <div class="form-floating">
-          <input
-            type="tel"
-            v-mask="'#####-###'"
-            class="form-control"
-            id="floatingInputCep"
-            v-model="form.data.cep"
-          />
-          <label for="floatingInputCep">Cep</label>
-        </div>
-        <small
-          class="text-danger"
-          v-if="form.hasError('cep')"
-          v-text="form.firstError('cep')"
-        ></small>
+        <re-input
+          type="tel"
+          v-mask="'#####-###'"
+          v-model="form.data.cep"
+          placeholder="Cep"
+          :error="form.hasError('cep')"
+          :error-message="form.firstError('cep')"
+          @pressEnter="cep"
+        ></re-input>
       </div>
       <div class="col-auto mb-2 px-0">
         <re-button
@@ -36,6 +30,7 @@
         placeholder="Endereço"
         :error="form.hasError('address')"
         :error-message="form.firstError('address')"
+        @pressEnter="$emit('pressEnter')"
       ></re-input>
     </div>
     <div class="col-sm-6 mb-2 d-flex align-items-center">
@@ -48,6 +43,7 @@
         type="number"
         :precision="0"
         :masked="false"
+        @pressEnter="$emit('pressEnter')"
       ></re-input>
 
       <div class="form-check form-check-inline col-auto ms-2">
@@ -68,6 +64,7 @@
         placeholder="Complemento"
         :error="form.hasError('complement')"
         :error-message="form.firstError('complement')"
+        @pressEnter="$emit('pressEnter')"
       ></re-input>
     </div>
     <div class="col-sm-6 mb-2">
@@ -77,6 +74,7 @@
         placeholder="Bairro*"
         :error="form.hasError('neighborhood')"
         :error-message="form.firstError('neighborhood')"
+        @pressEnter="$emit('pressEnter')"
       ></re-input>
     </div>
     <div class="col-sm-6 mb-2">
@@ -86,6 +84,7 @@
         placeholder="Cidade*"
         :error="form.hasError('city')"
         :error-message="form.firstError('city')"
+        @pressEnter="$emit('pressEnter')"
       ></re-input>
     </div>
     <div class="col-sm-6 mb-2">
@@ -95,6 +94,7 @@
         placeholder="Estado*"
         :error="form.hasError('initials')"
         :error-message="form.firstError('initials')"
+        @pressEnter="$emit('pressEnter')"
       ></re-input>
     </div>
   </div>

@@ -77,6 +77,7 @@
             <re-form-data-property
               :form="form"
               :type-id="this.type_id"
+              @pressEnter="next('details')"
             ></re-form-data-property>
             <div class="mb-2 col-12 text-end">
               <re-button :loading="loadingNext" @click="next('details')">
@@ -85,7 +86,10 @@
             </div>
           </div>
           <div class="tab-pane fade px-2" id="details" role="tabpanel">
-            <re-form-details-property :form="form"></re-form-details-property>
+            <re-form-details-property
+              :form="form"
+              @pressEnter="next('businesses')"
+            ></re-form-details-property>
             <div class="mb-2 col-12 d-flex justify-content-between">
               <div class="mb-2 col-auto text-start">
                 <re-button
@@ -108,6 +112,7 @@
               v-if="!loadingMaster"
               class="col-md-12 mb-2"
               :form="form"
+              @pressEnter="next('media')"
             ></re-business-property>
             <div class="mb-2 col-12 d-flex justify-content-between">
               <div class="mb-2 col-auto text-start">

@@ -6,7 +6,7 @@
       v-model.lazy="form.data.name"
       :error="form.hasError('name')"
       :error-message="form.firstError('name')"
-      @pressEnter="$emit('pressEnter')"
+      @pressEnter="submit"
     ></re-input>
     <div class="mt-2 text-end">
       <button type="button" class="btn btn-primary" @click="submit">
@@ -20,7 +20,7 @@
 import Form from "@/supports/form.js";
 import ReInput from "@/components/Controls/Inputs/Input";
 export default {
-  name: "AddBusiness",
+  name: "AddSituation",
   components: {
     ReInput,
   },
@@ -33,7 +33,7 @@ export default {
     submit() {
       this.form.clearErrors();
       reaxios
-        .post(window.reroute("jp_realestate.business.store"), this.form.data)
+        .post(window.reroute("jp_realestate.situation.store"), this.form.data)
         .then((response) => {
           this.$toast.message({
             message: response.data.message,
@@ -59,7 +59,7 @@ export default {
     },
   },
   mounted() {
-    this.$eventBus.$on("clear-add-business", () => {
+    this.$eventBus.$on("clear-add-type", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });

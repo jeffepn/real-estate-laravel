@@ -7,6 +7,7 @@
           v-model="form.data.code"
           :error="form.hasError('code')"
           :error-message="form.firstError('code')"
+          @pressEnter="$emit('pressEnter')"
         ></re-input>
       </div>
     </div>
@@ -24,20 +25,21 @@
         ></re-choose-sub-type>
       </div>
       <div class="col-sm-6 col-md-auto mb-2">
-        <re-select
-          placeholder="Situação"
-          :select-first="true"
-          :data="situations"
-          v-model="form.data.situation_id"
-          :error="form.hasError('situation_id')"
-          :error-message="form.firstError('situation_id')"
-        ></re-select>
+        <div class="col-sm-6 col-md-auto mb-2">
+          <re-choose-situation
+            :type-id="type_id"
+            v-model="form.data.situation_id"
+            :create="true"
+            :error="form.hasError('situation_id')"
+            :error-message="form.firstError('situation_id')"
+          ></re-choose-situation>
+        </div>
       </div>
     </div>
     <div class="col-12 mt-2">
       <h6>Endereço</h6>
     </div>
-    <re-address :form="form"></re-address>
+    <re-address :form="form" @pressEnter="$emit('pressEnter')"></re-address>
   </div>
 </template>
 
@@ -45,6 +47,7 @@
 import ReAddress from "@/components/Forms/Address";
 import ReChooseType from "@/components/Entities/Choose/Type";
 import ReChooseSubType from "@/components/Entities/Choose/SubType";
+import ReChooseSituation from "@/components/Entities/Choose/Situation";
 import ReInput from "@/components/Controls/Inputs/Input";
 import ReSelect from "@/components/Controls/Inputs/Select";
 export default {
@@ -52,6 +55,7 @@ export default {
     ReAddress,
     ReChooseType,
     ReChooseSubType,
+    ReChooseSituation,
     ReInput,
     ReSelect,
   },

@@ -14,6 +14,7 @@
         v-model.lazy="form.data.name"
         :error="form.hasError('name')"
         :error-message="form.firstError('name')"
+        @pressEnter="submit"
       ></re-input>
     </div>
     <div class="mt-2 col-12 text-end">

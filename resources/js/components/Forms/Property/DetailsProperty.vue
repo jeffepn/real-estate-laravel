@@ -8,6 +8,7 @@
           placeholder="Área construída"
           :error="form.hasError('building_area')"
           :error-message="form.firstError('building_area')"
+          @pressEnter="$emit('pressEnter')"
         ></re-input>
       </div>
       <div class="col-sm-6 col-md-3 mb-2">
@@ -17,6 +18,7 @@
           placeholder="Área útil"
           :error="form.hasError('useful_area')"
           :error-message="form.firstError('useful_area')"
+          @pressEnter="$emit('pressEnter')"
         ></re-input>
       </div>
       <div class="col-sm-6 col-md-3 mb-2">
@@ -26,6 +28,7 @@
           placeholder="Área total"
           :error="form.hasError('total_area')"
           :error-message="form.firstError('total_area')"
+          @pressEnter="$emit('pressEnter')"
         ></re-input>
       </div>
       <div class="col-sm-6 col-md-3 mb-2">
@@ -35,6 +38,7 @@
           placeholder="Área do terreno"
           :error="form.hasError('ground_area')"
           :error-message="form.firstError('ground_area')"
+          @pressEnter="$emit('pressEnter')"
         ></re-input>
       </div>
     </div>
@@ -48,8 +52,7 @@
             :precision="0"
             v-model="form.data.min_dormitory"
             placeholder="Min."
-            :error="form.hasError('min_dormitory')"
-            :error-message="form.firstError('min_dormitory')"
+            @pressEnter="$emit('pressEnter')"
           ></re-input>
           <div class="col-auto px-0 d-flex align-items-center">
             <i class="fas fa-arrows-alt-h"></i>
@@ -60,10 +63,19 @@
             :precision="0"
             v-model="form.data.max_dormitory"
             placeholder="Máx."
-            :error="form.hasError('max_dormitory')"
-            :error-message="form.firstError('max_dormitory')"
+            @pressEnter="$emit('pressEnter')"
           ></re-input>
         </div>
+        <p
+          class="text-danger"
+          v-if="form.hasError('min_dormitory')"
+          v-text="form.firstError('min_dormitory')"
+        />
+        <p
+          class="text-danger"
+          v-if="form.hasError('max_dormitory')"
+          v-text="form.firstError('max_dormitory')"
+        />
       </div>
       <div class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex flex-column">
         <div class="col-12">Suítes</div>
@@ -75,8 +87,7 @@
             :precision="0"
             v-model="form.data.min_suite"
             placeholder="Min."
-            :error="form.hasError('min_suite')"
-            :error-message="form.firstError('min_suite')"
+            @pressEnter="$emit('pressEnter')"
           ></re-input>
           <div class="col-auto px-0 d-flex align-items-center">
             <i class="fas fa-arrows-alt-h"></i>
@@ -87,10 +98,19 @@
             :precision="0"
             v-model="form.data.max_suite"
             placeholder="Máx."
-            :error="form.hasError('max_suite')"
-            :error-message="form.firstError('max_suite')"
+            @pressEnter="$emit('pressEnter')"
           ></re-input>
         </div>
+        <p
+          class="text-danger"
+          v-if="form.hasError('min_suite')"
+          v-text="form.firstError('min_suite')"
+        />
+        <p
+          class="text-danger"
+          v-if="form.hasError('max_suite')"
+          v-text="form.firstError('max_suite')"
+        />
       </div>
       <div class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex flex-column">
         <div class="col-12">Banheiros</div>
@@ -101,8 +121,7 @@
             :precision="0"
             v-model="form.data.min_bathroom"
             placeholder="Min."
-            :error="form.hasError('min_bathroom')"
-            :error-message="form.firstError('min_bathroom')"
+            @pressEnter="$emit('pressEnter')"
           ></re-input>
           <div class="col-auto px-0 d-flex align-items-center">
             <i class="fas fa-arrows-alt-h"></i>
@@ -113,10 +132,19 @@
             :precision="0"
             v-model="form.data.max_bathroom"
             placeholder="Máx."
-            :error="form.hasError('max_bathroom')"
-            :error-message="form.firstError('max_bathroom')"
+            @pressEnter="$emit('pressEnter')"
           ></re-input>
         </div>
+        <p
+          class="text-danger"
+          v-if="form.hasError('min_bathroom')"
+          v-text="form.firstError('min_bathroom')"
+        />
+        <p
+          class="text-danger"
+          v-if="form.hasError('max_bathroom')"
+          v-text="form.firstError('max_bathroom')"
+        />
       </div>
       <div class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex flex-column">
         <div class="col-12">Garagens</div>
@@ -127,8 +155,7 @@
             :precision="0"
             v-model="form.data.min_garage"
             placeholder="Min."
-            :error="form.hasError('min_garage')"
-            :error-message="form.firstError('min_garage')"
+            @pressEnter="$emit('pressEnter')"
           ></re-input>
           <div class="col-auto px-0 d-flex align-items-center">
             <i class="fas fa-arrows-alt-h"></i>
@@ -139,10 +166,19 @@
             :precision="0"
             v-model="form.data.max_garage"
             placeholder="Máx."
-            :error="form.hasError('max_garage')"
-            :error-message="form.firstError('max_garage')"
+            @pressEnter="$emit('pressEnter')"
           ></re-input>
         </div>
+        <p
+          class="text-danger"
+          v-if="form.hasError('min_garage')"
+          v-text="form.firstError('min_garage')"
+        />
+        <p
+          class="text-danger"
+          v-if="form.hasError('max_garage')"
+          v-text="form.firstError('max_garage')"
+        />
       </div>
     </div>
     <div class="mb-2 col-12">

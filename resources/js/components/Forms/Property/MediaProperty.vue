@@ -39,9 +39,6 @@
     </div>
     <div class="col-12 mb-2">
       <div class="mb-3">
-        <!-- <label for="formFileImage" class="form-label">
-          Adicionar imagens
-        </label> -->
         <div class="square-upload">
           <input
             type="file"
@@ -49,6 +46,7 @@
             id="fileImage"
             ref="fileImage"
             accept="image"
+            multiple
             @change="onFileChange"
           />
           <label class="square-upload-add" for="fileImage">
