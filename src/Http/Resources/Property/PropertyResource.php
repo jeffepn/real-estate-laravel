@@ -68,19 +68,19 @@ class PropertyResource extends JsonResource
                 'situation' => [
                     'data' => [
                         'type' => 'situation',
-                        'id' => $this->situation->id,
+                        'id' => $this->situation_id,
                     ]
                 ],
                 'sub_type' => [
                     'data' => [
                         'type' => 'sub_type',
-                        'id' => $this->sub_type->id,
+                        'id' => $this->sub_type_id,
                     ]
                 ],
                 'address' => [
                     'data' => [
                         'type' => 'address',
-                        'id' => $this->address->id,
+                        'id' => $this->address_id,
                     ]
                 ],
                 'businesses' => $this->businessesProperty->map(function ($businessProperty) {
@@ -97,7 +97,6 @@ class PropertyResource extends JsonResource
     public function with($request)
     {
         $includeds = [
-            new SituationResource($this->situation),
             new SubTypeResource($this->sub_type),
             new AddressResource($this->address),
             new NeighborhoodResource($this->address->neighborhood),
@@ -105,6 +104,10 @@ class PropertyResource extends JsonResource
             new StateResource($this->address->neighborhood->city->state),
             new CountryResource($this->address->neighborhood->city->state->country),
         ];
+        if ($this->situation) {
+            array_push($includeds, new SituationResource($this->situation));
+        }
+
         $businessesProperty = $this->businessesProperty->map(function ($businessProperty) {
             return new BusinessPropertyResource($businessProperty);
         })->toArray();

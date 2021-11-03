@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Http\Requests\Property\BusinessRequest;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Models\Property\Property;
+use Jeffpereira\RealEstate\Models\Property\Situation;
 use Jeffpereira\RealEstate\Models\Property\SubType;
 use Jeffpereira\RealEstate\Models\Property\Type;
 use Jeffpereira\RealEstate\Tests\TestCase;
@@ -19,14 +20,13 @@ use JPAddress\Models\Address\Address;
 class PropertyTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
-    protected $api = 'api/property';
+    const URL_API = 'api/property';
 
-    // protected function setUp(): void
-    // {
-    //     parent::setUp();
-    // }
     /**
      * @test
+     * @group property
+     * @group property-index
+     * @group index
      */
     public function verify_format_return_index()
     {
@@ -49,7 +49,7 @@ class PropertyTest extends TestCase
                         'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
                         'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
                     ],
-                    'relationships' => ['sub_type', 'address'],
+                    'relationships' => ['situation', 'sub_type', 'address', 'businesses'],
                 ]
             ],
             'included'
@@ -58,11 +58,14 @@ class PropertyTest extends TestCase
 
     /**
      * @test
+     * @group property
+     * @group property-show
+     * @group show
      */
     public function verify_format_return_show()
     {
         $property = factory(Property::class)->create();
-        $response = $this->getJson("$this->api/$property->id");
+        $response = $this->getJson(self::URL_API . "/$property->id");
         $response->assertStatus(200);
         $response->assertJsonStructure([
             "data" => [
@@ -115,15 +118,19 @@ class PropertyTest extends TestCase
 
     /**
      * @test
+     * @group property
+     * @group property-store
+     * @group store
      */
     public function store_with_success()
     {
-        $business = factory(Business::class)->create();
+        $situation = $this->faker->boolean() ? factory(Situation::class)->create() : null;
         $subType = factory(SubType::class)->create();
         $response = $this->postJson(
-            $this->api,
+            self::URL_API,
             [
                 'sub_type_id' => $subType->id,
+                'situation_id' => $situation ? $situation->id : null,
                 'min_description' =>
                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
                 'content' => 'test content', 'items' => 'test items',
@@ -162,7 +169,7 @@ class PropertyTest extends TestCase
                     'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage', 'ground_area', 'useful_area'
                 ],
                 'relationships' => [
-                    'address', 'sub_type'
+                    'address', 'sub_type', 'situation', 'businesses'
                 ]
             ],
             'included', 'error', 'message'
@@ -202,13 +209,17 @@ class PropertyTest extends TestCase
 
     /**
      * @test
+     * @group property
+     * @group property-update
+     * @group update
      */
     public function update_with_success()
     {
-        $business = factory(Business::class)->create();
+        $situation = factory(Situation::class)->create(); //$this->faker->boolean() ? factory(Situation::class)->create() : null;
         $subType = factory(SubType::class)->create();
         $address = $this->createAddress();
         $property = Property::create([
+            'situation_id' => $situation ? $situation->id : null,
             'sub_type_id' => $subType->id,
             'address_id' => $address->id,
             'min_description' =>
@@ -224,7 +235,7 @@ class PropertyTest extends TestCase
             'min_garage' => 4,
             'max_garage' => 8,
         ]);
-        $response = $this->patchJson("$this->api/$property->id", [
+        $response = $this->patchJson(self::URL_API . "/$property->id", [
             'min_description' => "min description edit",
             'content' => 'test content edit', 'items' => 'test items edit',
             'building_area' => 115.49, 'total_area' => 210.50,
@@ -275,18 +286,24 @@ class PropertyTest extends TestCase
 
     /**
      * @test
+     * @group property
+     * @group property-destroy
+     * @group destroy
      */
     public function destroy_with_success()
     {
         $property = factory(Property::class)->create();
         $this->assertNotNull(Property::first());
-        $response = $this->deleteJson("$this->api/$property->id");
+        $response = $this->deleteJson(self::URL_API . "/$property->id");
         $response->assertStatus(200);
         $this->assertNull(Property::first());
     }
 
     /**
      * @test
+     * @group property
+     * @group property-validation
+     * @group validation
      */
     public function validate_data_request()
     {
@@ -320,7 +337,7 @@ class PropertyTest extends TestCase
             "country" => "Brasil"
         ];
 
-        $response = $this->postJson($this->api, $data);
+        $response = $this->postJson(self::URL_API, $data);
         $response->assertStatus(Response::HTTP_CREATED);
         $data['slug'] = 'test-slug-2';
         $array_validation = [
@@ -380,13 +397,13 @@ class PropertyTest extends TestCase
         foreach ($array_validation as $item) {
             $aux = $data;
             $aux[$item['key']] = $item['value'];
-            $response = $this->postJson($this->api, $aux);
+            $response = $this->postJson(self::URL_API, $aux);
             $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $property = Property::first();
         // Test update slug, when is ignored
         $response = $this->patchJson(
-            "$this->api/$property->id",
+            self::URL_API . "/$property->id",
             [
                 'slug' => 'test-slug',
                 "neighborhood" => "Jd Santa Maria",

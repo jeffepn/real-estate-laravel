@@ -5,6 +5,7 @@ namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 use Jeffpereira\RealEstate\Http\Requests\Property\StoreSituationRequest;
 use Illuminate\Http\Request;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
+use Jeffpereira\RealEstate\Http\Requests\Property\UpdateSituationRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\SituationCollection;
 use Jeffpereira\RealEstate\Http\Resources\Property\SituationResource;
 use Jeffpereira\RealEstate\Models\Property\Situation;
@@ -25,7 +26,7 @@ class SituationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  StoreSituationRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreSituationRequest $request)
@@ -55,13 +56,20 @@ class SituationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  UpdateSituationRequest  $request
      * @param  \App\Situation  $situation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Situation $situation)
+    public function update(UpdateSituationRequest $request, Situation $situation)
     {
-        //
+        try {
+            if ($situation->update($request->all())) {
+                return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
+            }
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        } catch (\Throwable $th) {
+            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+        }
     }
 
     /**
@@ -72,6 +80,16 @@ class SituationController extends Controller
      */
     public function destroy(Situation $situation)
     {
-        //
+        try {
+            if ($situation->properties->isNotEmpty()) {
+                return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete_with_relations')], 400);
+            }
+            if ($situation->delete()) {
+                return response()->noContent(200);
+            }
+            return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete')], 400);
+        } catch (\Throwable $th) {
+            return response(['error' => true, 'message' => $th->getMessage()], 400);
+        }
     }
 }

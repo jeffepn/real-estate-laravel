@@ -5,7 +5,7 @@ namespace Jeffpereira\RealEstate\Http\Requests\Property;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreSituationRequest extends FormRequest
+class UpdateSituationRequest extends FormRequest
 {
 
     /**
@@ -16,7 +16,7 @@ class StoreSituationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'max:30', Rule::unique('situations')]
+            'name' => ['required', 'max:30', Rule::unique('situations')->ignore($this->situation)]
         ];
     }
 

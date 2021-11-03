@@ -22,7 +22,7 @@ class StorePropertyRequest extends FormRequest
             "code" => ['sometimes', "bail", "integer", Rule::unique('properties')->ignore($this->property)],
             "businesses.*.id" => "bail|required|uuid",
             "businesses.*.value" => "bail|nullable|numeric|between:0,99999999.99",
-            "situation_id" => "bail|uuid",
+            "situation_id" => "bail|nullable|uuid",
             "sub_type_id" => "bail|required|uuid",
             "min_description" => "bail|nullable|min:10|max:200",
             "total_area" => "bail|nullable|numeric|between:0,99999999.99",
