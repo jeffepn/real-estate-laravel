@@ -15,7 +15,7 @@ class UpdateSituationInProperty extends Migration
     public function up()
     {
         Schema::table('properties', function (Blueprint $table) {
-            $table->string('situation_id')->nullable()->after('sub_type_id')->change();
+            $table->string('situation_id')->default(null)->change();
         });
     }
 
@@ -28,7 +28,7 @@ class UpdateSituationInProperty extends Migration
     {
         $situation = Situation::firstOrCreate(['name' => 'Pronto']);
         Schema::table('properties', function (Blueprint $table) use ($situation) {
-            $table->string('situation_id')->nullable()->default($situation->id)->after('sub_type_id');
+            $table->string('situation_id')->default($situation->id)->change();
         });
     }
 }
