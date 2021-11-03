@@ -13,10 +13,10 @@
         "php": " >=7.2.5",
         "jeffersonpereira/address": "1.*",
         "laravellegends/pt-br-validator": "dev-master",
-        "doctrine/dbal": "4.0.x-dev",
         "tightenco/ziggy": "^1.2",
         "spatie/laravel-image-optimizer": "dev-master",
-        "intervention/image": "^2.7"
+        "intervention/image": "^2.7",
+        "doctrine/dbal": "2.*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.13",
