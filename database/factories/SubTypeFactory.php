@@ -8,7 +8,7 @@ use Jeffpereira\RealEstate\Models\Property\Type;
 
 $factory->define(SubType::class, function (Faker $faker) {
     return [
-        'name' => $faker->unique()->name,
+        'name' => $faker->unique()->name(),
         'type_id' => function () {
             return factory(Type::class)->create()->id;
         },
