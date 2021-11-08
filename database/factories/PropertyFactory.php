@@ -20,16 +20,7 @@ $factory->define(Property::class, function (Faker $faker) {
                 : null;
         },
         'address_id' => function () {
-            return factory(Address::class)->create([
-                'cep' => '99999999',
-                'neighborhood_id' => factory(Neighborhood::class)->create([
-                    'city_id' => factory(City::class)->create([
-                        'state_id' => factory(State::class)->create([
-                            'country_id' => Country::firstOrCreate(['name' => 'brasil'])->id
-                        ])
-                    ])->id
-                ])->id
-            ]);
+            return factory(Address::class)->create()->id;
         },
         'sub_type_id' => function () {
             return factory(SubType::class)->create()->id;

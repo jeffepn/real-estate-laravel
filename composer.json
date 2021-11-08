@@ -19,7 +19,7 @@
         "doctrine/dbal": "2.*"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.13",
+        "fakerphp/faker": "^1.9.1",
         "orchestra/testbench": "^4.0",
         "laravel/legacy-factories": "^1.0@dev",
         "nunomaduro/collision": "^3.0"
