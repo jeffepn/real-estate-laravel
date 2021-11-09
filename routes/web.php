@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Support\Facades\Route;
+
 Route::middleware(config('realestatelaravel.middleware.web'))->group(function () {
     Route::prefix('panel-realestate')->group(function () {
         Route::group(['namespace' => 'Jeffpereira\RealEstate\Http\Controllers'], function () {

@@ -28,6 +28,7 @@
               role="tab"
               aria-controls="data"
               aria-selected="true"
+              @click="next('data')"
             >
               Dados
             </button>
@@ -41,6 +42,7 @@
               role="tab"
               aria-controls="details"
               aria-selected="false"
+              @click="next('details')"
             >
               Detalhes
             </button>
@@ -54,6 +56,7 @@
               role="tab"
               aria-controls="businesses"
               aria-selected="false"
+              @click="next('businesses')"
             >
               Negócios
             </button>
@@ -67,6 +70,7 @@
               role="tab"
               aria-controls="media"
               aria-selected="false"
+              @click="next('media')"
             >
               Media
             </button>
@@ -296,6 +300,7 @@ export default {
       let keyError = this.form.firstKeyErrorAny();
       switch (keyError) {
         case "sub_type_id":
+        case "situation_id":
         case "code":
         case "cep":
         case "address":
@@ -422,7 +427,7 @@ export default {
       this.property = {
         id: data.id,
         slug: data.attributes.slug,
-        situation_id: situation.id,
+        situation_id: situation?.id,
         sub_type_id: subType.id,
         code: data.attributes.code,
         building_area: data.attributes.building_area,

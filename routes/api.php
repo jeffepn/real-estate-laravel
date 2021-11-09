@@ -1,6 +1,4 @@
 <?php
-// Controllers
-
 
 use Jeffpereira\RealEstate\Http\Controllers\Api\AppSettingController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\BusinessController;

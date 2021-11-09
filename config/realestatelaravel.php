@@ -23,8 +23,8 @@ return [
      *  Define middlewares of routes web and routes api
      */
     'middleware' => [
-        'web' => env('RE_MIDDLEWARES_WEB', ['web']),
-        'api' => env('RE_MIDDLEWARES_API', ['api']),
+        'web' => explode(',', env('RE_MIDDLEWARES_WEB', 'web')),
+        'api' => explode(',', env('RE_MIDDLEWARES_API', 'api')),
     ],
     /**
      *  Defines the disk used and the `paths` to save the entity files

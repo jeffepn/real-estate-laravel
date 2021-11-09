@@ -22,7 +22,7 @@ class UpdatePropertyRequest extends FormRequest
             "code" => ['sometimes', "bail", "integer", Rule::unique('properties')->ignore($this->property)],
             "businesses.*.id" => "sometimes|bail|required|uuid",
             "businesses.*.value" => "sometimes|bail|nullable|numeric|between:0,99999999.99",
-            "situation_id" => "sometimes|bail|uuid",
+            "situation_id" => "sometimes|bail|nullable|uuid",
             "sub_type_id" => "sometimes|bail|required|uuid",
             "min_description" => "sometimes|bail|nullable|min:10|max:200",
             "total_area" => "sometimes|bail|nullable|numeric|between:0,99999999.99",
