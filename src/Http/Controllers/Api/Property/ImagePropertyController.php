@@ -115,7 +115,7 @@ class ImagePropertyController extends Controller
         }
 
         $img->encode('jpg', config('realestatelaravel.filesystem.entities.properties.optmize') ? 60 : 100);
-        $nameImage = config('realestatelaravel.filesystem.entities.properties.path') . '/' . Str::slug($altImage) .  Str::uuid() . $img->extension;
+        $nameImage = config('realestatelaravel.filesystem.entities.properties.path') . '/' . Str::slug($altImage) .  Str::uuid() . '.jpg';
         Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))
             ->put($nameImage, $img);
         return $nameImage;
@@ -126,9 +126,22 @@ class ImagePropertyController extends Controller
             ->first();
         return $appSetting
             ? $img->insert(
-                Storage::disk(config('realestatelaravel.filesystem.disk'))->get($appSetting->value['image']),
+                $this->formatImageInserWatterMark($appSetting, $img->height()),
                 self::POSITION_WATTER_MARK
             )
             : $img;
+    }
+
+    private function formatImageInserWatterMark(AppSettings $appSetting, int $height): InterventionImage
+    {
+        $img = Image::make(
+            Storage::disk(config('realestatelaravel.filesystem.disk'))->get($appSetting->value['image'])
+        );
+        $img->resize(null, $height * 0.5, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
+        return $img;
     }
 }
