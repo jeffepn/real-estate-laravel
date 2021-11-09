@@ -4,9 +4,10 @@
 
 use Faker\Generator as Faker;
 use Jeffpereira\RealEstate\Models\Property\Situation;
+use Illuminate\Support\Str;
 
 $factory->define(Situation::class, function (Faker $faker) {
     return [
-        'name' => $faker->unique()->name()
+        'name' =>  Str::limit($faker->unique()->name(), 30, '')
     ];
 });
