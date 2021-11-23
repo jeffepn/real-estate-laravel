@@ -14,6 +14,7 @@ class CreateBannersTable extends Migration
     public function up()
     {
         Schema::create('banners', function (Blueprint $table) {
+            $table->engine = "InnoDB";
             $table->uuid('id')->primary();
             $table->string("way");
             $table->string("title")->nullable()->default(null);

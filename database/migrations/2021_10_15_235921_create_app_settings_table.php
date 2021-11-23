@@ -14,6 +14,7 @@ class CreateAppSettingsTable extends Migration
     public function up()
     {
         Schema::create('app_settings', function (Blueprint $table) {
+            $table->engine = "InnoDB";
             $table->uuid('id')->primary();
             $table->string('name')->unique();
             $table->json('value');

@@ -14,6 +14,7 @@ class CreateImagePropertiesTable extends Migration
     public function up()
     {
         Schema::create('image_properties', function (Blueprint $table) {
+            $table->engine = "InnoDB";
             $table->uuid('id')->primary();
             $table->string('property_id', 36);
             $table->foreign('property_id')

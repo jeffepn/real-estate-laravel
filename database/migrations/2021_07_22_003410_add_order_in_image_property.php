@@ -26,7 +26,7 @@ class AddOrderInImageProperty extends Migration
     public function down()
     {
         Schema::table('image_properties', function (Blueprint $table) {
-            $table->dropColumn('useful_area');
+            $table->dropColumn('order');
         });
     }
 }

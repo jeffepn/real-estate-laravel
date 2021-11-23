@@ -14,6 +14,7 @@ class CreateTypesTable extends Migration
     public function up()
     {
         Schema::create('types', function (Blueprint $table) {
+            $table->engine = "InnoDB";
             $table->uuid('id')->primary();
             $table->string('slug', 30);
             $table->string('name', 30)->unique();
