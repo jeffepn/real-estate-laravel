@@ -37,7 +37,7 @@ class UpdatePropertyRequest extends FormRequest
             "max_garage" => "sometimes|bail|nullable|integer|min:0",
             "embed" => "sometimes|bail|nullable|url|max:300",
             "address" => "sometimes|bail|nullable|max:100",
-            "number" => "sometimes|nullable|integer|min:1",
+            "number" => "sometimes|nullable|integer|min:o",
             "complement" => "max:15",
             "cep" => "sometimes|bail|nullable|formato_cep",
             "latitude" => "sometimes|nullable|integer",

@@ -39,7 +39,7 @@ class StorePropertyRequest extends FormRequest
             "max_garage" => "bail|nullable|integer|min:0",
             "embed" => "bail|nullable|url|max:300",
             "address" => "sometimes|bail|nullable|max:100",
-            "number" => "sometimes|nullable|integer|min:1",
+            "number" => "sometimes|nullable|integer|min:0",
             "complement" => "max:15",
             "cep" => "sometimes|bail|nullable|formato_cep",
             "latitude" => "sometimes|nullable|integer",
