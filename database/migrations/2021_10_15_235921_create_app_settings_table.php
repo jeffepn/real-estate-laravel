@@ -29,6 +29,6 @@ class CreateAppSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('app_setings');
+        Schema::dropIfExists('app_settings');
     }
 }
