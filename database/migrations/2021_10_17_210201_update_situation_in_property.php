@@ -20,7 +20,11 @@ class UpdateSituationInProperty extends Migration
             $situation->delete();
         }
         Schema::table('properties', function (Blueprint $table) {
+            $table->dropForeign(['situation_id']);
             $table->string('situation_id')->default(null)->change();
+            $table->foreign('situation_id')
+                ->references('id')
+                ->on('situations');
         });
     }
 
@@ -33,7 +37,11 @@ class UpdateSituationInProperty extends Migration
     {
         $situation = Situation::firstOrCreate(['name' => 'Pronto']);
         Schema::table('properties', function (Blueprint $table) use ($situation) {
+            $table->dropForeign(['situation_id']);
             $table->string('situation_id')->default($situation->id)->change();
+            $table->foreign('situation_id')
+                ->references('id')
+                ->on('situations');
         });
     }
 }
