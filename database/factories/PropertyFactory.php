@@ -28,3 +28,15 @@ $factory->define(Property::class, function (Faker $faker) {
         'min_description' => $faker->sentence(4, true)
     ];
 });
+
+$factory->state(Property::class, 'active', function (Faker $faker) {
+    return [
+        'active' => true
+    ];
+});
+
+$factory->state(Property::class, 'inactive', function (Faker $faker) {
+    return [
+        'active' => false
+    ];
+});

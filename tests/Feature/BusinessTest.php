@@ -126,4 +126,28 @@ class BusinessTest extends TestCase
         $response = $this->patchJson("$this->api/$business->id", ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_OK);
     }
+
+    // Scopes
+
+    /**
+     * @test
+     * @group business
+     * @group scope
+     * @group business-scope-properties
+     */
+    public function hasProperties()
+    {
+        factory(Business::class, 10)->create();
+        $this->assertCount(10, Business::all());
+        $this->assertCount(0, Business::hasProperties()->get());
+        Business::all()->each(function ($business, $key) {
+            $business->properties()->attach(
+                $key < 5
+                    ? factory(Property::class)->state('active')->create()->id
+                    : factory(Property::class)->state('inactive')->create()->id
+            );
+        });
+        $this->assertCount(5, Business::hasProperties()->get());
+        $this->assertCount(10, Property::all());
+    }
 }

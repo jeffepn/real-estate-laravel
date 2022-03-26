@@ -21,15 +21,15 @@ class Property extends Model
     // Relationships
     public function businesses(): BelongsToMany
     {
-        return $this->belongsToMany('Jeffpereira\RealEstate\Models\Property\Business', "business_properties")
-            ->using('Jeffpereira\RealEstate\Models\Property\BusinessProperty')
+        return $this->belongsToMany(Business::class, 'business_properties')
+            ->using(BusinessProperty::class)
             ->withPivot([
                 'value', 'id'
             ]);
     }
     public function businessesProperty(): HasMany
     {
-        return $this->hasMany('Jeffpereira\RealEstate\Models\Property\BusinessProperty');
+        return $this->hasMany(BusinessProperty::class);
     }
 
     public function sub_type(): BelongsTo
@@ -50,6 +50,17 @@ class Property extends Model
     public function images(): HasMany
     {
         return $this->hasMany(ImageProperty::class)->orderBy('order');
+    }
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('properties.active', true);
+    }
+
+    public function scopeNotActive($query)
+    {
+        return $query->where('properties.active', false);
     }
 
     protected function generateSlug()

@@ -20,7 +20,7 @@ class PropertyTest extends TestCase
     /**
      * @test
      */
-    public function a_slug_must_be_unique()
+    public function aSlugMustBeUnique()
     {
         $property = factory(Property::class)->create();
         $codeException = null;
@@ -32,7 +32,7 @@ class PropertyTest extends TestCase
         $this->assertEquals('23000', $codeException);
     }
 
-    public function test_format_generate_slug_based_in_context()
+    public function testFormatGeneratSluBasedIinContext()
     {
         $address = $this->createAddress();
         $business = factory(Business::class)->create();
