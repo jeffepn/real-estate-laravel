@@ -53,4 +53,6 @@ class BusinessTest extends TestCase
     //     $business->properties()->saveMany(factory(Property::class, 20)->make());
     //     $this->assertEquals(21, $business->refresh()->properties->count());
     // }
+
+
 }

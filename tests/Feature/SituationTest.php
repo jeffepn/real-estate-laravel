@@ -24,7 +24,7 @@ class SituationTest extends TestCase
      * @group situation
      * @group situation-index
      */
-    public function verify_format_return_index()
+    public function verifyFormatReturnIndex()
     {
         factory(Situation::class)->create();
         $response = $this->getJson(self::URL_API);
@@ -44,7 +44,7 @@ class SituationTest extends TestCase
      * @group situation
      * @group situation-show
      */
-    public function verify_format_return_show()
+    public function verifyFormatReturnShow()
     {
         $situation = factory(Situation::class)->create();
         $response = $this->getJson(self::URL_API . "/$situation->id");
@@ -68,7 +68,7 @@ class SituationTest extends TestCase
      * @group situation
      * @group situation-store
      */
-    public function store_with_success()
+    public function storeWitSuccess()
     {
         $response = $this->postJson(self::URL_API, ['name' => 'Test of name']);
         $response->assertStatus(201);
@@ -76,9 +76,9 @@ class SituationTest extends TestCase
             'type', 'id', 'attributes' => ['slug', 'name']
         ], 'error', 'message']);
 
-        $this->assertEquals(1, Situation::count());
-        $this->assertEquals("test-of-name", Situation::first()->slug);
-        $this->assertEquals("TEST OF NAME", Situation::first()->name);
+        $this->assertEquals(2, Situation::count());
+        $this->assertEquals("test-of-name", Situation::firstWhere('name', 'TEST OF NAME')->slug);
+        $this->assertEquals("TEST OF NAME", Situation::firstWhere('name', 'TEST OF NAME')->name);
     }
 
     /**
@@ -86,12 +86,12 @@ class SituationTest extends TestCase
      * @group situation
      * @group situation-update
      */
-    public function update_with_success()
+    public function updateWithSuccess()
     {
         $situation = factory(Situation::class)->create();
         $response = $this->patchJson(self::URL_API . "/$situation->id", ['name' => 'Test of name2']);
         $response->assertStatus(200);
-        $this->assertEquals("test-of-name2", Situation::first()->slug);
+        $this->assertEquals("test-of-name2", Situation::firstWhere('name', 'TEST OF NAME2')->slug);
     }
 
     /**
@@ -99,13 +99,13 @@ class SituationTest extends TestCase
      * @group situation
      * @group situation-destroy
      */
-    public function destroy_with_success()
+    public function destroyWithSuccess()
     {
         $situation = factory(Situation::class)->create();
         $this->assertNotNull(Situation::first());
         $response = $this->deleteJson(self::URL_API . "/$situation->id");
         $response->assertStatus(200);
-        $this->assertNull(Situation::first());
+        $this->assertNull(Situation::find($situation->id));
     }
 
     /**
@@ -114,7 +114,7 @@ class SituationTest extends TestCase
      * @group situation-destroy
      * @group situation-destroy-error
      */
-    public function dont_destroy_type_with_one_or_more_property()
+    public function dontDestroyTypeWithOneOrMoreProperty()
     {
         $situation = factory(Situation::class)->create();
         $this->assertNotNull(Situation::first());
@@ -130,7 +130,7 @@ class SituationTest extends TestCase
      * @group situation
      * @group situation-validation
      */
-    public function validate_name_request()
+    public function validateNameRequest()
     {
         // $request = new typeRequest();
         $situation = factory(Situation::class)->create(['name' => 'teste']);

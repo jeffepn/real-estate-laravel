@@ -14,8 +14,15 @@ class BusinessProperty extends Pivot
 
     protected $guarded = [];
 
+    // Relationships
+
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
+    }
+
+    public function property(): BelongsTo
+    {
+        return $this->belongsTo(Property::class);
     }
 }

@@ -34,6 +34,14 @@ class SubType extends Model
         return $this->belongsTo(Type::class);
     }
 
+    // Scopes
+    public function scopeHasProperties($query)
+    {
+        return $query->whereHas('properties', function ($subQuery) {
+            $subQuery->where('active', true);
+        });
+    }
+
     protected function generateSlug()
     {
         return Str::slug($this->name);

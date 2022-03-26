@@ -28,7 +28,7 @@ class PropertyTest extends TestCase
      * @group property-index
      * @group index
      */
-    public function verify_format_return_index()
+    public function verifyFormatReturnIndex()
     {
         $subType = factory(Type::class)->create()->sub_types()->save(factory(SubType::class)->make());
         factory(Property::class, 20)->create([
@@ -62,7 +62,7 @@ class PropertyTest extends TestCase
      * @group property-show
      * @group show
      */
-    public function verify_format_return_show()
+    public function verifyFormatReturnShow()
     {
         $property = factory(Property::class)->create();
         $response = $this->getJson(self::URL_API . "/$property->id");
@@ -122,7 +122,7 @@ class PropertyTest extends TestCase
      * @group property-store
      * @group store
      */
-    public function store_with_success()
+    public function storeWithSuccess()
     {
         $situation = $this->faker->boolean() ? factory(Situation::class)->create() : null;
         $subType = factory(SubType::class)->create();
@@ -213,7 +213,7 @@ class PropertyTest extends TestCase
      * @group property-update
      * @group update
      */
-    public function update_with_success()
+    public function updateWithSuccess()
     {
         $situation = factory(Situation::class)->create(); //$this->faker->boolean() ? factory(Situation::class)->create() : null;
         $subType = factory(SubType::class)->create();
@@ -290,7 +290,7 @@ class PropertyTest extends TestCase
      * @group property-destroy
      * @group destroy
      */
-    public function destroy_with_success()
+    public function destroyWithSuccess()
     {
         $property = factory(Property::class)->create();
         $this->assertNotNull(Property::first());
@@ -305,7 +305,7 @@ class PropertyTest extends TestCase
      * @group property-validation
      * @group validation
      */
-    public function validate_data_request()
+    public function validateDataRequest()
     {
         $business = factory(Business::class)->create();
         $type = factory(Type::class)->create();
@@ -373,7 +373,7 @@ class PropertyTest extends TestCase
             ['key' => 'max_garage', 'value' => -1],
             ['key' => 'address', 'value' => Str::random(101)],
             ['key' => 'number', 'value' => 'jjk'],
-            ['key' => 'number', 'value' => 0],
+            ['key' => 'number', 'value' => -20],
             ['key' => 'complement', 'value' => Str::random(16)],
             ['key' => 'cep', 'value' => Str::random(16)],
             ['key' => 'latitude', 'value' => 'fsfd'],
@@ -414,5 +414,25 @@ class PropertyTest extends TestCase
             ]
         );
         $response->assertStatus(Response::HTTP_OK);
+    }
+
+    // Scopes
+
+    /**
+     * @test
+     * @group feature
+     * @group property
+     * @group scope
+     * @group scope-active
+     */
+    public function propertyIsActiveAndNotActive()
+    {
+        $property = factory(Property::class)->state('active')->create();
+        $this->assertCount(1, Property::active()->get());
+        $this->assertCount(0, Property::notActive()->get());
+        $property->active = false;
+        $property->save();
+        $this->assertCount(0, Property::active()->get());
+        $this->assertCount(1, Property::notActive()->get());
     }
 }

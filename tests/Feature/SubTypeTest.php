@@ -132,4 +132,30 @@ class SubTypeTest extends TestCase
         $response = $this->patchJson("$this->api/$subType->id", ['name' => 'teste', 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_OK);
     }
+
+    // Scopes
+
+    /**
+     * @test
+     * @group sub_type
+     * @group scope
+     * @group sub_type-scope-properties
+     */
+    public function hasProperties()
+    {
+        $type = factory(Type::class)->create();
+        factory(SubType::class, 10)->create(['type_id' => $type->id]);
+        $this->assertCount(10, SubType::all());
+        $this->assertCount(0, SubType::hasProperties()->get());
+        SubType::all()->each(function ($subType, $key) {
+
+            $subType->properties()->save(
+                $key < 5
+                    ? factory(Property::class)->state('active')->make()
+                    : factory(Property::class)->state('inactive')->make()
+            );
+        });
+        $this->assertCount(5, SubType::hasProperties()->get());
+        $this->assertCount(10, Property::all());
+    }
 }

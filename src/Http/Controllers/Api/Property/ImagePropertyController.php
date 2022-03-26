@@ -107,6 +107,7 @@ class ImagePropertyController extends Controller
         if ($request->use_watter_mark) {
             $img = $this->insertWatterMark($img);
         }
+        $img->orientate();
         if (config('realestatelaravel.filesystem.entities.properties.optmize')) {
             $img->resize(null, 1080, function ($constraint) {
                 $constraint->aspectRatio();
