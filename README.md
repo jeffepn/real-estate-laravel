@@ -62,12 +62,13 @@ We use bootstrap in version 5.1.
 and assets of package.
 
 ```html
-<script src="/realestatelaravel/js/manifest.js"></script>
-<script src="/realestatelaravel/js/realestatelaravel.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jeffepereira/real-estate-laravel@1/dist/js/realestatelaravel.min.js"></script>
 ```
 
 ```html
-<link href="/realestatelaravel/css/realestatelaravel.css" />
+<link
+  href="https://cdn.jsdelivr.net/gh/jeffepereira/real-estate-laravel@1/dist/css/realestatelaravel.css"
+/>
 ```
 
 # Features available in the package
