@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
@@ -42,13 +43,17 @@ class ImagePropertyController extends Controller
         try {
             $property = Property::findOrFail($request->property_id);
             $altImage =  $property->generateAltImage();
-
-            $image = ImageProperty::create([
-                'property_id' => $property->id,
-                'way' => $this->storageImage($request, $altImage),
-                'alt' => $altImage
-            ]);
-            return (new ImagePropertyResource($image, Terminologies::get('all.common.save_data')))
+            $imagesStore = collect();
+            foreach ($request->images as $image) {
+                $imagesStore->push(
+                    ImageProperty::create([
+                        'property_id' => $property->id,
+                        'way' => $this->storageImage($image, $altImage, $request->use_watter_mark),
+                        'alt' => $altImage
+                    ])
+                );
+            }
+            return (new ImagePropertyCollection($imagesStore, Terminologies::get('all.common.save_data')))
                 ->response()->setStatusCode(201);
         } catch (ModelNotFoundException $mn) {
             logger('Error in store ImagePropertyController: ' . $mn->getMessage(), $mn->getTrace());
@@ -101,10 +106,10 @@ class ImagePropertyController extends Controller
         return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
     }
 
-    private function storageImage(ImagePropertyRequest $request, string $altImage): string
+    private function storageImage(UploadedFile $image, string $altImage, bool $useWatterMark): string
     {
-        $img = Image::make($request->image);
-        if ($request->use_watter_mark) {
+        $img = Image::make($image);
+        if ($useWatterMark) {
             $img = $this->insertWatterMark($img);
         }
         $img->orientate();

@@ -45,7 +45,7 @@
             name="fileImage"
             id="fileImage"
             ref="fileImage"
-            accept="image"
+            accept="image/png, image/jpeg"
             multiple
             @change="onFileChange"
           />
@@ -141,14 +141,23 @@ export default {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.loadingFiles = true;
-      for await (let file of files) {
-        this.setImage(file);
-      }
+      //   const filesUpload = [];
+      //   for await (let file of files) {
+      //     this.setImage(file);
+      //     // filesUpload.push(file);
+      //   }
+      //   this.setImage(filesUpload);
+      this.setImage(files);
       this.loadingFiles = false;
     },
-    async setImage(file) {
+    async setImage(files) {
       let dataForm = new FormData();
-      dataForm.append("image", file);
+      for (var index = 0; index < files.length; index++) {
+        dataForm.append("images[]", files[index]);
+      }
+      //   dataForm.append("images", files);
+      //   dataForm.append("images", files[0]);
+      //   dataForm.append("images[]", files);
       dataForm.append("property_id", this.form.data.id);
       dataForm.append("use_watter_mark", this.useWatterMark);
       await reaxios
@@ -158,18 +167,29 @@ export default {
           },
         })
         .then((response) => {
-          setTimeout(() => {}, 2000);
-          this.images.push({
-            id: response.data.data.id,
-            way: response.data.data.attributes.way,
-            alt: response.data.data.attributes.alt,
+          response.data.data.forEach((image) => {
+            this.images.push({
+              id: image.id,
+              way: image.attributes.way,
+              alt: image.attributes.alt,
+            });
           });
         })
         .catch(({ response }) => {
+          let message = "Algo deu errado no upload das imagens.";
           if (response && response.status === 422) {
             let keysErrors = Object.keys(response.data.errors);
             this.errors = response.data.errors[keysErrors[0]];
+            message = "Confira os erros do upload das imagens.";
           }
+          if (response && response.status === 413) {
+            message = "Verifique o tamanho total do arquivos, muito grandes.";
+          }
+
+          this.$toast.message({
+            message,
+            type: "danger",
+          });
         });
     },
     removeImage(id) {
