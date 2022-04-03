@@ -49,6 +49,7 @@ class RealEstateServiceProvider extends ServiceProvider
         $this->registerComponents();
         $this->registerCustomRules();
         $this->registerObservers();
+        $this->registerBladeDirectives();
     }
 
     protected function registerPublishes()
@@ -58,9 +59,10 @@ class RealEstateServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/realestatelaravel.php' => config_path('realestatelaravel.php'),
             ], 'realestatelaravel-config');
 
-            $this->publishes([
-                __DIR__ . '/../dist/' => public_path('realestatelaravel/'),
-            ], 'realestatelaravel-assets');
+            // Disable in version 1.3.19 to use in cdn
+            // $this->publishes([
+            //     __DIR__ . '/../dist/' => public_path('realestatelaravel/'),
+            // ], 'realestatelaravel-assets');
         }
     }
 
@@ -91,5 +93,12 @@ class RealEstateServiceProvider extends ServiceProvider
     protected function registerComponents()
     {
         Blade::component('jprealestate::components.layout.content', 'content');
+    }
+
+    // Create protected function to register blade directives
+    protected function registerBladeDirectives()
+    {
+        Blade::directive('realestatelaravelStyles', [RealEstateBladeDirective::class, 'mainStyles']);
+        Blade::directive('realestatelaravelScripts', [RealEstateBladeDirective::class, 'mainScripts']);
     }
 }
