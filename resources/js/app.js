@@ -1,4 +1,9 @@
 import Vue from "vue";
+// Template
+import "bootstrap/dist/css/bootstrap.min.css";
+
+// require("bootstrap/dist/js/bootstrap.min.js");
+window.bootstrap = require("bootstrap");
 // Defaults bootstrap
 import "@/bootstrap";
 // Register components
