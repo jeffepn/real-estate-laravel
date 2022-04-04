@@ -45,3 +45,5 @@ mix
   .sass("resources/scss/app.scss", "css/realestatelaravel.css")
   .copyDirectory(root, "public/realestatelaravel")
   .vue();
+
+mix.copy("resources/img", path.resolve(__dirname, `${root}/img/`));
