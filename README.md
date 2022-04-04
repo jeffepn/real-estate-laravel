@@ -1,6 +1,6 @@
 <p align="center">
 <a href="https://github.com/jeffepereira/real-estate-laravel" target="_blank">
-<img src="https://cdn.jsdelivr.net/gh/jeffepereira/real-estate-laravel@1/dist/img/logorealestate.png'" width="150">
+<img src="https://cdn.jsdelivr.net/gh/jeffepereira/real-estate-laravel@1/dist/img/logorealestate.png" width="150">
 </a>
 </p>
 
@@ -9,6 +9,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/jeffersonpereira/realestatelaravel" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/jeffersonpereira/realestatelaravel" alt="License"></a>
 </p>
+
 ### Description
 
 Package used to manage real estate / brokerage websites, built with the Laravel framework
