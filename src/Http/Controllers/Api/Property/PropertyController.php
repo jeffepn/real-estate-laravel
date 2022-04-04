@@ -46,10 +46,13 @@ class PropertyController extends Controller
                 $this->updateBusinessesOfProperty($property, $request->all());
             }
             return (new PropertyResource($property->refresh(), Terminologies::get('all.common.save_data')))
-                ->response()->setStatusCode(201);
+                ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (\Throwable $th) {
-            logger("Error store PropertyController: " . $th->getMessage(), $th->getTrace());
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 500);
+            logger()->error("Error store PropertyController: " . $th->getMessage(), $th->getTrace());
+            return response([
+                'error' => 'true',
+                'message' => Terminologies::get('all.common.error_save_data')
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -102,10 +105,13 @@ class PropertyController extends Controller
             }
             $property->updateAddres($request->all());
             $property->update($request->getData());
-            return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
+            return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')]);
         } catch (\Throwable $th) {
-            logger("Error update PropertyController: " . $th->getMessage(), $th->getTrace());
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], 500);
+            logger()->error("Error update PropertyController: " . $th->getMessage(), $th->getTrace());
+            return response([
+                'error' => 'true',
+                'message' => Terminologies::get('all.common.error_save_data')
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -114,13 +120,13 @@ class PropertyController extends Controller
         try {
             $this->validate($request, ["active" => "required|boolean"]);
             $property->update(['active' => $request->active]);
-            return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
+            return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')]);
         } catch (\Throwable $th) {
-            logger("Error activeOrInactive PropertyController: " . $th->getMessage(), $th->getTrace());
+            logger()->error("Error activeOrInactive PropertyController: " . $th->getMessage(), $th->getTrace());
             return response([
                 'error' => 'true',
                 'message' => Terminologies::get('all.property.not_publish_without_dependences')
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -134,11 +140,14 @@ class PropertyController extends Controller
     {
         try {
             return $property->delete()
-                ? response()->noContent(200)
-                : response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], 400);
+                ? response()->noContent(Response::HTTP_OK)
+                : response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            logger("Error destroy PropertyController: " . $th->getMessage(), $th->getTrace());
-            return response(['error' => true, 'message' => $th->getMessage()], 500);
+            logger()->error("Error destroy PropertyController: " . $th->getMessage(), $th->getTrace());
+            return response([
+                'error' => true,
+                'message' => $th->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

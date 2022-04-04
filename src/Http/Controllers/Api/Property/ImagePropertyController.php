@@ -54,13 +54,13 @@ class ImagePropertyController extends Controller
                 );
             }
             return (new ImagePropertyCollection($imagesStore, Terminologies::get('all.common.save_data')))
-                ->response()->setStatusCode(201);
+                ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (ModelNotFoundException $mn) {
-            logger('Error in store ImagePropertyController: ' . $mn->getMessage(), $mn->getTrace());
-            return response()->noContent(400);
+            logger()->error('Error in store ImagePropertyController: ' . $mn->getMessage(), $mn->getTrace());
+            return response()->noContent(Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            logger('Error in store ImagePropertyController: ' . $th->getMessage(), $th->getTrace());
-            return response()->noContent(500);
+            logger()->error('Error in store ImagePropertyController: ' . $th->getMessage(), $th->getTrace());
+            return response()->noContent(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -87,13 +87,16 @@ class ImagePropertyController extends Controller
         try {
 
             return $imageProperty->delete()
-                ? response()->noContent(200)
+                ? response()->noContent(Response::HTTP_OK)
                 : response([
                     'error' => true,
                     'message' => Terminologies::get('all.property.not_delete')
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => $th->getMessage()], 500);
+            return response([
+                'error' => true,
+                'message' => $th->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
