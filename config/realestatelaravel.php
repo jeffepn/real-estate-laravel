@@ -12,9 +12,9 @@ return [
      */
     'use_template' => env('RE_USE_TEMPLATE', true),
     /**
-     *  The name of the `template` used to extend the package view
+     *  The name of the `template` to custom template
      */
-    'template' => env('RE_TEMPLATE', 'jprealestate::layout.template'),
+    'template' => env('RE_TEMPLATE'),
     /**
      *  Template content section name
      */
@@ -31,7 +31,6 @@ return [
      */
     'filesystem' => [
         'disk' => env('RE_DISK', 'public'),
-        'optmize' => env('RE_OPTMIZE_PROPERTY', true),
         'entities' => [
             'properties' => [
                 'disk' => env('RE_DISK_PROPERTY', 'public'),

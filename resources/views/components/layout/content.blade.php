@@ -1,8 +1,13 @@
-@extends(config('realestatelaravel.template'))
+@php
+$useTemplate = config('realestatelaravel.use_template');
+$template = $useTemplate ? 'jprealestate::layout.template' : config('realestatelaravel.template');
+@endphp
 
-@if (config('realestatelaravel.use_template'))
+@extends($template)
 
-@section(config('realestatelaravel.section_content'))
+@if ($useTemplate)
+
+@section('content')
 {{ $slot }}
 @endsection
 
