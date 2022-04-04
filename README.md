@@ -10,11 +10,11 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/jeffersonpereira/realestatelaravel" alt="License"></a>
 </p>
 
-### Description
+## Description
 
 Package used to manage real estate / brokerage websites, built with the Laravel framework
 
-### Instalation
+## Instalation
 
 ```php
 composer require jeffersonpereira/realestatelaravel
@@ -36,7 +36,7 @@ The package has migrations and you will need to run:
 php artisan migrate
 ```
 
-### _Importants Notes:_
+## _Importants Notes:_
 
 When using your template, import assets with the directive blade and cdn to font-awesome.
 
@@ -63,7 +63,7 @@ _Obs: We use **bootstrap 5.1** on ours assets_
 </html>
 ```
 
-### Features available in the package
+## Features available in the package
 
 #### Property
 
@@ -106,7 +106,3 @@ More options, check the `config/realestatelaravel.php` config file
 ## License
 
 Real Estate Laravel is an open source project, licensed by [MIT](https://opensource.org/licenses/MIT).
-
-```
-
-```
