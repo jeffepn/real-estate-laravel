@@ -5,4 +5,7 @@ node_modules/
 laravel/
 assets/
 public/
+.vscode/
+node_modules/
+.yarn-integrity
 
