@@ -119,8 +119,15 @@ export default {
             WATTERMARK_IMAGE_PROPERTY,
           ]),
         )
+        .catch(({ response }) => {
+          if (response && response.status !== 404)
+            this.$toast.message({
+              message: response.data.message,
+              type: "danger",
+            });
+        })
         .then((response) => {
-          this.watterMark = response.data.data;
+          if (response) this.watterMark = response.data.data;
         });
     },
   },
