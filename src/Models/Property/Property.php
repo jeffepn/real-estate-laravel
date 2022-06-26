@@ -3,65 +3,20 @@
 namespace Jeffpereira\RealEstate\Models\Property;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Traits\AbstractAddress;
+use Jeffpereira\RealEstate\Models\Traits\Property\Relationships;
+use Jeffpereira\RealEstate\Models\Traits\Property\Scopes;
 use Jeffpereira\RealEstate\Models\Traits\SetSlug;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 use JPAddress\Models\Address\Address;
 
 class Property extends Model
 {
-    use UsesUuid, SetSlug, AbstractAddress;
+    use UsesUuid, SetSlug, AbstractAddress, Relationships, Scopes;
 
     protected $guarded = [];
 
-    // Relationships
-    public function businesses(): BelongsToMany
-    {
-        return $this->belongsToMany(Business::class, 'business_properties')
-            ->using(BusinessProperty::class)
-            ->withPivot([
-                'value', 'id'
-            ]);
-    }
-    public function businessesProperty(): HasMany
-    {
-        return $this->hasMany(BusinessProperty::class);
-    }
-
-    public function sub_type(): BelongsTo
-    {
-        return $this->belongsTo(SubType::class);
-    }
-
-    public function situation(): BelongsTo
-    {
-        return $this->belongsTo(Situation::class);
-    }
-
-    public function address(): BelongsTo
-    {
-        return $this->belongsTo(Address::class);
-    }
-
-    public function images(): HasMany
-    {
-        return $this->hasMany(ImageProperty::class)->orderBy('order');
-    }
-
-    // Scopes
-    public function scopeActive($query)
-    {
-        return $query->where('properties.active', true);
-    }
-
-    public function scopeNotActive($query)
-    {
-        return $query->where('properties.active', false);
-    }
 
     protected function generateSlug()
     {
@@ -83,7 +38,6 @@ class Property extends Model
 
         $generate = sprintf(
             "%s em %s - %s %s %s %s %s",
-            // $this->business->name,
             Str::title($subType->name),
             Str::title($this->address->neighborhood->name),
             Str::title($this->address->neighborhood->city->state->initials),

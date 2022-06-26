@@ -32,7 +32,37 @@
       </div>
       <div class="card-body">
         <div class="content-table">
-          <table class="table table-striped">
+          <div
+            class="d-flex justify-content-center text-center p-4"
+            v-if="propertiesIsEmpty || loadingProperties"
+          >
+            <div v-if="propertiesIsEmpty && !loadingProperties">
+              <ph-table :size="80" weight="thin" />
+              <p>
+                Não encontramos imóveis, com os termos de busca.
+              </p>
+            </div>
+            <div v-if="loadingProperties">
+              <ph-circle-notch :size="80" weight="thin">
+                <animateTransform
+                  attributeName="transform"
+                  attributeType="XML"
+                  type="rotate"
+                  dur="0.5s"
+                  from="0 0 0"
+                  to="360 0 0"
+                  repeatCount="indefinite"
+                />
+              </ph-circle-notch>
+              <p>
+                Carregando...
+              </p>
+            </div>
+          </div>
+          <table
+            class="table table-striped"
+            v-if="propertiesIsNotEmpty && !loadingProperties"
+          >
             <thead>
               <tr>
                 <th scope="col">Código</th>
@@ -98,9 +128,9 @@
       </div>
       <div class="card-footer">
         <re-pagination
-          :per-page="pagination.perPage"
-          :total="total"
-          :page="pagination.page"
+          :per-page="parseInt(meta.per_page)"
+          :total="meta.total"
+          :page="meta.current_page"
           @changePage="updatePage"
           @changePerPage="updatePerPage"
         ></re-pagination>
@@ -113,9 +143,9 @@
       text-button-ok="Sim"
       @close="idDelete = null"
       @cancel="idDelete = null"
-      @ok="deleteBanner"
+      @ok="deleteProperty"
     >
-      <p>Tem certeza da exclusão do banner?</p>
+      <p>Tem certeza da exclusão do imóvel?</p>
     </re-modal>
   </div>
 </template>
@@ -125,51 +155,40 @@ import { active } from "@/supports/property.js";
 import RePagination from "@/components/Controls/Pagination";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
 import ReModal from "@/components/Modal";
+import { PhTable, PhCircleNotch } from "phosphor-vue";
 export default {
-  components: { RePagination, ReButton, ReModal },
+  components: { RePagination, ReButton, ReModal, PhTable, PhCircleNotch },
   data() {
     return {
       search: null,
       data: [],
       included: [],
+      meta: {
+        per_page: 10,
+        current_page: 1,
+        total: 0,
+      },
       pagination: {
         perPage: 10,
         page: 1,
       },
       showModalDelete: false,
       idDelete: null,
+      debounceSearch: null,
+      timeoutDebounce: 500,
+      loadingProperties: true,
     };
+  },
+  watch: {
+    search() {
+      clearTimeout(this.debounceSearch);
+      this.debounceSearch = setTimeout(() => {
+        this.getProperties();
+      }, this.timeoutDebounce);
+    },
   },
   computed: {
     properties() {
-      const initial = (this.pagination.page - 1) * this.pagination.perPage;
-      const final = initial + this.pagination.perPage;
-      return this.filteredProperties.slice(initial, final);
-    },
-    filteredProperties() {
-      if (this.searchIsEmpty) {
-        return this.originalProperties;
-      }
-
-      const result = this.originalProperties.filter(
-        (item) =>
-          //   item.business.name.search(
-          //     new RegExp(this.search.replaceAll(" ", ".*"), "i"),
-          //   ) !== -1 ||
-          item.type.name.search(
-            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
-          ) !== -1 ||
-          item.sub_type.name.search(
-            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
-          ) !== -1 ||
-          item.slug.search(
-            new RegExp(this.search.replaceAll(" ", ".*"), "i"),
-          ) !== -1,
-      );
-      this.resetPage();
-      return result;
-    },
-    originalProperties() {
       return this.data.reduce((acumulator, currentValue) => {
         let { id, attributes, relationships } = currentValue;
 
@@ -182,11 +201,14 @@ export default {
         return acumulator;
       }, []);
     },
-    total() {
-      return this.filteredProperties.length;
+    propertiesIsEmpty() {
+      return !this.propertiesIsNotEmpty;
     },
-    searchIsEmpty() {
-      return !(this.search && this.search.trim().length);
+    propertiesIsNotEmpty() {
+      return this.properties.length;
+    },
+    searchIsNotEmpty() {
+      return this.search && this.search.trim().length;
     },
     urlCreate() {
       return window.reroute("jp_realestate.property.create");
@@ -196,7 +218,7 @@ export default {
     active,
     setActive(property, active = false) {
       this.active(property.id, active)
-        .then((response) => {
+        .then(() => {
           this.data = this.data.map((element) => {
             if (element.id === property.id) {
               element.attributes.active = active;
@@ -214,24 +236,41 @@ export default {
         });
     },
     getProperties() {
+      this.loadingProperties = true;
+      const params = {
+        paginate: this.meta.per_page,
+        page: this.meta.current_page,
+      };
+      if (this.searchIsNotEmpty) params.search = this.search;
+
       reaxios
-        .get(window.reroute("jp_realestate.property.index"))
+        .get(window.reroute("jp_realestate.property.index"), {
+          params,
+        })
         .then((response) => {
           this.data = response.data.data;
+          console.log("data", this.data);
           this.included = response.data.included;
+          this.meta = response.data.meta;
         })
-        .catch((error) => {
-          this.$toast.message(error.message, true);
-        });
+        .catch(({ response }) => {
+          if (!response) return;
+
+          this.$toast.message({
+            type: "danger",
+            message: response.data.message,
+          });
+        })
+        .finally(() => (this.loadingProperties = false));
     },
     updatePage(page) {
-      this.pagination.page = page;
+      this.meta.current_page = page;
+      this.getProperties();
     },
     updatePerPage(perPage) {
-      this.pagination.perPage = perPage;
-    },
-    resetPage() {
-      this.updatePage(1);
+      this.meta.current_page = 1;
+      this.meta.per_page = perPage;
+      this.getProperties();
     },
     formateAddress(property) {
       return `${property.address.neighborhood}, ${property.address.city} - ${property.address.initials}`;
@@ -248,7 +287,7 @@ export default {
     extractBusiness(relationships) {
       let businessesProperty = relationships.businesses;
       let included = this.included;
-      return businessesProperty.map(function (businessProperty) {
+      return businessesProperty.map(function(businessProperty) {
         let businessPropertyFind = included.find(
           (element) =>
             element.type === "business_property" &&
@@ -325,7 +364,7 @@ export default {
       this.idDelete = id;
       this.showModalDelete = true;
     },
-    deleteBanner() {
+    deleteProperty() {
       reaxios
         .delete(
           window.reroute("jp_realestate.property.destroy", [this.idDelete]),
@@ -335,11 +374,16 @@ export default {
             (element) => element.id !== this.idDelete,
           );
           this.idDelete = null;
-          this.showModalDelete = false;
         })
-        .catch((error) => {
-          this.$toast.message(error.message, true);
-        });
+        .catch(({ response }) => {
+          if (!response) return;
+
+          this.$toast.message({
+            type: "danger",
+            message: response.data.message,
+          });
+        })
+        .finally(() => (this.showModalDelete = false));
     },
     generateUrlEdit(propertyId) {
       return window.reroute("jp_realestate.property.edit", [propertyId]);

@@ -26,8 +26,10 @@ class AddSearchInProperty extends Migration
      */
     public function down()
     {
-        Schema::table('properties', function ($table) {
-            $table->dropIndex('fulltextproperties_index');
-        });
+        if (env("DB_CONNECTION") != "sqlite") {
+            Schema::table('properties', function ($table) {
+                $table->dropIndex('fulltextproperties_index');
+            });
+        }
     }
 }

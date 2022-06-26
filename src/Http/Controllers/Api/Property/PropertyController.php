@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\Property\PropertyRequest;
@@ -20,12 +21,27 @@ class PropertyController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index(): JsonResource
+    public function index()
     {
-        return new PropertyCollection(Property::orderBy('code', "desc")->get());
+        try {
+            $paginate = request()->paginate;
+            $properties = Property::select('properties.*')->orderBy('code', "desc");
+            if (request()->search) {
+                $properties->search(request()->search);
+            }
+            $properties->distinct(['properties.id']);
+
+            return new PropertyCollection(
+                $paginate ? $properties->paginate($paginate) : $properties->get()
+            );
+        } catch (\Throwable $th) {
+            Log::error("Error index PropertyController", [$th->getTraceAsString()]);
+            return response([
+                'error' => 'true',
+                'message' => Terminologies::get('all.property.error_index')
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -48,7 +64,7 @@ class PropertyController extends Controller
             return (new PropertyResource($property->refresh(), Terminologies::get('all.common.save_data')))
                 ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (\Throwable $th) {
-            logger()->error("Error store PropertyController: " . $th->getMessage(), $th->getTrace());
+            Log::error("Error store PropertyController", [$th->getTraceAsString()]);
             return response([
                 'error' => 'true',
                 'message' => Terminologies::get('all.common.error_save_data')
@@ -107,7 +123,7 @@ class PropertyController extends Controller
             $property->update($request->getData());
             return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')]);
         } catch (\Throwable $th) {
-            logger()->error("Error update PropertyController: " . $th->getMessage(), $th->getTrace());
+            Log::error("Error update PropertyController", [$th->getTraceAsString()]);
             return response([
                 'error' => 'true',
                 'message' => Terminologies::get('all.common.error_save_data')
@@ -122,11 +138,11 @@ class PropertyController extends Controller
             $property->update(['active' => $request->active]);
             return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')]);
         } catch (\Throwable $th) {
-            logger()->error("Error activeOrInactive PropertyController: " . $th->getMessage(), $th->getTrace());
+            Log::error("Error activeOrInactive PropertyController", [$th->getTraceAsString()]);
             return response([
                 'error' => 'true',
                 'message' => Terminologies::get('all.property.not_publish_without_dependences')
-            ], Response::HTTP_BAD_REQUEST);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -143,10 +159,10 @@ class PropertyController extends Controller
                 ? response()->noContent(Response::HTTP_OK)
                 : response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            logger()->error("Error destroy PropertyController: " . $th->getMessage(), $th->getTrace());
+            Log::error("Error destroy PropertyController", [$th->getTraceAsString()]);
             return response([
                 'error' => true,
-                'message' => $th->getMessage()
+                'message' => Terminologies::get('all.property.not_delete')
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
