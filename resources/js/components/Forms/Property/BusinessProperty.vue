@@ -80,7 +80,7 @@ export default {
   methods: {
     async getBusinesses() {
       await reaxios
-        .get(window.reroute("jp_realestate.business.index"))
+        .get(window.reroute("jp_realestate.api.business.index"))
         .then((response) => {
           this.originalBusinesses = response.data.data;
           this.formatBusinesses();

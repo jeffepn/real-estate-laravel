@@ -244,12 +244,11 @@ export default {
       if (this.searchIsNotEmpty) params.search = this.search;
 
       reaxios
-        .get(window.reroute("jp_realestate.property.index"), {
+        .get(window.reroute("jp_realestate.api.property.index"), {
           params,
         })
         .then((response) => {
           this.data = response.data.data;
-          console.log("data", this.data);
           this.included = response.data.included;
           this.meta = response.data.meta;
         })
@@ -367,7 +366,7 @@ export default {
     deleteProperty() {
       reaxios
         .delete(
-          window.reroute("jp_realestate.property.destroy", [this.idDelete]),
+          window.reroute("jp_realestate.api.property.destroy", [this.idDelete]),
         )
         .then((response) => {
           this.data = this.data.filter(

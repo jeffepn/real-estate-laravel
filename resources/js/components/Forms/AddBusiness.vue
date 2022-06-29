@@ -33,7 +33,7 @@ export default {
     submit() {
       this.form.clearErrors();
       reaxios
-        .post(window.reroute("jp_realestate.business.store"), this.form.data)
+        .post(window.reroute("jp_realestate.api.business.store"), this.form.data)
         .then((response) => {
           this.$toast.message({
             message: response.data.message,

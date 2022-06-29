@@ -117,7 +117,7 @@ export default {
         return;
       }
       reaxios
-        .get(window.reroute("jp_realestate.image_property.index"), {
+        .get(window.reroute("jp_realestate.api.image_property.index"), {
           params: {
             property_id: this.form.data.id,
           },
@@ -161,7 +161,7 @@ export default {
       dataForm.append("property_id", this.form.data.id);
       dataForm.append("use_watter_mark", this.useWatterMark);
       await reaxios
-        .post(window.reroute("jp_realestate.image_property.store"), dataForm, {
+        .post(window.reroute("jp_realestate.api.image_property.store"), dataForm, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -194,14 +194,14 @@ export default {
     },
     removeImage(id) {
       reaxios
-        .delete(window.reroute("jp_realestate.image_property.destroy", [id]))
+        .delete(window.reroute("jp_realestate.api.image_property.destroy", [id]))
         .then(() => {
           this.images = this.images.filter((element) => element.id !== id);
         });
     },
     updateOrderOfImages(data) {
       reaxios.patch(
-        window.reroute("jp_realestate.image_property.update_order"),
+        window.reroute("jp_realestate.api.image_property.update_order"),
         {
           orders: data,
         },

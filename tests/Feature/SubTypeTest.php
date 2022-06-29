@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Property\Property;
@@ -13,8 +13,7 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class SubTypeTest extends TestCase
 {
-    use RefreshDatabase;
-    protected $api = 'api/sub-type';
+    use DatabaseTransactions;
 
     /**
      * @test
@@ -22,7 +21,7 @@ class SubTypeTest extends TestCase
     public function verify_format_return_index()
     {
         factory(SubType::class)->create();
-        $response = $this->getJson($this->api);
+        $response = $this->getJson(route('jp_realestate.api.sub_type.index'));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => [[
@@ -37,7 +36,7 @@ class SubTypeTest extends TestCase
     public function verify_format_return_show()
     {
         $subType = factory(SubType::class)->create();
-        $response = $this->getJson("$this->api/$subType->id");
+        $response = $this->getJson(route('jp_realestate.api.sub_type.show', $subType->id));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             "data" => [
@@ -62,7 +61,7 @@ class SubTypeTest extends TestCase
     public function store_with_success()
     {
         $type = factory(Type::class)->create();
-        $response = $this->postJson($this->api, ['name' => 'Test of name', 'type_id' => $type->id]);
+        $response = $this->postJson(route('jp_realestate.api.sub_type.store'), ['name' => 'Test of name', 'type_id' => $type->id]);
         $response->assertStatus(201);
         $response->assertJsonStructure(['data' => ['type', 'id', 'attributes' => ['name', 'slug'], 'relationships' => ['type']], 'included', 'error', 'message']);
         $this->assertEquals("test-of-name", SubType::first()->slug);
@@ -76,7 +75,7 @@ class SubTypeTest extends TestCase
     {
         $type = factory(Type::class)->create();
         $subType = factory(SubType::class)->create();
-        $response = $this->patchJson("$this->api/$subType->id", ['name' => 'Test of name2', 'type_id' => $type->id]);
+        $response = $this->patchJson(route('jp_realestate.api.sub_type.update', $subType->id), ['name' => 'Test of name2', 'type_id' => $type->id]);
         $response->assertStatus(200);
         $this->assertEquals("test-of-name2", SubType::first()->slug);
     }
@@ -88,7 +87,7 @@ class SubTypeTest extends TestCase
     {
         $subType = factory(SubType::class)->create();
         $this->assertNotNull(SubType::first());
-        $response = $this->deleteJson("$this->api/$subType->id");
+        $response = $this->deleteJson(route('jp_realestate.api.sub_type.destroy', $subType->id));
         $response->assertStatus(200);
         $this->assertNull(SubType::first());
     }
@@ -100,7 +99,7 @@ class SubTypeTest extends TestCase
         $subType = factory(SubType::class)->create();
         $this->assertNotNull(SubType::first());
         $subType->properties()->save(factory(Property::class)->make());
-        $response = $this->deleteJson("$this->api/$subType->id");
+        $response = $this->deleteJson(route('jp_realestate.api.sub_type.destroy', $subType->id));
         $response->assertStatus(400);
         $this->assertNotNull(SubType::first());
         $this->assertEquals(Terminologies::get('all.sub_type.not_delete_with_relations'), $response->json()['message']);
@@ -114,22 +113,22 @@ class SubTypeTest extends TestCase
         $type = factory(Type::class)->create();
         $subType = factory(SubType::class)->create(['name' => 'teste', 'type_id' => $type->id]);
 
-        $response = $this->postJson($this->api, ['name' => Str::random(30), 'type_id' => $type->id]);
+        $response = $this->postJson(route('jp_realestate.api.sub_type.store'), ['name' => Str::random(30), 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_CREATED);
 
-        $response = $this->postJson($this->api, ['name' => Str::random(31), 'type_id' => $type->id]);
+        $response = $this->postJson(route('jp_realestate.api.sub_type.store'), ['name' => Str::random(31), 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->postJson($this->api, ['name' => '', 'type_id' => $type->id]);
+        $response = $this->postJson(route('jp_realestate.api.sub_type.store'), ['name' => '', 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->postJson($this->api, ['name' => 'teste', 'type_id' => $type->id]);
+        $response = $this->postJson(route('jp_realestate.api.sub_type.store'), ['name' => 'teste', 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->patchJson("$this->api/$subType->id", []);
+        $response = $this->patchJson(route('jp_realestate.api.sub_type.update', $subType->id), []);
         $response->assertStatus(Response::HTTP_OK);
 
-        $response = $this->patchJson("$this->api/$subType->id", ['name' => 'teste', 'type_id' => $type->id]);
+        $response = $this->patchJson(route('jp_realestate.api.sub_type.update', $subType->id), ['name' => 'teste', 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_OK);
     }
 

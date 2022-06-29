@@ -56,10 +56,10 @@ export default {
     },
     urlPostImage() {
       return this.edit
-        ? reroute("jp_realestate.app_setting.update", [
+        ? reroute("jp_realestate.api.app_setting.update", [
             WATTERMARK_IMAGE_PROPERTY,
           ])
-        : reroute("jp_realestate.app_setting.store");
+        : reroute("jp_realestate.api.app_setting.store");
     },
   },
   data: () => ({
@@ -104,7 +104,7 @@ export default {
     async destroyWatterMark() {
       await reaxios
         .delete(
-          reroute("jp_realestate.app_setting.destroy", [
+          reroute("jp_realestate.api.app_setting.destroy", [
             WATTERMARK_IMAGE_PROPERTY,
           ]),
         )
@@ -115,7 +115,7 @@ export default {
     async getWatterMark() {
       await reaxios
         .get(
-          reroute("jp_realestate.app_setting.show", [
+          reroute("jp_realestate.api.app_setting.show", [
             WATTERMARK_IMAGE_PROPERTY,
           ]),
         )

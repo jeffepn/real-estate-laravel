@@ -3,18 +3,13 @@
 namespace Jeffpereira\RealEstate\Tests\Unit;
 
 use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Jeffpereira\RealEstate\Http\Requests\Property\BusinessRequest;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Jeffpereira\RealEstate\Models\Property\Business;
-use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Tests\TestCase;
 
 class BusinessTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * @test

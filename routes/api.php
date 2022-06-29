@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(config('realestatelaravel.middleware.api'))->group(function () {
     Route::prefix('api')->group(function () {
-        Route::name('jp_realestate.')->group(function () {
+        Route::name('jp_realestate.api.')->group(function () {
             Route::apiResources([
                 "business" => BusinessController::class,
                 "situation" => SituationController::class,
                 "type" => TypeController::class,
-                "sub-type" => SubTypeController::class,
+                "sub_type" => SubTypeController::class,
                 "property" => PropertyController::class,
                 "image_property" => ImagePropertyController::class,
                 "banner" => BannerController::class,

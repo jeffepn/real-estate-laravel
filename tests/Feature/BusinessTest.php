@@ -2,20 +2,16 @@
 
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
-use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Tests\TestCase;
-use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class BusinessTest extends TestCase
 {
-    use RefreshDatabase;
-    protected $api = 'api/business';
+    use DatabaseTransactions;
 
     /**
      * @test
@@ -23,7 +19,7 @@ class BusinessTest extends TestCase
     public function verify_format_return_index()
     {
         factory(Business::class)->create();
-        $response = $this->getJson($this->api);
+        $response = $this->getJson(route('jp_realestate.api.business.index'));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => [['type', 'id', 'attributes' => ['slug', 'name']]]
@@ -36,7 +32,7 @@ class BusinessTest extends TestCase
     public function verify_format_return_show()
     {
         $business = factory(Business::class)->create();
-        $response = $this->getJson("$this->api/$business->id");
+        $response = $this->getJson(route('jp_realestate.api.business.show', $business->id));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             "data" => [
@@ -57,7 +53,7 @@ class BusinessTest extends TestCase
      */
     public function store_with_success()
     {
-        $response = $this->postJson($this->api, ['name' => 'Test of name']);
+        $response = $this->postJson(route('jp_realestate.api.business.store'), ['name' => 'Test of name']);
         $response->assertStatus(201);
         $response->assertJsonStructure([
             'data' => ['type', 'id', 'attributes' => ['slug', 'name']], 'error', 'message'
@@ -72,7 +68,10 @@ class BusinessTest extends TestCase
     public function update_with_success()
     {
         $business = factory(Business::class)->create();
-        $response = $this->patchJson("$this->api/$business->id", ['name' => 'Test of name2']);
+        $response = $this->patchJson(
+            route('jp_realestate.api.business.update', $business->id),
+            ['name' => 'Test of name2']
+        );
         $response->assertStatus(200);
         $this->assertEquals("test-of-name2", Business::first()->slug);
     }
@@ -84,7 +83,7 @@ class BusinessTest extends TestCase
     {
         $business = factory(Business::class)->create();
         $this->assertNotNull(Business::first());
-        $response = $this->deleteJson("$this->api/$business->id");
+        $response = $this->deleteJson(route('jp_realestate.api.business.destroy', $business->id));
         $response->assertStatus(200);
         $this->assertNull(Business::first());
     }
@@ -97,7 +96,7 @@ class BusinessTest extends TestCase
     //     $business = factory(Business::class)->create();
     //     $this->assertNotNull(Business::first());
     //     $business->properties()->save(factory(Property::class)->make());
-    //     $response = $this->deleteJson("$this->api/$business->id");
+    //     $response = $this->deleteJson("route('jp_realestate.api.business.index')/$business->id");
     //     $response->assertStatus(400);
     //     $this->assertNotNull(Business::first());
     //     $this->assertEquals(Terminologies::get('all.business.not_delete_with_relations'), $response->json()['message']);
@@ -111,19 +110,19 @@ class BusinessTest extends TestCase
         // $request = new BusinessRequest();
         $business = factory(Business::class)->create(['name' => 'teste']);
 
-        $response = $this->postJson($this->api, ['name' => Str::random(30)]);
+        $response = $this->postJson(route('jp_realestate.api.business.store'), ['name' => Str::random(30)]);
         $response->assertStatus(Response::HTTP_CREATED);
 
-        $response = $this->postJson($this->api, ['name' => Str::random(31)]);
+        $response = $this->postJson(route('jp_realestate.api.business.store'), ['name' => Str::random(31)]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->postJson($this->api, ['name' => '']);
+        $response = $this->postJson(route('jp_realestate.api.business.store'), ['name' => '']);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->postJson($this->api, ['name' => 'teste']);
+        $response = $this->postJson(route('jp_realestate.api.business.store'), ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->patchJson("$this->api/$business->id", ['name' => 'teste']);
+        $response = $this->patchJson(route('jp_realestate.api.business.update', $business->id), ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_OK);
     }
 

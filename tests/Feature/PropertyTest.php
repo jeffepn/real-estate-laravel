@@ -2,25 +2,20 @@
 
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
-use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Jeffpereira\RealEstate\Http\Requests\Property\BusinessRequest;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Models\Property\Situation;
 use Jeffpereira\RealEstate\Models\Property\SubType;
 use Jeffpereira\RealEstate\Models\Property\Type;
 use Jeffpereira\RealEstate\Tests\TestCase;
-use JPAddress\Models\Address\Address;
 
 class PropertyTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
-    const URL_API = 'api/property';
+    use DatabaseTransactions, WithFaker;
 
     /**
      * @test
@@ -38,7 +33,7 @@ class PropertyTest extends TestCase
                 return rand(1, 5);
             }
         ]);
-        $response = $this->getJson(route('jp_realestate.property.index'));
+        $response = $this->getJson(route('jp_realestate.api.property.index'));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => [
@@ -65,7 +60,7 @@ class PropertyTest extends TestCase
     public function verifyFormatReturnShow()
     {
         $property = factory(Property::class)->create();
-        $response = $this->getJson(self::URL_API . "/$property->id");
+        $response = $this->getJson(route('jp_realestate.api.property.show', $property->id));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             "data" => [
@@ -127,7 +122,7 @@ class PropertyTest extends TestCase
         $situation = $this->faker->boolean() ? factory(Situation::class)->create() : null;
         $subType = factory(SubType::class)->create();
         $response = $this->postJson(
-            self::URL_API,
+            route('jp_realestate.api.property.store'),
             [
                 'sub_type_id' => $subType->id,
                 'situation_id' => $situation ? $situation->id : null,
@@ -235,7 +230,7 @@ class PropertyTest extends TestCase
             'min_garage' => 4,
             'max_garage' => 8,
         ]);
-        $response = $this->patchJson(self::URL_API . "/$property->id", [
+        $response = $this->patchJson(route('jp_realestate.api.property.update', $property->id), [
             'min_description' => "min description edit",
             'content' => 'test content edit', 'items' => 'test items edit',
             'building_area' => 115.49, 'total_area' => 210.50,
@@ -294,7 +289,7 @@ class PropertyTest extends TestCase
     {
         $property = factory(Property::class)->create();
         $this->assertNotNull(Property::first());
-        $response = $this->deleteJson(self::URL_API . "/$property->id");
+        $response = $this->deleteJson(route('jp_realestate.api.property.destroy', $property->id));
         $response->assertStatus(200);
         $this->assertNull(Property::first());
     }
@@ -337,7 +332,7 @@ class PropertyTest extends TestCase
             "country" => "Brasil"
         ];
 
-        $response = $this->postJson(self::URL_API, $data);
+        $response = $this->postJson(route('jp_realestate.api.property.store'), $data);
         $response->assertStatus(Response::HTTP_CREATED);
         $data['slug'] = 'test-slug-2';
         $array_validation = [
@@ -397,13 +392,13 @@ class PropertyTest extends TestCase
         foreach ($array_validation as $item) {
             $aux = $data;
             $aux[$item['key']] = $item['value'];
-            $response = $this->postJson(self::URL_API, $aux);
+            $response = $this->postJson(route('jp_realestate.api.property.store'), $aux);
             $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $property = Property::first();
         // Test update slug, when is ignored
         $response = $this->patchJson(
-            self::URL_API . "/$property->id",
+            route('jp_realestate.api.property.update', $property->id),
             [
                 'slug' => 'test-slug',
                 "neighborhood" => "Jd Santa Maria",

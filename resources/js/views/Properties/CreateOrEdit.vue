@@ -361,10 +361,15 @@ export default {
       delete data["active"];
       let request = this.edit
         ? reaxios.patch(
-            window.reroute("jp_realestate.property.update", [this.idProperty]),
+            window.reroute("jp_realestate.api.property.update", [
+              this.idProperty,
+            ]),
             data,
           )
-        : reaxios.post(window.reroute("jp_realestate.property.store"), data);
+        : reaxios.post(
+            window.reroute("jp_realestate.api.property.store"),
+            data,
+          );
       request
         .then((response) => {
           if (!this.edit) {
@@ -467,7 +472,7 @@ export default {
     },
     async getProperty() {
       await reaxios
-        .get(window.reroute("jp_realestate.property.show", [this.id]))
+        .get(window.reroute("jp_realestate.api.property.show", [this.id]))
         .then((response) => this.setProperty(response.data));
     },
     initialiseTabs() {

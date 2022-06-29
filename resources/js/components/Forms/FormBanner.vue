@@ -126,10 +126,13 @@ export default {
       }
       return this.edit
         ? reaxios.post(
-            window.reroute("jp_realestate.banner.update", [this.banner.id]),
+            window.reroute("jp_realestate.api.banner.update", [this.banner.id]),
             formData,
           )
-        : reaxios.post(window.reroute("jp_realestate.banner.store"), formData);
+        : reaxios.post(
+            window.reroute("jp_realestate.api.banner.store"),
+            formData,
+          );
     },
     successSubmit(data) {
       this.$emit("submitSuccess", data);

@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Feature;
+namespace Jeffpereira\RealEstate\Tests\Feature;
 
-use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
@@ -15,7 +14,7 @@ use Jeffpereira\RealEstate\Models\AppSettings;
 
 class AppSettingTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use DatabaseTransactions, WithFaker;
     private $api;
 
     /**
@@ -26,7 +25,7 @@ class AppSettingTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->api = route('jp_realestate.app_setting.store');
+        $this->api = route('jp_realestate.api.app_setting.store');
         Storage::fake(config('realestatelaravel.filesystem.disk'));
         $this->storage = Storage::disk(config('realestatelaravel.filesystem.disk'));
     }

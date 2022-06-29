@@ -3,7 +3,7 @@ scripts:
   composer: kool exec app composer2
   mysql: kool exec -e MYSQL_PWD=$DB_PASSWORD database mysql -u $DB_USERNAME $DB_DATABASE
   node: kool docker kooldev/node:14 node
-  testphp: kool exec app ./vendor/bin/phpunit --testdox
+  phpunit: kool exec app ./vendor/bin/phpunit
   node-setup:
     - kool run yarn install
     - kool run yarn dev
