@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
@@ -15,7 +15,7 @@ use Jeffpereira\RealEstate\Tests\TestCase;
 
 class PropertyTest extends TestCase
 {
-    use DatabaseTransactions, WithFaker;
+    use RefreshDatabase, WithFaker;
 
     /**
      * @test

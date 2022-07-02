@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Property\SubType;
@@ -12,7 +12,7 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class TypeTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * @test

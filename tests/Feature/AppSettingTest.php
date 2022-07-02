@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
@@ -14,7 +14,7 @@ use Jeffpereira\RealEstate\Models\AppSettings;
 
 class AppSettingTest extends TestCase
 {
-    use DatabaseTransactions, WithFaker;
+    use RefreshDatabase, WithFaker;
     private $api;
 
     /**

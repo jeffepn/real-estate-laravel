@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Tests\Unit;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Models\Property\Property;
@@ -11,7 +11,7 @@ use Jeffpereira\RealEstate\Tests\TestCase;
 
 class PropertyTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * @test
