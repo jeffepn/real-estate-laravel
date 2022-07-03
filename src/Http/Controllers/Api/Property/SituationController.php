@@ -3,7 +3,7 @@
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
 use Jeffpereira\RealEstate\Http\Requests\Property\StoreSituationRequest;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\Property\UpdateSituationRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\SituationCollection;
@@ -34,11 +34,11 @@ class SituationController extends Controller
         try {
             if ($situation = Situation::create($request->all())) {
                 return (new SituationResource($situation, Terminologies::get('all.common.save_data')))
-                    ->response()->setStatusCode(201);
+                    ->response()->setStatusCode(Response::HTTP_CREATED);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -66,9 +66,9 @@ class SituationController extends Controller
             if ($situation->update($request->all())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -82,14 +82,14 @@ class SituationController extends Controller
     {
         try {
             if ($situation->properties->isNotEmpty()) {
-                return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete_with_relations')], 400);
+                return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete_with_relations')], Response::HTTP_BAD_REQUEST);
             }
             if ($situation->delete()) {
                 return response()->noContent(200);
             }
-            return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => $th->getMessage()], 400);
+            return response(['error' => true, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 }

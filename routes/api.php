@@ -9,6 +9,7 @@ use Jeffpereira\RealEstate\Http\Controllers\Api\BannerController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\ImagePropertyController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\SituationController;
 use Illuminate\Support\Facades\Route;
+use Jeffpereira\RealEstate\Http\Controllers\Api\Project\ProjectController;
 
 Route::middleware(config('realestatelaravel.middleware.api'))->group(function () {
     Route::prefix('api')->group(function () {
@@ -19,6 +20,7 @@ Route::middleware(config('realestatelaravel.middleware.api'))->group(function ()
                 "type" => TypeController::class,
                 "sub_type" => SubTypeController::class,
                 "property" => PropertyController::class,
+                "project" => ProjectController::class,
                 "image_property" => ImagePropertyController::class,
                 "banner" => BannerController::class,
                 "app_setting" => AppSettingController::class,

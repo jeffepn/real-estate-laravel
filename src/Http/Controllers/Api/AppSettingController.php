@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Jeffpereira\RealEstate\Enum\AppSettingsEnum;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\AppSettingsRequest;
@@ -38,10 +38,10 @@ class AppSettingController extends Controller
             );
 
             return (new AppSettingResource($appSetting, Terminologies::get('all.common.save_data')))
-                ->response()->setStatusCode(201);
+                ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             logger()->error("Erro in store  AppSettingController: " . $th->getMessage(), $th->getTrace());
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -56,7 +56,7 @@ class AppSettingController extends Controller
                 ->response()->setStatusCode(200);
         } catch (\Throwable $th) {
             logger()->error("Erro in update AppSettingController: " . $th->getMessage(), $th->getTrace());
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -66,7 +66,7 @@ class AppSettingController extends Controller
         try {
             return $app_setting->delete()
                 ? response()->noContent(200)
-                : response(['error' => true, 'message' => Terminologies::get('all.app_setting.not_delete')], 400);
+                : response(['error' => true, 'message' => Terminologies::get('all.app_setting.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             logger("Error destroy AppSettingController: " . $th->getMessage(), $th->getTrace());
             return response(['error' => true, 'message' => $th->getMessage()], 500);

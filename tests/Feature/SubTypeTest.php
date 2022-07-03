@@ -62,7 +62,7 @@ class SubTypeTest extends TestCase
     {
         $type = factory(Type::class)->create();
         $response = $this->postJson(route('jp_realestate.api.sub_type.store'), ['name' => 'Test of name', 'type_id' => $type->id]);
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure(['data' => ['type', 'id', 'attributes' => ['name', 'slug'], 'relationships' => ['type']], 'included', 'error', 'message']);
         $this->assertEquals("test-of-name", SubType::first()->slug);
         $this->assertEquals("TEST OF NAME", SubType::first()->name);
@@ -100,7 +100,7 @@ class SubTypeTest extends TestCase
         $this->assertNotNull(SubType::first());
         $subType->properties()->save(factory(Property::class)->make());
         $response = $this->deleteJson(route('jp_realestate.api.sub_type.destroy', $subType->id));
-        $response->assertStatus(400);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $this->assertNotNull(SubType::first());
         $this->assertEquals(Terminologies::get('all.sub_type.not_delete_with_relations'), $response->json()['message']);
     }

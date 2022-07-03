@@ -23,6 +23,16 @@
         },
         "app_setting": {
             "not_delete": "Não foi possível excluir a configuração."
+        },
+        "resource": {
+            "success": {
+                "delete": "Recurso excluído com sucesso.",
+                "save": "Os dados do recurso foram salvos com sucesso."
+            },
+            "error": {
+                "delete": "Não foi possível excluir o recurso. Se o problema persistir, contacte o suporte.",
+                "save": "Não foi possível salvar o recurso. Se o problema persistir, contacte o suporte."
+            }
         }
     }
 }

@@ -54,7 +54,7 @@ class BusinessTest extends TestCase
     public function store_with_success()
     {
         $response = $this->postJson(route('jp_realestate.api.business.store'), ['name' => 'Test of name']);
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure([
             'data' => ['type', 'id', 'attributes' => ['slug', 'name']], 'error', 'message'
         ]);
@@ -97,7 +97,7 @@ class BusinessTest extends TestCase
     //     $this->assertNotNull(Business::first());
     //     $business->properties()->save(factory(Property::class)->make());
     //     $response = $this->deleteJson("route('jp_realestate.api.business.index')/$business->id");
-    //     $response->assertStatus(400);
+    //     $response->assertStatus(Response::HTTP_BAD_REQUEST);
     //     $this->assertNotNull(Business::first());
     //     $this->assertEquals(Terminologies::get('all.business.not_delete_with_relations'), $response->json()['message']);
     // }

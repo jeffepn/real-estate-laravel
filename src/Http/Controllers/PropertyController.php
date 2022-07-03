@@ -12,7 +12,7 @@ class PropertyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function list(): View
+    public function index(): View
     {
         return view('jprealestate::properties.list');
     }

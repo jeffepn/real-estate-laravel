@@ -11,5 +11,5 @@ trait SetSlug
         });
     }
 
-    abstract public function generateSlug();
+    abstract public function generateSlug(): string;
 }

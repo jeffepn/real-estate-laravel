@@ -59,7 +59,7 @@ class TypeTest extends TestCase
     public function store_with_success()
     {
         $response = $this->postJson(route('jp_realestate.api.type.store'), ['name' => 'Test of name']);
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure(['data' => [
             'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types' => ['data' => []]]
         ], 'error', 'message']);
@@ -105,7 +105,7 @@ class TypeTest extends TestCase
         $this->assertNotNull(Type::first());
         $type->sub_types()->save(factory(SubType::class)->make());
         $response = $this->deleteJson(route('jp_realestate.api.type.destroy', $type->id));
-        $response->assertStatus(400);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $this->assertNotNull(Type::first());
         $this->assertEquals(Terminologies::get('all.type.not_delete_with_relations'), $response->json()['message']);
     }

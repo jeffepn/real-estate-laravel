@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\Property\TypeRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\TypeCollection;
@@ -33,11 +33,11 @@ class TypeController extends Controller
         try {
             if ($type = Type::create($request->all())) {
                 return (new TypeResource($type, Terminologies::get('all.common.save_data')))
-                    ->response()->setStatusCode(201);
+                    ->response()->setStatusCode(Response::HTTP_CREATED);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -65,9 +65,9 @@ class TypeController extends Controller
             if ($type->update($request->all())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -81,14 +81,14 @@ class TypeController extends Controller
     {
         try {
             if ($type->sub_types->count() > 0) {
-                return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete_with_relations')], 400);
+                return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete_with_relations')], Response::HTTP_BAD_REQUEST);
             }
             if ($type->delete()) {
                 return response()->noContent(200);
             }
-            return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => $th->getMessage()], 400);
+            return response(['error' => true, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 }

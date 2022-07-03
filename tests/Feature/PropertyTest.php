@@ -154,7 +154,7 @@ class PropertyTest extends TestCase
                 'embed' => 'http://google.com'
             ]
         );
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure([
             'data' => [
                 'type', 'id',

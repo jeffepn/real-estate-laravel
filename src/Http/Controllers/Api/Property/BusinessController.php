@@ -2,6 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
+use Illuminate\Http\Response;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Resources\Property\BusinessCollection;
@@ -32,11 +33,11 @@ class BusinessController extends Controller
         try {
             if ($business = Business::create($request->all())) {
                 return (new BusinessResource($business, Terminologies::get('all.common.save_data')))
-                    ->response()->setStatusCode(201);
+                    ->response()->setStatusCode(Response::HTTP_CREATED);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -64,9 +65,9 @@ class BusinessController extends Controller
             if ($business->update($request->all())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -80,14 +81,14 @@ class BusinessController extends Controller
     {
         try {
             // if ($business->properties->count() > 0) {
-            //     return response(['error' => true, 'message' => Terminologies::get('all.business.not_delete_with_relations')], 400);
+            //     return response(['error' => true, 'message' => Terminologies::get('all.business.not_delete_with_relations')], Response::HTTP_BAD_REQUEST);
             // }
             if ($business->delete()) {
                 return response()->noContent(200);
             }
-            return response(['error' => true, 'message' => Terminologies::get('all.business.not_delete')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.business.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => $th->getMessage()], 400);
+            return response(['error' => true, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 }

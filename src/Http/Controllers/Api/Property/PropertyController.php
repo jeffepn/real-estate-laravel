@@ -38,7 +38,7 @@ class PropertyController extends Controller
         } catch (\Throwable $th) {
             Log::error("Error index PropertyController", [$th->getTraceAsString()]);
             return response([
-                'error' => 'true',
+                'error' => true,
                 'message' => Terminologies::get('all.property.error_index')
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -66,7 +66,7 @@ class PropertyController extends Controller
         } catch (\Throwable $th) {
             Log::error("Error store PropertyController", [$th->getTraceAsString()]);
             return response([
-                'error' => 'true',
+                'error' => true,
                 'message' => Terminologies::get('all.common.error_save_data')
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -121,11 +121,14 @@ class PropertyController extends Controller
             }
             $property->updateAddres($request->all());
             $property->update($request->getData());
-            return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')]);
+            return response([
+                'error' => false,
+                'message' => Terminologies::get('all.common.save_data')
+            ]);
         } catch (\Throwable $th) {
             Log::error("Error update PropertyController", [$th->getTraceAsString()]);
             return response([
-                'error' => 'true',
+                'error' => true,
                 'message' => Terminologies::get('all.common.error_save_data')
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -140,7 +143,7 @@ class PropertyController extends Controller
         } catch (\Throwable $th) {
             Log::error("Error activeOrInactive PropertyController", [$th->getTraceAsString()]);
             return response([
-                'error' => 'true',
+                'error' => true,
                 'message' => Terminologies::get('all.property.not_publish_without_dependences')
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

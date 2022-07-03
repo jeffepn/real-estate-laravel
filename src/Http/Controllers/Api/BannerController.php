@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
 use Jeffpereira\RealEstate\Models\Banner;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
@@ -41,11 +41,11 @@ class BannerController extends Controller
 
             if ($banner = Banner::create($data)) {
                 return (new BannerResource($banner->refresh(), Terminologies::get('all.common.save_data')))
-                    ->response()->setStatusCode(201);
+                    ->response()->setStatusCode(Response::HTTP_CREATED);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -78,9 +78,9 @@ class BannerController extends Controller
             if ($banner->update($data)) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => 'true', 'message' => Terminologies::get('all.common.error_save_data')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -96,9 +96,9 @@ class BannerController extends Controller
             if ($banner->delete()) {
                 return response()->noContent(200);
             }
-            return response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], 400);
+            return response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => $th->getMessage()], 400);
+            return response(['error' => true, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 }
