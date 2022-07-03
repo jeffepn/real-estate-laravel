@@ -23,7 +23,7 @@ class TypeTest extends TestCase
     {
         factory(Type::class)->create();
         $response = $this->getJson(route('jp_realestate.api.type.index'));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'data' => [['type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types']]]
         ], $response->json());
@@ -37,7 +37,7 @@ class TypeTest extends TestCase
     {
         $type = factory(Type::class)->create();
         $response = $this->getJson(route('jp_realestate.api.type.show', $type->id));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             "data" => [
                 'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types']
@@ -78,7 +78,7 @@ class TypeTest extends TestCase
             route('jp_realestate.api.type.update', $type->id),
             ['name' => 'Test of name2']
         );
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals("test-of-name2", Type::first()->slug);
     }
 
@@ -91,7 +91,7 @@ class TypeTest extends TestCase
         $type = factory(Type::class)->create();
         $this->assertNotNull(Type::first());
         $response = $this->deleteJson(route('jp_realestate.api.type.destroy', $type->id));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertNull(Type::first());
     }
 

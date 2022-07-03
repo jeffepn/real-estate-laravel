@@ -9,6 +9,7 @@ use Jeffpereira\RealEstate\Http\Controllers\Api\BannerController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\ImagePropertyController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Property\SituationController;
 use Illuminate\Support\Facades\Route;
+use Jeffpereira\RealEstate\Http\Controllers\Api\Person\PersonController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Project\ProjectController;
 
 Route::middleware(config('realestatelaravel.middleware.api'))->group(function () {
@@ -23,6 +24,7 @@ Route::middleware(config('realestatelaravel.middleware.api'))->group(function ()
                 "project" => ProjectController::class,
                 "image_property" => ImagePropertyController::class,
                 "banner" => BannerController::class,
+                "person" => PersonController::class,
                 "app_setting" => AppSettingController::class,
             ]);
             Route::patch("property/{property}/active_or_inactive", [PropertyController::class, "activeOrInactive"])->name('property.active_or_inactive');

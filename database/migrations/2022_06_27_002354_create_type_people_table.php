@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateTypePeopleTable extends Migration
@@ -20,6 +21,10 @@ class CreateTypePeopleTable extends Migration
             $table->string('name', 30)->unique();
             $table->timestamps();
         });
+
+        if (env("DB_CONNECTION") != "sqlite") {
+            DB::statement("ALTER TABLE type_people ADD FULLTEXT fulltexttype_people_index (name)");
+        }
     }
 
     /**

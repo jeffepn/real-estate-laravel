@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreatePeopleTable extends Migration
@@ -25,6 +26,10 @@ class CreatePeopleTable extends Migration
             $table->string('bio', 500)->nullable();
             $table->timestamps();
         });
+
+        if (env("DB_CONNECTION") != "sqlite") {
+            DB::statement("ALTER TABLE people ADD FULLTEXT fulltextpeople_index (name, bio)");
+        }
     }
 
     /**

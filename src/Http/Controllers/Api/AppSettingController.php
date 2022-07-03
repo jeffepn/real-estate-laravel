@@ -53,7 +53,7 @@ class AppSettingController extends Controller
             );
 
             return (new AppSettingResource($appSettings, Terminologies::get('all.common.save_data')))
-                ->response()->setStatusCode(200);
+                ->response()->setStatusCode(Response::HTTP_OK);
         } catch (\Throwable $th) {
             logger()->error("Erro in update AppSettingController: " . $th->getMessage(), $th->getTrace());
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
@@ -65,7 +65,7 @@ class AppSettingController extends Controller
     {
         try {
             return $app_setting->delete()
-                ? response()->noContent(200)
+                ? response()->noContent(Response::HTTP_OK)
                 : response(['error' => true, 'message' => Terminologies::get('all.app_setting.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             logger("Error destroy AppSettingController: " . $th->getMessage(), $th->getTrace());

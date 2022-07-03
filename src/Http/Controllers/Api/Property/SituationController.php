@@ -85,7 +85,7 @@ class SituationController extends Controller
                 return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete_with_relations')], Response::HTTP_BAD_REQUEST);
             }
             if ($situation->delete()) {
-                return response()->noContent(200);
+                return response()->noContent(Response::HTTP_OK);
             }
             return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {

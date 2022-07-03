@@ -22,7 +22,8 @@
         "fakerphp/faker": "^1.9.1",
         "orchestra/testbench": "^4.0",
         "laravel/legacy-factories": "^1.0@dev",
-        "nunomaduro/collision": "^3.0"
+        "nunomaduro/collision": "^3.0",
+        "spatie/phpunit-watcher": "^1.23.0"
     },
     "extra": {
         "laravel": {

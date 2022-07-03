@@ -28,7 +28,7 @@ class CreateProjectsTable extends Migration
         });
 
         if (env("DB_CONNECTION") != "sqlite") {
-            DB::statement("ALTER TABLE projects ADD FULLTEXT fulltextprojects_index (name)");
+            DB::statement("ALTER TABLE projects ADD FULLTEXT fulltextprojects_index (name, content)");
         }
     }
 

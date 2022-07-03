@@ -30,7 +30,7 @@ class ProjectTest extends TestCase
     ];
 
     /**
-     * @tests
+     * @test
      * @group project
      * @group project-index
      * @group index
@@ -39,7 +39,7 @@ class ProjectTest extends TestCase
     {
         factory(Project::class, 20)->create();
         $response = $this->getJson(route('jp_realestate.api.project.index'));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'data' => [
                 [
@@ -71,7 +71,7 @@ class ProjectTest extends TestCase
         });
         $response = $this->getJson(route('jp_realestate.api.project.index') . '?with=responsible,responsible.type');
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $formatResourceRelationships = self::FORMAT_RESOURCE;
         $formatResourceRelationships['relationships'] = ['responsible'];
         $response->assertJsonStructure([
@@ -141,7 +141,7 @@ class ProjectTest extends TestCase
         $project->refresh();
         $response = $this->getJson(route('jp_realestate.api.project.show', $project->id));
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             "data" => self::FORMAT_RESOURCE,
             'included', 'error', 'message'
@@ -177,7 +177,7 @@ class ProjectTest extends TestCase
             route('jp_realestate.api.project.show', $project->id) . "?with=responsible"
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $formatResourceRelationships = self::FORMAT_RESOURCE;
         $formatResourceRelationships['relationships'] = ['responsible'];
         $response->assertJsonStructure([
@@ -233,7 +233,7 @@ class ProjectTest extends TestCase
             route('jp_realestate.api.project.show', $project->id) . "?with=responsible,responsible.type"
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $formatResourceRelationships = self::FORMAT_RESOURCE;
         $formatResourceRelationships['relationships'] = ['responsible'];
         $response->assertJsonStructure([
@@ -366,7 +366,7 @@ class ProjectTest extends TestCase
             'name' => "Other name",
             'content' => 'test content edit',
         ]);
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals(
             [
                 'error' => false,
@@ -397,7 +397,7 @@ class ProjectTest extends TestCase
         $project = factory(Project::class)->create();
         $this->assertNotNull(Project::first());
         $response = $this->deleteJson(route('jp_realestate.api.project.destroy', $project->id));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals(
             [
                 'error' => false,
@@ -420,7 +420,7 @@ class ProjectTest extends TestCase
         $data = [
             'name' => 'Test name',
             'person_id' =>  $person->id,
-            'content' => 'test content', 'items' => 'test items',
+            'content' => 'test content',
         ];
         $response = $this->postJson(route('jp_realestate.api.project.store'), $data);
 

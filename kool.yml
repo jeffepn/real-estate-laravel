@@ -4,6 +4,7 @@ scripts:
   mysql: kool exec -e MYSQL_PWD=$DB_PASSWORD database mysql -u $DB_USERNAME $DB_DATABASE
   node: kool docker kooldev/node:14 node
   phpunit: kool exec app ./vendor/bin/phpunit
+  phpunitwatch: kool exec app ./vendor/bin/phpunit-watcher watch
   node-setup:
     - kool run yarn install
     - kool run yarn dev

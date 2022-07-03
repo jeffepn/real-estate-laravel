@@ -20,7 +20,7 @@ class BusinessTest extends TestCase
     {
         factory(Business::class)->create();
         $response = $this->getJson(route('jp_realestate.api.business.index'));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'data' => [['type', 'id', 'attributes' => ['slug', 'name']]]
         ], $response->json());
@@ -33,7 +33,7 @@ class BusinessTest extends TestCase
     {
         $business = factory(Business::class)->create();
         $response = $this->getJson(route('jp_realestate.api.business.show', $business->id));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             "data" => [
                 'type', 'id', 'attributes' => ['slug', 'name']
@@ -72,7 +72,7 @@ class BusinessTest extends TestCase
             route('jp_realestate.api.business.update', $business->id),
             ['name' => 'Test of name2']
         );
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals("test-of-name2", Business::first()->slug);
     }
 
@@ -84,23 +84,9 @@ class BusinessTest extends TestCase
         $business = factory(Business::class)->create();
         $this->assertNotNull(Business::first());
         $response = $this->deleteJson(route('jp_realestate.api.business.destroy', $business->id));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertNull(Business::first());
     }
-
-    /**
-     * @test
-     */
-    // public function dont_destroy_business_with_one_or_more_properties()
-    // {
-    //     $business = factory(Business::class)->create();
-    //     $this->assertNotNull(Business::first());
-    //     $business->properties()->save(factory(Property::class)->make());
-    //     $response = $this->deleteJson("route('jp_realestate.api.business.index')/$business->id");
-    //     $response->assertStatus(Response::HTTP_BAD_REQUEST);
-    //     $this->assertNotNull(Business::first());
-    //     $this->assertEquals(Terminologies::get('all.business.not_delete_with_relations'), $response->json()['message']);
-    // }
 
     /**
      * @test
@@ -125,9 +111,6 @@ class BusinessTest extends TestCase
         $response = $this->patchJson(route('jp_realestate.api.business.update', $business->id), ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_OK);
     }
-
-    // Scopes
-
     /**
      * @test
      * @group business

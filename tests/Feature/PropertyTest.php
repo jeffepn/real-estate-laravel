@@ -34,7 +34,7 @@ class PropertyTest extends TestCase
             }
         ]);
         $response = $this->getJson(route('jp_realestate.api.property.index'));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'data' => [
                 [
@@ -61,7 +61,7 @@ class PropertyTest extends TestCase
     {
         $property = factory(Property::class)->create();
         $response = $this->getJson(route('jp_realestate.api.property.show', $property->id));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             "data" => [
                 'type', 'id',
@@ -246,7 +246,7 @@ class PropertyTest extends TestCase
             'city' => $this->faker->city(),
             'initials' => $this->faker->stateAbbr(),
         ]);
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $data = $property->refresh()->toArray();
         unset($data['created_at']);
         unset($data['updated_at']);
@@ -290,7 +290,7 @@ class PropertyTest extends TestCase
         $property = factory(Property::class)->create();
         $this->assertNotNull(Property::first());
         $response = $this->deleteJson(route('jp_realestate.api.property.destroy', $property->id));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertNull(Property::first());
     }
 
@@ -314,7 +314,7 @@ class PropertyTest extends TestCase
                 ]
             ],
             'sub_type_id' => $subType->id,
-            'min_description' =>  Str::random(200),
+            'min_description' =>  Str::random(Response::HTTP_OK),
             'content' => 'test content', 'items' => 'test items',
             'building_area' => 105.49, 'total_area' => 200.50,
             'min_dormitory' => 1,

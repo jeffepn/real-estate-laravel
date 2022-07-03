@@ -23,7 +23,7 @@ class SituationTest extends TestCase
     {
         factory(Situation::class)->create();
         $response = $this->getJson(route('jp_realestate.api.situation.index'));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'data' => [
                 [
@@ -43,7 +43,7 @@ class SituationTest extends TestCase
     {
         $situation = factory(Situation::class)->create();
         $response = $this->getJson(route('jp_realestate.api.situation.show', $situation->id));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             "data" => [
                 'type', 'id', 'attributes' => ['slug', 'name']
@@ -88,7 +88,7 @@ class SituationTest extends TestCase
             route('jp_realestate.api.situation.update', $situation->id),
             ['name' => 'Test of name2']
         );
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals("test-of-name2", Situation::firstWhere('name', 'TEST OF NAME2')->slug);
     }
 
@@ -102,7 +102,7 @@ class SituationTest extends TestCase
         $situation = factory(Situation::class)->create();
         $this->assertNotNull(Situation::first());
         $response = $this->deleteJson(route('jp_realestate.api.situation.destroy', $situation->id));
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertNull(Situation::find($situation->id));
     }
 

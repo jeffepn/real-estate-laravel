@@ -25,6 +25,9 @@ class ProjectController extends Controller
             $paginate = request()->paginate;
             $projects = Project::select('projects.*')->orderBy("name");
 
+            if (request()->search) {
+                $projects->search(request()->search);
+            }
             $projects->distinct(['projects.id']);
 
             if (request()->with) $projects->with(explode(',', request()->with));
@@ -65,7 +68,7 @@ class ProjectController extends Controller
             return response([
                 'error' => true,
                 'message' => Terminologies::get('all.common.error_save_data')
-            ], Response::HTTP_BAD_REQUEST);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

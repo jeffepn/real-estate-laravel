@@ -84,7 +84,7 @@ class SubTypeController extends Controller
                 return response(['error' => true, 'message' => Terminologies::get('all.sub_type.not_delete_with_relations')], Response::HTTP_BAD_REQUEST);
             }
             if ($subType->delete()) {
-                return response()->noContent(200);
+                return response()->noContent(Response::HTTP_OK);
             }
             return response(['error' => true, 'message' => Terminologies::get('all.sub_type.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {

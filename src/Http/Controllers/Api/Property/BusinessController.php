@@ -80,11 +80,8 @@ class BusinessController extends Controller
     public function destroy(Business $business)
     {
         try {
-            // if ($business->properties->count() > 0) {
-            //     return response(['error' => true, 'message' => Terminologies::get('all.business.not_delete_with_relations')], Response::HTTP_BAD_REQUEST);
-            // }
             if ($business->delete()) {
-                return response()->noContent(200);
+                return response()->noContent(Response::HTTP_OK);
             }
             return response(['error' => true, 'message' => Terminologies::get('all.business.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {

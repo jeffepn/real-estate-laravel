@@ -30,7 +30,9 @@
                 "save": "Os dados do recurso foram salvos com sucesso."
             },
             "error": {
+                "get": "Não foi possível realizar a busca. Se o problema persistir, contacte o suporte.",
                 "delete": "Não foi possível excluir o recurso. Se o problema persistir, contacte o suporte.",
+                "delete_relationships": "Este recurso possui vínculos e por isso não pode ser removido.",
                 "save": "Não foi possível salvar o recurso. Se o problema persistir, contacte o suporte."
             }
         }

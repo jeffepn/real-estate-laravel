@@ -94,7 +94,7 @@ class BannerController extends Controller
     {
         try {
             if ($banner->delete()) {
-                return response()->noContent(200);
+                return response()->noContent(Response::HTTP_OK);
             }
             return response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
