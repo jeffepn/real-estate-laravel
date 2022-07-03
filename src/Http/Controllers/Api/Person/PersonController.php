@@ -41,7 +41,7 @@ class PersonController extends Controller
             $this->registerError($th);
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.get') . $th->getMessage()
+                'message' => Terminologies::get('all.resource.error.get')
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -69,7 +69,7 @@ class PersonController extends Controller
             $this->registerError($th);
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.save') . $th->getMessage()
+                'message' => Terminologies::get('all.resource.error.save')
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

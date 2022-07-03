@@ -9,4 +9,6 @@ use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 class TypePerson extends Model
 {
     use UsesUuid, SetSlugByName;
+
+    protected $fillable = ['name'];
 }
