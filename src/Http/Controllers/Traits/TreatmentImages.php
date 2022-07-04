@@ -9,15 +9,15 @@ use Intervention\Image\Facades\Image;
 use Intervention\Image\Image as InterventionImage;
 use Jeffpereira\RealEstate\Enum\AppSettingsEnum;
 use Jeffpereira\RealEstate\Models\AppSettings;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 trait TreatmentImages
 {
-
     private function storageImage(string $entity, UploadedFile $image, string $altImage, ?bool $useWatterMark = false): string
     {
-        $optmize = config("realestatelaravel.filesystem.entities.{$entity}.optmize") ?? true;
-        $path = config("realestatelaravel.filesystem.entities.{$entity}.path") ?? $entity;
-        $disk = config("realestatelaravel.filesystem.entities.{$entity}.disk") ?? 'public';
+        $optmize = ConfigHelper::get("realestatelaravel.filesystem.entities.{$entity}.optmize");
+        $path = ConfigHelper::get("realestatelaravel.filesystem.entities.{$entity}.path");
+        $disk = ConfigHelper::get('filesystem.disk');
         $img = Image::make($image);
         if ($useWatterMark) {
             $img = $this->insertWatterMark($entity, $img);
@@ -53,7 +53,7 @@ trait TreatmentImages
     private function formatImageInserWatterMark(AppSettings $appSetting, int $height): InterventionImage
     {
         $img = Image::make(
-            Storage::disk(config('realestatelaravel.filesystem.disk'))
+            Storage::disk(ConfigHelper::get('filesystem.disk'))
                 ->get($appSetting->value['image'])
         );
         $img->resize(null, $height * 0.5, function ($constraint) {

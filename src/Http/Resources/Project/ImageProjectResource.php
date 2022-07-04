@@ -19,8 +19,7 @@ class ImageProjectResource extends BaseResource
             'type' => 'image_project',
             'id' => $this->id,
             'attributes' => [
-                'way' => Storage::disk(config('realestatelaravel.filesystem.entities.projects.disk'))
-                    ->url($this->image->way),
+                'way' => $this->image->way_url,
                 'alt' => $this->image->alt,
                 'title' => $this->image->title,
                 'description' => $this->image->description,

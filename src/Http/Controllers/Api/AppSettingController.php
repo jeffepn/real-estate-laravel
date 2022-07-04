@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Resources\AppSettingResource;
 use Jeffpereira\RealEstate\Models\AppSettings;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class AppSettingController extends Controller
@@ -93,7 +94,7 @@ class AppSettingController extends Controller
             AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY => function (AppSettingsRequest $request): array {
                 $data = Arr::only($request->all(), 'name');
                 $data['value'] = [
-                    'image' => Storage::disk(config('realestatelaravel.filesystem.disk'))
+                    'image' => Storage::disk(ConfigHelper::get('filesystem.disk'))
                         ->put(
                             'images',
                             $request->image_watter
@@ -104,7 +105,7 @@ class AppSettingController extends Controller
             AppSettingsEnum::WATTERMARK_IMAGE_PROJECT => function (AppSettingsRequest $request): array {
                 $data = Arr::only($request->all(), 'name');
                 $data['value'] = [
-                    'image' => Storage::disk(config('realestatelaravel.filesystem.disk'))
+                    'image' => Storage::disk(ConfigHelper::get('filesystem.disk'))
                         ->put(
                             'images',
                             $request->image_watter

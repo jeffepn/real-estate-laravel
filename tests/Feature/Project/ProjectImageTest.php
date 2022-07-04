@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Person\Person;
 use Jeffpereira\RealEstate\Models\Person\TypePerson;
@@ -91,9 +92,12 @@ class ProjectImageTest extends TestCase
                 return [
                     'type' => 'image_project',
                     'id' => $imageProject->id,
-                    'attributes' => Arr::only(
-                        $imageProject->image->toArray(),
-                        ['way', 'alt', 'title', 'description', 'author']
+                    'attributes' => array_merge(
+                        Arr::only(
+                            $imageProject->image->toArray(),
+                            ['alt', 'title', 'description', 'author']
+                        ),
+                        ['way' => $imageProject->image->way_url]
                     ),
                     'relationships' => [],
                 ];

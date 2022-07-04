@@ -5,6 +5,7 @@ namespace Jeffpereira\RealEstate\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 class AppSettingResource extends JsonResource
 {
@@ -60,14 +61,14 @@ class AppSettingResource extends JsonResource
     private function formatValueWattermarkImageProperty(array $value): array
     {
         return [
-            'image' => Storage::disk(config('realestatelaravel.filesystem.disk'))->url($value['image'])
+            'image' => Storage::disk(ConfigHelper::get('filesystem.disk'))->url($value['image'])
         ];
     }
 
     private function formatValueWattermarkImageProject(array $value): array
     {
         return [
-            'image' => Storage::disk(config('realestatelaravel.filesystem.disk'))->url($value['image'])
+            'image' => Storage::disk(ConfigHelper::get('filesystem.disk'))->url($value['image'])
         ];
     }
 }

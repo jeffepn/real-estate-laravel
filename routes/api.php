@@ -13,8 +13,9 @@ use Jeffpereira\RealEstate\Http\Controllers\Api\Person\PersonController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Person\TypePersonController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Project\ImageProjectController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Project\ProjectController;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
-Route::middleware(config('realestatelaravel.middleware.api'))->group(function () {
+Route::middleware(ConfigHelper::get('middleware.api'))->group(function () {
     Route::prefix('api')->group(function () {
         Route::name('jp_realestate.api.')->group(function () {
             Route::apiResources([

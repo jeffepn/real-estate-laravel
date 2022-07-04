@@ -5,12 +5,11 @@ namespace Jeffpereira\RealEstate\Models\Property;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 class ImageProperty extends Model
 {
     use UsesUuid;
-
-    const CONFIG_DISK = "realestatelaravel.filesystem.entities.properties.disk";
 
     protected $table = "image_properties";
 
@@ -20,6 +19,6 @@ class ImageProperty extends Model
 
     public function getWayUrlAttribute()
     {
-        return Storage::disk(config(self::CONFIG_DISK))->url($this->way);
+        return Storage::disk(ConfigHelper::get('filesystem.disk'))->url($this->way);
     }
 }

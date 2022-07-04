@@ -11,6 +11,7 @@ use Jeffpereira\RealEstate\Enum\AppSettingsEnum;
 use Jeffpereira\RealEstate\Tests\TestCase;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\AppSettings;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 class AppSettingTest extends TestCase
 {
@@ -26,8 +27,8 @@ class AppSettingTest extends TestCase
     {
         parent::setUp();
         $this->api = route('jp_realestate.api.app_setting.store');
-        Storage::fake(config('realestatelaravel.filesystem.disk'));
-        $this->storage = Storage::disk(config('realestatelaravel.filesystem.disk'));
+        Storage::fake(ConfigHelper::get('filesystem.disk'));
+        $this->storage = Storage::disk(ConfigHelper::get('filesystem.disk'));
     }
 
 
@@ -39,7 +40,7 @@ class AppSettingTest extends TestCase
      */
     public function storeSettingWatterMark()
     {
-        Storage::fake(config('realestatelaravel.filesystem.disk'));
+        Storage::fake(ConfigHelper::get('filesystem.disk'));
         $data = [
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
             'image_watter' => UploadedFile::fake()->image('watter.jpg')
@@ -62,7 +63,7 @@ class AppSettingTest extends TestCase
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
             'value' => ['image' => $this->faker->imageUrl()]
         ]);
-        Storage::fake(config('realestatelaravel.filesystem.disk'));
+        Storage::fake(ConfigHelper::get('filesystem.disk'));
         $data = [
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
             'image_watter' => UploadedFile::fake()->image('watter.jpg')
@@ -107,7 +108,7 @@ class AppSettingTest extends TestCase
      */
     public function validationSettingWatterMark()
     {
-        Storage::fake(config('realestatelaravel.filesystem.disk'));
+        Storage::fake(ConfigHelper::get('filesystem.disk'));
         $data = [
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
             'image_watter' => UploadedFile::fake()->image('watter.jpg')

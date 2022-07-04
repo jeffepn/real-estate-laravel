@@ -9,6 +9,7 @@ use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\BannerRequest;
 use Jeffpereira\RealEstate\Http\Resources\BannerCollection;
 use Jeffpereira\RealEstate\Http\Resources\BannerResource;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class BannerController extends Controller
@@ -33,9 +34,9 @@ class BannerController extends Controller
     {
         try {
             $data = $request->only(['title', 'content', 'link']);
-            $data['way'] = Storage::disk(config('realestatelaravel.filesystem.disk'))
+            $data['way'] = Storage::disk(ConfigHelper::get('filesystem.disk'))
                 ->put(
-                    config('realestatelaravel.filesystem.path.banners'),
+                    ConfigHelper::get('filesystem.path.banners'),
                     $request->image
                 );
 
@@ -72,8 +73,8 @@ class BannerController extends Controller
         try {
             $data = $request->only(['title', 'content', 'link']);
             if ($request->image) {
-                $data['way'] = Storage::disk(config('realestatelaravel.filesystem.disk'))
-                    ->put(config('realestatelaravel.filesystem.path.banners'), $request->image);
+                $data['way'] = Storage::disk(ConfigHelper::get('filesystem.disk'))
+                    ->put(ConfigHelper::get('filesystem.path.banners'), $request->image);
             }
             if ($banner->update($data)) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);

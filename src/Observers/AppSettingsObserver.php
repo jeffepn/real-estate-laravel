@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Models\AppSettings;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 use Illuminate\Support\Str;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 class AppSettingsObserver
 {
@@ -21,7 +22,13 @@ class AppSettingsObserver
 
     private function destroySettingWattermarkImageProperty(AppSettings $appSettings): bool
     {
-        return Storage::disk(config('realestatelaravel.filesystem.disk'))
+        return Storage::disk(ConfigHelper::get('filesystem.disk'))
+            ->delete($appSettings->value['image']);
+    }
+
+    private function destroySettingWattermarkImageProject(AppSettings $appSettings): bool
+    {
+        return Storage::disk(ConfigHelper::get('filesystem.disk'))
             ->delete($appSettings->value['image']);
     }
 }

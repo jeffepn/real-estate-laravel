@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Jeffpereira\RealEstate\Http\Controllers\HomeController;
 use Jeffpereira\RealEstate\Http\Controllers\ProjectController;
 use Jeffpereira\RealEstate\Http\Controllers\PropertyController;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
-Route::middleware(config('realestatelaravel.middleware.web'))->group(function () {
+Route::middleware(ConfigHelper::get('middleware.web'))->group(function () {
     Route::prefix('panel-realestate')->group(function () {
         Route::name('jp_realestate.')->group(function () {
             Route::get('dasboard', [HomeController::class, 'dashboard'])->name('jp_realestate.dashboard');

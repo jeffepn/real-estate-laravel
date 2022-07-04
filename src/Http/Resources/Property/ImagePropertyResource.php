@@ -39,7 +39,7 @@ class ImagePropertyResource extends JsonResource
             'type' => 'image-property',
             'id' => $this->id,
             'attributes' => [
-                'way' => Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))->url($this->way),
+                'way' => $this->way_url,
                 'alt' => $this->alt,
                 'order' => $this->order,
             ]

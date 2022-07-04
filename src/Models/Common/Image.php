@@ -3,10 +3,9 @@
 namespace Jeffpereira\RealEstate\Models\Common;
 
 use Illuminate\Database\Eloquent\Model;
-use Jeffpereira\RealEstate\Models\Traits\Project\Relationships;
-use Jeffpereira\RealEstate\Models\Traits\Project\Scopes;
-use Jeffpereira\RealEstate\Models\Traits\SetSlugByName;
+use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 class Image extends Model
 {
@@ -17,4 +16,11 @@ class Image extends Model
     protected $fillable = [
         'way', 'alt', 'title', 'description', 'author'
     ];
+
+    protected $appends = ['way_url'];
+
+    public function getWayUrlAttribute()
+    {
+        return Storage::disk(ConfigHelper::get('filesystem.disk'))->url($this->way);
+    }
 }

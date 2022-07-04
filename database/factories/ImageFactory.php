@@ -6,6 +6,7 @@ use Faker\Generator as Faker;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Models\Common\Image;
 use Illuminate\Support\Str;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 $factory->define(Image::class, function (Faker $faker) {
     return [
@@ -15,9 +16,9 @@ $factory->define(Image::class, function (Faker $faker) {
             $contents = file_get_contents(
                 "https://picsum.photos/seed/" . rand(1, 1000) . "/400/225"
             );
-            $nameImage = config('realestatelaravel.filesystem.entities.projects.path') . '/' . Str::uuid() . '.jpg';
+            $nameImage = ConfigHelper::get('filesystem.entities.projects.path') . '/' . Str::uuid() . '.jpg';
             return Storage::disk(
-                config('realestatelaravel.filesystem.entities.projects.disk')
+                ConfigHelper::get('filesystem.entities.projects.disk')
             )
                 ->put($nameImage, $contents);
         },
