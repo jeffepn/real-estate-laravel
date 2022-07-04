@@ -15,17 +15,14 @@ use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyResource;
 use Jeffpereira\RealEstate\Models\Property\ImageProperty;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 use Illuminate\Support\Str;
+use Jeffpereira\RealEstate\Http\Controllers\Traits\TreatmentImages;
 use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyUpdateOrderRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyCollection;
-use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
-use Intervention\Image\Facades\Image;
-use Intervention\Image\Image as InterventionImage;
-use Jeffpereira\RealEstate\Enum\AppSettingsEnum;
-use Jeffpereira\RealEstate\Models\AppSettings;
 
 class ImagePropertyController extends Controller
 {
-    const POSITION_WATTER_MARK = 'center';
+    use TreatmentImages;
+
     /**
      * Display a listing of the resource.
      */
@@ -48,7 +45,7 @@ class ImagePropertyController extends Controller
                 $imagesStore->push(
                     ImageProperty::create([
                         'property_id' => $property->id,
-                        'way' => $this->storageImage($image, $altImage, $request->use_watter_mark),
+                        'way' => $this->storageImage('properties', $image, $altImage, $request->use_watter_mark),
                         'alt' => $altImage
                     ])
                 );
@@ -107,50 +104,5 @@ class ImagePropertyController extends Controller
             $image->update(['order' => $contentOrder['order']]);
         }
         return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
-    }
-
-    private function storageImage(UploadedFile $image, string $altImage, bool $useWatterMark): string
-    {
-        $img = Image::make($image);
-        if ($useWatterMark) {
-            $img = $this->insertWatterMark($img);
-        }
-        $img->orientate();
-        if (config('realestatelaravel.filesystem.entities.properties.optmize')) {
-            $img->resize(null, 1080, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
-        }
-
-        $img->encode('jpg', config('realestatelaravel.filesystem.entities.properties.optmize') ? 60 : 100);
-        $nameImage = config('realestatelaravel.filesystem.entities.properties.path') . '/' . Str::slug($altImage) .  Str::uuid() . '.jpg';
-        Storage::disk(config('realestatelaravel.filesystem.entities.properties.disk'))
-            ->put($nameImage, $img);
-        return $nameImage;
-    }
-    private function insertWatterMark(InterventionImage $img): InterventionImage
-    {
-        $appSetting = AppSettings::whereName(AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY)
-            ->first();
-        return $appSetting
-            ? $img->insert(
-                $this->formatImageInserWatterMark($appSetting, $img->height()),
-                self::POSITION_WATTER_MARK
-            )
-            : $img;
-    }
-
-    private function formatImageInserWatterMark(AppSettings $appSetting, int $height): InterventionImage
-    {
-        $img = Image::make(
-            Storage::disk(config('realestatelaravel.filesystem.disk'))->get($appSetting->value['image'])
-        );
-        $img->resize(null, $height * 0.5, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-
-        return $img;
     }
 }

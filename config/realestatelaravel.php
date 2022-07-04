@@ -37,6 +37,11 @@ return [
                 'path' => env('RE_PATH_PROPERTY', 'properties'),
                 'optmize' => env('RE_OPTMIZE_PROPERTY', true),
             ],
+            'projects' => [
+                'disk' => env('RE_DISK_PROJECT', 'public'),
+                'path' => env('RE_PATH_PROJECT', 'projects'),
+                'optmize' => env('RE_OPTMIZE_PROJECT', true),
+            ],
         ],
     ],
     /**

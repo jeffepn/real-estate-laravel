@@ -2,12 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Resources\Project;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Jeffpereira\RealEstate\Http\Resources\BaseResource;
-use Jeffpereira\RealEstate\Http\Resources\Person\PersonResource;
-use Jeffpereira\RealEstate\Http\Resources\Person\TypePersonResource;
-use Jeffpereira\RealEstate\Http\Resources\Traits\ResolverEntities;
 
 class ProjectResource extends BaseResource
 {

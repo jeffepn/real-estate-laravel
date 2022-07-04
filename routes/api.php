@@ -11,6 +11,7 @@ use Jeffpereira\RealEstate\Http\Controllers\Api\Property\SituationController;
 use Illuminate\Support\Facades\Route;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Person\PersonController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Person\TypePersonController;
+use Jeffpereira\RealEstate\Http\Controllers\Api\Project\ImageProjectController;
 use Jeffpereira\RealEstate\Http\Controllers\Api\Project\ProjectController;
 
 Route::middleware(config('realestatelaravel.middleware.api'))->group(function () {
@@ -22,8 +23,9 @@ Route::middleware(config('realestatelaravel.middleware.api'))->group(function ()
                 "type" => TypeController::class,
                 "sub_type" => SubTypeController::class,
                 "property" => PropertyController::class,
-                "project" => ProjectController::class,
                 "image_property" => ImagePropertyController::class,
+                "project" => ProjectController::class,
+                "image_project" => ImageProjectController::class,
                 "banner" => BannerController::class,
                 "person" => PersonController::class,
                 "type_person" => TypePersonController::class,

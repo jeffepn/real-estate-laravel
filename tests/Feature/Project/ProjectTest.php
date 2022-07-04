@@ -1,6 +1,6 @@
 <?php
 
-namespace Jeffpereira\RealEstate\Tests\Feature;
+namespace Jeffpereira\RealEstate\Tests\Feature\Project;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -9,11 +9,6 @@ use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Person\Person;
 use Jeffpereira\RealEstate\Models\Person\TypePerson;
 use Jeffpereira\RealEstate\Models\Project\Project;
-use Jeffpereira\RealEstate\Models\Property\Business;
-use Jeffpereira\RealEstate\Models\Property\Property;
-use Jeffpereira\RealEstate\Models\Property\Situation;
-use Jeffpereira\RealEstate\Models\Property\SubType;
-use Jeffpereira\RealEstate\Models\Property\Type;
 use Jeffpereira\RealEstate\Tests\TestCase;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 
