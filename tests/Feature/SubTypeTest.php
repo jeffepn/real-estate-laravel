@@ -25,7 +25,7 @@ class SubTypeTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'data' => [[
-                'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['type']
+                'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['type'],
             ]], 'included',
         ], $response->json());
     }
@@ -39,8 +39,8 @@ class SubTypeTest extends TestCase
         $response = $this->getJson(route('jp_realestate.api.sub_type.show', $subType->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
-            "data" => [
-                'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['type']
+            'data' => [
+                'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['type'],
             ], 'included',
         ], $response->json());
         $this->assertEquals([
@@ -51,10 +51,11 @@ class SubTypeTest extends TestCase
                 'name' => Str::title($subType->name),
             ],
             'relationships' => [
-                'type' => ['data' => ['type' => 'type', 'id' => $subType->type_id]]
-            ]
+                'type' => ['data' => ['type' => 'type', 'id' => $subType->type_id]],
+            ],
         ], $response->json()['data']);
     }
+
     /**
      * @test
      */
@@ -64,8 +65,8 @@ class SubTypeTest extends TestCase
         $response = $this->postJson(route('jp_realestate.api.sub_type.store'), ['name' => 'Test of name', 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure(['data' => ['type', 'id', 'attributes' => ['name', 'slug'], 'relationships' => ['type']], 'included', 'error', 'message']);
-        $this->assertEquals("test-of-name", SubType::first()->slug);
-        $this->assertEquals("TEST OF NAME", SubType::first()->name);
+        $this->assertEquals('test-of-name', SubType::first()->slug);
+        $this->assertEquals('TEST OF NAME', SubType::first()->name);
     }
 
     /**
@@ -77,7 +78,7 @@ class SubTypeTest extends TestCase
         $subType = factory(SubType::class)->create();
         $response = $this->patchJson(route('jp_realestate.api.sub_type.update', $subType->id), ['name' => 'Test of name2', 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals("test-of-name2", SubType::first()->slug);
+        $this->assertEquals('test-of-name2', SubType::first()->slug);
     }
 
     /**
@@ -91,6 +92,7 @@ class SubTypeTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $this->assertNull(SubType::first());
     }
+
     /**
      * @test
      */
@@ -147,7 +149,6 @@ class SubTypeTest extends TestCase
         $this->assertCount(10, SubType::all());
         $this->assertCount(0, SubType::hasProperties()->get());
         SubType::all()->each(function ($subType, $key) {
-
             $subType->properties()->save(
                 $key < 5
                     ? factory(Property::class)->state('active')->make()

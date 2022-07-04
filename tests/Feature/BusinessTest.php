@@ -22,7 +22,7 @@ class BusinessTest extends TestCase
         $response = $this->getJson(route('jp_realestate.api.business.index'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
-            'data' => [['type', 'id', 'attributes' => ['slug', 'name']]]
+            'data' => [['type', 'id', 'attributes' => ['slug', 'name']]],
         ], $response->json());
     }
 
@@ -35,9 +35,9 @@ class BusinessTest extends TestCase
         $response = $this->getJson(route('jp_realestate.api.business.show', $business->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
-            "data" => [
-                'type', 'id', 'attributes' => ['slug', 'name']
-            ]
+            'data' => [
+                'type', 'id', 'attributes' => ['slug', 'name'],
+            ],
         ], $response->json());
         $this->assertEquals([
             'type' => 'business',
@@ -45,9 +45,10 @@ class BusinessTest extends TestCase
             'attributes' => [
                 'slug' => $business->slug,
                 'name' => Str::title($business->name),
-            ]
+            ],
         ], $response->json()['data']);
     }
+
     /**
      * @test
      */
@@ -56,10 +57,10 @@ class BusinessTest extends TestCase
         $response = $this->postJson(route('jp_realestate.api.business.store'), ['name' => 'Test of name']);
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure([
-            'data' => ['type', 'id', 'attributes' => ['slug', 'name']], 'error', 'message'
+            'data' => ['type', 'id', 'attributes' => ['slug', 'name']], 'error', 'message',
         ]);
-        $this->assertEquals("test-of-name", Business::first()->slug);
-        $this->assertEquals("TEST OF NAME", Business::first()->name);
+        $this->assertEquals('test-of-name', Business::first()->slug);
+        $this->assertEquals('TEST OF NAME', Business::first()->name);
     }
 
     /**
@@ -73,7 +74,7 @@ class BusinessTest extends TestCase
             ['name' => 'Test of name2']
         );
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals("test-of-name2", Business::first()->slug);
+        $this->assertEquals('test-of-name2', Business::first()->slug);
     }
 
     /**
@@ -111,6 +112,7 @@ class BusinessTest extends TestCase
         $response = $this->patchJson(route('jp_realestate.api.business.update', $business->id), ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_OK);
     }
+
     /**
      * @test
      * @group business

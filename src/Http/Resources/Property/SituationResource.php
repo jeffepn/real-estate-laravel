@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 
 class SituationResource extends JsonResource
 {
-
     private $message;
 
     /**
@@ -21,6 +20,7 @@ class SituationResource extends JsonResource
         parent::__construct($resource);
         $this->message = $message;
     }
+
     /**
      * Transform the resource into an array.
      *
@@ -35,7 +35,7 @@ class SituationResource extends JsonResource
             'attributes' => [
                 'slug' => $this->slug,
                 'name' => Str::title($this->name),
-            ]
+            ],
         ];
     }
 
@@ -43,7 +43,7 @@ class SituationResource extends JsonResource
     {
         return [
             'error' => false,
-            'message' => $this->message
+            'message' => $this->message,
         ];
     }
 }

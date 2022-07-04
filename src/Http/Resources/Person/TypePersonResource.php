@@ -15,7 +15,7 @@ class TypePersonResource extends BaseResource
                 'slug' => $this->slug,
                 'name' => $this->name,
             ],
-            'relationships' => []
+            'relationships' => [],
         ];
     }
 }

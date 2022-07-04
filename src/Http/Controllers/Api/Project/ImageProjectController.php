@@ -8,9 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Jeffpereira\RealEstate\Http\Controllers\Traits\TreatmentImages;
 use Jeffpereira\RealEstate\Http\Requests\Project\StoreImageProjectRequest;
-use Jeffpereira\RealEstate\Http\Requests\Project\UpdateProjectRequest;
 use Jeffpereira\RealEstate\Http\Resources\Project\ImageProjectCollection;
-use Jeffpereira\RealEstate\Http\Resources\Project\ProjectResource;
 use Jeffpereira\RealEstate\Models\Common\Image;
 use Jeffpereira\RealEstate\Models\Project\ImageProject;
 use Jeffpereira\RealEstate\Models\Project\Project;
@@ -28,14 +26,17 @@ class ImageProjectController extends Controller
     public function index()
     {
         request()->validate(['project_id' => 'required|exists:projects,id']);
+
         try {
             $project = Project::findOrFail(request()->project_id);
+
             return new ImageProjectCollection($project->imagesProject);
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.get')
+                'message' => Terminologies::get('all.resource.error.get'),
             ]);
         }
     }
@@ -58,7 +59,7 @@ class ImageProjectController extends Controller
                     array_merge(
                         [
                             'way' => $this->storageImage('projects', $image, $altImage, $request->use_watter_mark),
-                            'alt' => $altImage
+                            'alt' => $altImage,
                         ],
                         $request->only(['title', 'description', 'author'])
                     )
@@ -78,35 +79,15 @@ class ImageProjectController extends Controller
             );
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response(
                 [
                     'error' => true,
-                    'message' => Terminologies::get('all.resource.error.save') . $th->getMessage()
+                    'message' => Terminologies::get('all.resource.error.save') . $th->getMessage(),
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  Jeffpereira\RealEstate\Models\Project\Project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Project $project)
-    {
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  UpdateProjectRequest  $request
-     * @param  Jeffpereira\RealEstate\Models\Project\Project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateProjectRequest $request, Project $project)
-    {
     }
 
     /**
@@ -118,17 +99,20 @@ class ImageProjectController extends Controller
     public function destroy(ImageProject $imageProject)
     {
         try {
-            if (!$imageProject->delete()) throw new Exception();
+            if (!$imageProject->delete()) {
+                throw new Exception();
+            }
 
             return response([
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.delete')
+                'message' => Terminologies::get('all.resource.success.delete'),
             ]);
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.delete')
+                'message' => Terminologies::get('all.resource.error.delete'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

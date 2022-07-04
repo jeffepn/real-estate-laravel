@@ -17,10 +17,9 @@ class ConfigHelper
         'filesystem.entities.properties.optmize' => true,
         'filesystem.entities.projects.path' => 'projects',
         'filesystem.entities.projects.optmize' => true,
-        'filesystem.disk' => 'public',
-        'filesystem.entities' => 'public',
         'url_home' => null,
     ];
+
     /**
      * Get config laravelrealestate to dot anotation
      * Example:

@@ -14,26 +14,30 @@ class BaseResourceCollection extends ResourceCollection
     /** @var Collection */
     private $includes;
 
-    public function __construct($resource, $message = '', int $code = null)
+    public function __construct($resource, $message = '', ?int $code = null)
     {
         parent::__construct($resource);
 
         $this->includes = collect([]);
 
-        if ($code) $this->response()->setStatusCode($code);
+        if ($code) {
+            $this->response()->setStatusCode($code);
+        }
 
         $this->additional([
             'error' => false,
-            'message' => $message
+            'message' => $message,
         ]);
     }
 
     public function with($request)
     {
-        if ($request->with) $this->loadRelationships($request);
+        if ($request->with) {
+            $this->loadRelationships($request);
+        }
 
         return [
-            'included' =>  $this->includes->toArray()
+            'included' => $this->includes->toArray(),
         ];
     }
 

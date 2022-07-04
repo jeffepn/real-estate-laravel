@@ -41,11 +41,12 @@ class AppSettingController extends Controller
             return (new AppSettingResource($appSetting, Terminologies::get('all.common.save_data')))
                 ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (\Throwable $th) {
-            logger()->error("Erro in store  AppSettingController: " . $th->getMessage(), $th->getTrace());
+            logger()->error('Erro in store  AppSettingController: ' . $th->getMessage(), $th->getTrace());
+
             return response(
                 [
                     'error' => true,
-                    'message' => Terminologies::get('all.common.error_save_data')
+                    'message' => Terminologies::get('all.common.error_save_data'),
                 ],
                 Response::HTTP_BAD_REQUEST
             );
@@ -62,11 +63,11 @@ class AppSettingController extends Controller
             return (new AppSettingResource($appSettings, Terminologies::get('all.common.save_data')))
                 ->response()->setStatusCode(Response::HTTP_OK);
         } catch (\Throwable $th) {
-            logger()->error("Erro in update AppSettingController: " . $th->getMessage(), $th->getTrace());
+            logger()->error('Erro in update AppSettingController: ' . $th->getMessage(), $th->getTrace());
+
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         }
     }
-
 
     public function destroy(AppSettings $app_setting)
     {
@@ -75,7 +76,8 @@ class AppSettingController extends Controller
                 ? response()->noContent(Response::HTTP_OK)
                 : response(['error' => true, 'message' => Terminologies::get('all.app_setting.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            logger("Error destroy AppSettingController: " . $th->getMessage(), $th->getTrace());
+            logger('Error destroy AppSettingController: ' . $th->getMessage(), $th->getTrace());
+
             return response(['error' => true, 'message' => $th->getMessage()], 500);
         }
     }
@@ -83,6 +85,7 @@ class AppSettingController extends Controller
     private function wrapperDataSettings(AppSettingsRequest $request): array
     {
         $wrappers = $this->handleWrapper();
+
         return Arr::has($wrappers, $request->name)
             ? $this->handleWrapper()[$request->name]($request)
             : Arr::only($request->all(), ['name', 'value']);
@@ -98,8 +101,9 @@ class AppSettingController extends Controller
                         ->put(
                             'images',
                             $request->image_watter
-                        )
+                        ),
                 ];
+
                 return $data;
             },
             AppSettingsEnum::WATTERMARK_IMAGE_PROJECT => function (AppSettingsRequest $request): array {
@@ -109,10 +113,11 @@ class AppSettingController extends Controller
                         ->put(
                             'images',
                             $request->image_watter
-                        )
+                        ),
                 ];
+
                 return $data;
-            }
+            },
         ];
     }
 }

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 
 trait Errors
 {
-
     public function registerError(Exception $ex): void
     {
         $controller = __CLASS__;

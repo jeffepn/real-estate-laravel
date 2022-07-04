@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
-use Illuminate\Http\UploadedFile;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
@@ -14,7 +13,6 @@ use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyResource;
 use Jeffpereira\RealEstate\Models\Property\ImageProperty;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
-use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Http\Controllers\Traits\TreatmentImages;
 use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyUpdateOrderRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyCollection;
@@ -29,6 +27,7 @@ class ImagePropertyController extends Controller
     public function index(Request $request): JsonResource
     {
         $property = Property::findOrFail($request->property_id);
+
         return new ImagePropertyCollection($property->images);
     }
 
@@ -39,24 +38,27 @@ class ImagePropertyController extends Controller
     {
         try {
             $property = Property::findOrFail($request->property_id);
-            $altImage =  $property->generateAltImage();
+            $altImage = $property->generateAltImage();
             $imagesStore = collect();
             foreach ($request->images as $image) {
                 $imagesStore->push(
                     ImageProperty::create([
                         'property_id' => $property->id,
                         'way' => $this->storageImage('properties', $image, $altImage, $request->use_watter_mark),
-                        'alt' => $altImage
+                        'alt' => $altImage,
                     ])
                 );
             }
+
             return (new ImagePropertyCollection($imagesStore, Terminologies::get('all.common.save_data')))
                 ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (ModelNotFoundException $mn) {
             logger()->error('Error in store ImagePropertyController: ' . $mn->getMessage(), $mn->getTrace());
+
             return response()->noContent(Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             logger()->error('Error in store ImagePropertyController: ' . $th->getMessage(), $th->getTrace());
+
             return response()->noContent(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -82,17 +84,16 @@ class ImagePropertyController extends Controller
     public function destroy(ImageProperty $imageProperty): Response
     {
         try {
-
             return $imageProperty->delete()
                 ? response()->noContent(Response::HTTP_OK)
                 : response([
                     'error' => true,
-                    'message' => Terminologies::get('all.property.not_delete')
+                    'message' => Terminologies::get('all.property.not_delete'),
                 ], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response([
                 'error' => true,
-                'message' => $th->getMessage()
+                'message' => $th->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -103,6 +104,7 @@ class ImagePropertyController extends Controller
             $image = ImageProperty::findOrFail($contentOrder['id']);
             $image->update(['order' => $contentOrder['order']]);
         }
+
         return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
     }
 }

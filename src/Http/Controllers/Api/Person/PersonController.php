@@ -24,7 +24,7 @@ class PersonController extends Controller
     {
         try {
             $paginate = request()->paginate;
-            $people = Person::select('people.*')->orderBy("name");
+            $people = Person::select('people.*')->orderBy('name');
 
             if (request()->search) {
                 $people->search(request()->search);
@@ -32,16 +32,19 @@ class PersonController extends Controller
 
             $people->distinct(['people.id']);
 
-            if (request()->with) $people->with(explode(',', request()->with));
+            if (request()->with) {
+                $people->with(explode(',', request()->with));
+            }
 
             return new PersonCollection(
                 $paginate ? $people->paginate($paginate) : $people->get()
             );
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.get')
+                'message' => Terminologies::get('all.resource.error.get'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -57,9 +60,12 @@ class PersonController extends Controller
         try {
             $person = Person::create($request->all());
 
-            if (!$person) throw new Exception();
+            if (!$person) {
+                throw new Exception();
+            }
 
             $person->loadMissing('type');
+
             return new PersonResource(
                 $person,
                 Terminologies::get('all.resource.success.save'),
@@ -67,9 +73,10 @@ class PersonController extends Controller
             );
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.save')
+                'message' => Terminologies::get('all.resource.error.save'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -82,7 +89,10 @@ class PersonController extends Controller
      */
     public function show(Person $person)
     {
-        if (request()->with) $person->loadMissing(explode(',', request()->with));
+        if (request()->with) {
+            $person->loadMissing(explode(',', request()->with));
+        }
+
         return new PersonResource($person);
     }
 
@@ -97,15 +107,17 @@ class PersonController extends Controller
     {
         try {
             $person->update($request->all());
+
             return response([
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.save')
+                'message' => Terminologies::get('all.resource.success.save'),
             ]);
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.save')
+                'message' => Terminologies::get('all.resource.error.save'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -119,20 +131,23 @@ class PersonController extends Controller
     public function destroy(Person $person)
     {
         try {
-            if (!$person->delete()) throw new Exception();
+            if (!$person->delete()) {
+                throw new Exception();
+            }
 
             return response([
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.delete')
+                'message' => Terminologies::get('all.resource.success.delete'),
             ]);
         } catch (\Throwable $th) {
             $this->registerError($th);
             $message = $th instanceof QueryException
                 ? 'all.resource.error.delete_relationships'
                 : 'all.resource.error.delete';
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get($message)
+                'message' => Terminologies::get($message),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

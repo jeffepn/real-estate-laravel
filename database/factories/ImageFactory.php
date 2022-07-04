@@ -11,12 +11,15 @@ use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 $factory->define(Image::class, function (Faker $faker) {
     return [
         'way' => function () use ($faker) {
-            if (config('app.env') == 'testing') return $faker->imageUrl();
+            if (config('app.env') == 'testing') {
+                return $faker->imageUrl();
+            }
 
             $contents = file_get_contents(
-                "https://picsum.photos/seed/" . rand(1, 1000) . "/400/225"
+                'https://picsum.photos/seed/' . rand(1, 1000) . '/400/225'
             );
             $nameImage = ConfigHelper::get('filesystem.entities.projects.path') . '/' . Str::uuid() . '.jpg';
+
             return Storage::disk(
                 ConfigHelper::get('filesystem.entities.projects.disk')
             )

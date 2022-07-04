@@ -24,7 +24,7 @@ class TypePersonController extends Controller
     {
         try {
             $paginate = request()->paginate;
-            $type_people = TypePerson::select('type_people.*')->orderBy("name");
+            $type_people = TypePerson::select('type_people.*')->orderBy('name');
 
             if (request()->search) {
                 $type_people->search(request()->search);
@@ -32,16 +32,19 @@ class TypePersonController extends Controller
 
             $type_people->distinct(['type_people.id']);
 
-            if (request()->with) $type_people->with(explode(',', request()->with));
+            if (request()->with) {
+                $type_people->with(explode(',', request()->with));
+            }
 
             return new TypePersonCollection(
                 $paginate ? $type_people->paginate($paginate) : $type_people->get()
             );
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.get')
+                'message' => Terminologies::get('all.resource.error.get'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -57,7 +60,9 @@ class TypePersonController extends Controller
         try {
             $typePerson = TypePerson::create($request->all());
 
-            if (!$typePerson) throw new Exception();
+            if (!$typePerson) {
+                throw new Exception();
+            }
 
             return new TypePersonResource(
                 $typePerson,
@@ -66,9 +71,10 @@ class TypePersonController extends Controller
             );
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.save') . $th->getMessage()
+                'message' => Terminologies::get('all.resource.error.save') . $th->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -98,13 +104,14 @@ class TypePersonController extends Controller
 
             return response([
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.save')
+                'message' => Terminologies::get('all.resource.success.save'),
             ]);
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.save') . $th->getMessage()
+                'message' => Terminologies::get('all.resource.error.save') . $th->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -118,20 +125,23 @@ class TypePersonController extends Controller
     public function destroy(TypePerson $typePerson)
     {
         try {
-            if (!$typePerson->delete()) throw new Exception();
+            if (!$typePerson->delete()) {
+                throw new Exception();
+            }
 
             return response([
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.delete')
+                'message' => Terminologies::get('all.resource.success.delete'),
             ]);
         } catch (\Throwable $th) {
             $this->registerError($th);
             $message = $th instanceof QueryException
                 ? 'all.resource.error.delete_relationships'
                 : 'all.resource.error.delete';
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get($message)
+                'message' => Terminologies::get($message),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

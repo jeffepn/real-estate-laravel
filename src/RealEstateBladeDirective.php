@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\App;
 
 class RealEstateBladeDirective
 {
-
     public static function mainStyles(): string
     {
         $assets[] = self::isDebug() || self::environmentIsDev() ? '<!-- Realestatelaravel Styles -->' : '';

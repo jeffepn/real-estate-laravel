@@ -15,22 +15,14 @@ use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 class AppSettingTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
     private $api;
 
     /**
      * @var Storage
      */
     private $storage;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->api = route('jp_realestate.api.app_setting.store');
-        Storage::fake(ConfigHelper::get('filesystem.disk'));
-        $this->storage = Storage::disk(ConfigHelper::get('filesystem.disk'));
-    }
-
 
     /**
      * @test
@@ -43,7 +35,7 @@ class AppSettingTest extends TestCase
         Storage::fake(ConfigHelper::get('filesystem.disk'));
         $data = [
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
-            'image_watter' => UploadedFile::fake()->image('watter.jpg')
+            'image_watter' => UploadedFile::fake()->image('watter.jpg'),
         ];
         $response = $this->postJson($this->api, $data);
         $response->assertStatus(Response::HTTP_CREATED);
@@ -52,6 +44,7 @@ class AppSettingTest extends TestCase
         $this->assertEquals(AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY, $appSettings->name);
         $this->assertNotNull($appSettings->value['image']);
     }
+
     /**
      * @test
      * @group app-setting
@@ -61,14 +54,14 @@ class AppSettingTest extends TestCase
     {
         $appSettings = AppSettings::create([
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
-            'value' => ['image' => $this->faker->imageUrl()]
+            'value' => ['image' => $this->faker->imageUrl()],
         ]);
         Storage::fake(ConfigHelper::get('filesystem.disk'));
         $data = [
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
-            'image_watter' => UploadedFile::fake()->image('watter.jpg')
+            'image_watter' => UploadedFile::fake()->image('watter.jpg'),
         ];
-        $response = $this->patchJson($this->api . "/" . AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY, $data);
+        $response = $this->patchJson($this->api . '/' . AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY, $data);
         $response->assertStatus(Response::HTTP_OK);
         $appSettingsUpdated = AppSettings::first();
         $this->assertNotEquals($appSettings->value['image'], $appSettingsUpdated->value['image']);
@@ -85,17 +78,17 @@ class AppSettingTest extends TestCase
         $appSettings = AppSettings::create([
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
             'value' => [
-                'image' =>  $this->storage
+                'image' => $this->storage
                     ->putFileAs(
                         'images',
                         UploadedFile::fake()->image('watter.jpg'),
                         'watter.jpg'
-                    )
-            ]
+                    ),
+            ],
         ]);
         $this->assertNotNull(AppSettings::first());
         $this->storage->assertExists('images/watter.jpg');
-        $response = $this->deleteJson($this->api . "/" . AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY);
+        $response = $this->deleteJson($this->api . '/' . AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY);
         $response->assertStatus(Response::HTTP_OK);
         $this->assertNull(AppSettings::first());
         $this->storage->assertMissing('images/watter.jpg');
@@ -111,7 +104,7 @@ class AppSettingTest extends TestCase
         Storage::fake(ConfigHelper::get('filesystem.disk'));
         $data = [
             'name' => AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY,
-            'image_watter' => UploadedFile::fake()->image('watter.jpg')
+            'image_watter' => UploadedFile::fake()->image('watter.jpg'),
         ];
         $response = $this->postJson($this->api, $data);
         $response->assertStatus(Response::HTTP_CREATED);
@@ -133,5 +126,13 @@ class AppSettingTest extends TestCase
             $response = $this->postJson($this->api, $aux);
             $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+    }
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->api = route('jp_realestate.api.app_setting.store');
+        Storage::fake(ConfigHelper::get('filesystem.disk'));
+        $this->storage = Storage::disk(ConfigHelper::get('filesystem.disk'));
     }
 }

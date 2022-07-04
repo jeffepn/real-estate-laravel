@@ -15,7 +15,7 @@ class CreateProjectsTable extends Migration
     public function up()
     {
         Schema::create('projects', function (Blueprint $table) {
-            $table->engine = "InnoDB";
+            $table->engine = 'InnoDB';
             $table->uuid('id')->primary();
             $table->string('person_id', 36)->nullable()->default(null);
             $table->foreign('person_id')
@@ -27,8 +27,8 @@ class CreateProjectsTable extends Migration
             $table->timestamps();
         });
 
-        if (env("DB_CONNECTION") != "sqlite") {
-            DB::statement("ALTER TABLE projects ADD FULLTEXT fulltextprojects_index (name, content)");
+        if (env('DB_CONNECTION') != 'sqlite') {
+            DB::statement('ALTER TABLE projects ADD FULLTEXT fulltextprojects_index (name, content)');
         }
     }
 

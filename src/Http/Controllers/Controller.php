@@ -10,5 +10,8 @@ use Jeffpereira\RealEstate\Http\Controllers\Traits\Errors;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Errors;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
+    use Errors;
 }

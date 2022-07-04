@@ -11,7 +11,7 @@ class ImageProperty extends Model
 {
     use UsesUuid;
 
-    protected $table = "image_properties";
+    protected $table = 'image_properties';
 
     protected $appends = ['way_url'];
 

@@ -14,13 +14,13 @@ class CreateImagesTable extends Migration
     public function up()
     {
         Schema::create('images_realestate', function (Blueprint $table) {
-            $table->engine = "InnoDB";
+            $table->engine = 'InnoDB';
             $table->uuid('id')->primary();
-            $table->string("way");
-            $table->string("alt")->nullable()->default(null);
-            $table->string("title")->nullable()->default(null);
-            $table->string("description")->nullable()->default(null);
-            $table->string("author")->nullable()->default(null);
+            $table->string('way');
+            $table->string('alt')->nullable()->default(null);
+            $table->string('title')->nullable()->default(null);
+            $table->string('description')->nullable()->default(null);
+            $table->string('author')->nullable()->default(null);
             $table->timestamps();
         });
     }

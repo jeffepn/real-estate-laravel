@@ -14,7 +14,7 @@ class CreateImageProjectsTable extends Migration
     public function up()
     {
         Schema::create('image_projects', function (Blueprint $table) {
-            $table->engine = "InnoDB";
+            $table->engine = 'InnoDB';
             $table->uuid('id')->primary();
             $table->string('image_id', 36);
             $table->foreign('image_id')

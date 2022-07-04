@@ -10,7 +10,10 @@ use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 
 class Person extends Model
 {
-    use UsesUuid, SetSlugByName, Relationships, Scopes;
+    use UsesUuid;
+    use SetSlugByName;
+    use Relationships;
+    use Scopes;
 
     protected $fillable = ['type_person_id', 'name', 'bio'];
 }

@@ -27,9 +27,9 @@ class ProjectResource extends BaseResource
                     'data' => [
                         'type' => 'person',
                         'id' => $this->person_id,
-                    ]
+                    ],
                 ]),
-            ]
+            ],
         ];
     }
 }

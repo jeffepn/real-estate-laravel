@@ -7,7 +7,6 @@ use Illuminate\Validation\Rule;
 
 class StoreTypePersonRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -16,12 +15,12 @@ class StoreTypePersonRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => [
-                "bail",
-                "required",
-                "min:3",
-                "max:30",
-                Rule::unique('type_people')->ignore($this->typePerson)
+            'name' => [
+                'bail',
+                'required',
+                'min:3',
+                'max:30',
+                Rule::unique('type_people')->ignore($this->typePerson),
             ],
         ];
     }
@@ -31,8 +30,8 @@ class StoreTypePersonRequest extends FormRequest
         return [
             'min' => 'O campo deve ter no mínimo :min caracteres.',
             'max' => 'Limite o campo a no máximo :max caracteres.',
-            "name.required" => 'O tipo pessoa precisa de um nome.',
-            "name.unique" => 'Este tipo de pessoa já existe.',
+            'name.required' => 'O tipo pessoa precisa de um nome.',
+            'name.unique' => 'Este tipo de pessoa já existe.',
         ];
     }
 }

@@ -15,7 +15,8 @@ use Jeffpereira\RealEstate\Tests\TestCase;
 
 class PropertyTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * @test
@@ -31,7 +32,7 @@ class PropertyTest extends TestCase
             'address_id' => $this->createAddress()->id,
             'max_dormitory' => function () {
                 return rand(1, 5);
-            }
+            },
         ]);
         $response = $this->getJson(route('jp_realestate.api.property.index'));
         $response->assertStatus(Response::HTTP_OK);
@@ -40,14 +41,14 @@ class PropertyTest extends TestCase
                 [
                     'type', 'id',
                     'attributes' => [
-                        'slug', "code", 'building_area', 'total_area', 'min_description',
+                        'slug', 'code', 'building_area', 'total_area', 'min_description',
                         'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
-                        'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage'
+                        'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage',
                     ],
                     'relationships' => ['situation', 'sub_type', 'address', 'businesses'],
-                ]
+                ],
             ],
-            'included'
+            'included',
         ], $response->json());
     }
 
@@ -63,17 +64,17 @@ class PropertyTest extends TestCase
         $response = $this->getJson(route('jp_realestate.api.property.show', $property->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
-            "data" => [
+            'data' => [
                 'type', 'id',
                 'attributes' => [
                     'slug', 'code', 'building_area', 'total_area', 'min_description',
                     'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
                     'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage',
-                    'useful_area', 'embed', 'active'
+                    'useful_area', 'embed', 'active',
                 ],
                 'relationships' => ['sub_type', 'address'],
             ],
-            'included'
+            'included',
         ], $response->json());
         $property->refresh();
         $this->assertEquals([
@@ -107,7 +108,7 @@ class PropertyTest extends TestCase
                 'businesses' => $property->businesses->map(function ($business) {
                     return  ['data' => ['type' => 'business', 'id' => $business->id]];
                 })->toArray(),
-            ]
+            ],
         ], $response->json()['data']);
     }
 
@@ -126,8 +127,7 @@ class PropertyTest extends TestCase
             [
                 'sub_type_id' => $subType->id,
                 'situation_id' => $situation ? $situation->id : null,
-                'min_description' =>
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
+                'min_description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat',
                 'content' => 'test content', 'items' => 'test items',
                 'building_area' => 105.49, 'total_area' => 200.50,
                 'min_dormitory' => 1,
@@ -144,14 +144,14 @@ class PropertyTest extends TestCase
                 'cep' => '99999-999',
                 'latitude' => 45,
                 'longitude' => 123,
-                "neighborhood" => "Jd Santa Maria",
-                "city" => "Poços de Caldas",
-                "state" => "Minas Gerais",
-                "initials" => "MG",
-                "country" => "Brasil",
+                'neighborhood' => 'Jd Santa Maria',
+                'city' => 'Poços de Caldas',
+                'state' => 'Minas Gerais',
+                'initials' => 'MG',
+                'country' => 'Brasil',
                 'useful_area' => 200,
                 'ground_area' => 100,
-                'embed' => 'http://google.com'
+                'embed' => 'http://google.com',
             ]
         );
         $response->assertStatus(Response::HTTP_CREATED);
@@ -161,13 +161,13 @@ class PropertyTest extends TestCase
                 'attributes' => [
                     'slug', 'code', 'building_area', 'total_area', 'min_description',
                     'content', 'items', 'min_dormitory', 'max_dormitory', 'min_bathroom',
-                    'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage', 'ground_area', 'useful_area'
+                    'max_bathroom', 'min_suite', 'max_suite', 'min_garage', 'max_garage', 'ground_area', 'useful_area',
                 ],
                 'relationships' => [
-                    'address', 'sub_type', 'situation', 'businesses'
-                ]
+                    'address', 'sub_type', 'situation', 'businesses',
+                ],
             ],
-            'included', 'error', 'message'
+            'included', 'error', 'message',
         ]);
         $property = Property::first();
 
@@ -175,10 +175,10 @@ class PropertyTest extends TestCase
         $this->assertEquals([
             'type' => 'property', 'id' => $property->id, 'attributes' => [
                 'slug' => $property->slug, 'code' => $property->code, 'building_area' => 105.49, 'total_area' => 200.50,
-                'min_description' => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
+                'min_description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat',
                 'min_dormitory' => 1, 'max_dormitory' => 3, 'min_suite' => 2, 'max_suite' => 4, 'min_bathroom' => 3, 'max_bathroom' => 6,
                 'min_garage' => 4, 'max_garage' => 8, 'content' => 'test content', 'items' => 'test items',
-                'useful_area' => 200, 'ground_area' => 100, 'embed' => 'http://google.com', 'active' => false
+                'useful_area' => 200, 'ground_area' => 100, 'embed' => 'http://google.com', 'active' => false,
             ],
             'relationships' => [
                 'address' => ['data' => ['type' => 'address', 'id' => $property->address_id]],
@@ -187,7 +187,7 @@ class PropertyTest extends TestCase
                 'businesses' => $property->businesses->map(function ($business) {
                     return  ['data' => ['type' => 'business', 'id' => $business->id]];
                 })->toArray(),
-            ]
+            ],
         ], $response->json()['data']);
         $this->assertEquals('av. campos do jordão', $property->address->address);
         $this->assertEquals(2324, $property->address->number);
@@ -217,8 +217,7 @@ class PropertyTest extends TestCase
             'situation_id' => $situation ? $situation->id : null,
             'sub_type_id' => $subType->id,
             'address_id' => $address->id,
-            'min_description' =>
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat",
+            'min_description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores exercitationem placeat',
             'content' => 'test content', 'items' => 'test items',
             'building_area' => 105.49, 'total_area' => 200.50,
             'min_dormitory' => 1,
@@ -231,7 +230,7 @@ class PropertyTest extends TestCase
             'max_garage' => 8,
         ]);
         $response = $this->patchJson(route('jp_realestate.api.property.update', $property->id), [
-            'min_description' => "min description edit",
+            'min_description' => 'min description edit',
             'content' => 'test content edit', 'items' => 'test items edit',
             'building_area' => 115.49, 'total_area' => 210.50,
             'min_dormitory' => 2,
@@ -248,11 +247,8 @@ class PropertyTest extends TestCase
         ]);
         $response->assertStatus(Response::HTTP_OK);
         $data = $property->refresh()->toArray();
-        unset($data['created_at']);
-        unset($data['updated_at']);
-        unset($data['business']);
-        unset($data['sub_type']);
-        unset($data['address']);
+        unset($data['created_at'], $data['updated_at'], $data['business'], $data['sub_type'], $data['address']);
+
         $this->assertEquals([
             'id' => $property->id,
             'slug' => $property->slug,
@@ -260,7 +256,7 @@ class PropertyTest extends TestCase
             'address_id' => $property->address_id,
             'sub_type_id' => $property->sub_type_id,
             'situation_id' => $property->situation_id,
-            'min_description' => "min description edit",
+            'min_description' => 'min description edit',
             'content' => 'test content edit', 'items' => 'test items edit',
             'building_area' => 115.49, 'total_area' => 210.50,
             'min_dormitory' => 2,
@@ -271,7 +267,6 @@ class PropertyTest extends TestCase
             'max_bathroom' => 7,
             'min_garage' => 5,
             'max_garage' => 9,
-            "active" => 0,
             'useful_area' => $property->useful_area,
             'ground_area' => $property->ground_area,
             'embed' => $property->embed,
@@ -309,12 +304,12 @@ class PropertyTest extends TestCase
             'slug' => 'test-slug',
             'businesses' => [
                 [
-                    "id" => $business->id,
-                    "value" => 1000.00
-                ]
+                    'id' => $business->id,
+                    'value' => 1000.00,
+                ],
             ],
             'sub_type_id' => $subType->id,
-            'min_description' =>  Str::random(Response::HTTP_OK),
+            'min_description' => Str::random(Response::HTTP_OK),
             'content' => 'test content', 'items' => 'test items',
             'building_area' => 105.49, 'total_area' => 200.50,
             'min_dormitory' => 1,
@@ -325,11 +320,11 @@ class PropertyTest extends TestCase
             'max_bathroom' => 6,
             'min_garage' => 4,
             'max_garage' => 8,
-            "neighborhood" => "Jd Santa Maria",
-            "city" => "Poços de Caldas",
-            "state" => "Minas Gerais",
-            "initials" => "MG",
-            "country" => "Brasil"
+            'neighborhood' => 'Jd Santa Maria',
+            'city' => 'Poços de Caldas',
+            'state' => 'Minas Gerais',
+            'initials' => 'MG',
+            'country' => 'Brasil',
         ];
 
         $response = $this->postJson(route('jp_realestate.api.property.store'), $data);
@@ -387,7 +382,6 @@ class PropertyTest extends TestCase
             ['key' => 'initials', 'value' => ''],
             ['key' => 'initials', 'value' => 'f'],
             ['key' => 'initials', 'value' => Str::random(3)],
-
         ];
         foreach ($array_validation as $item) {
             $aux = $data;
@@ -401,11 +395,11 @@ class PropertyTest extends TestCase
             route('jp_realestate.api.property.update', $property->id),
             [
                 'slug' => 'test-slug',
-                "neighborhood" => "Jd Santa Maria",
-                "city" => "Poços de Caldas",
-                "state" => "Minas Gerais",
-                "initials" => "MG",
-                "country" => "Brasil"
+                'neighborhood' => 'Jd Santa Maria',
+                'city' => 'Poços de Caldas',
+                'state' => 'Minas Gerais',
+                'initials' => 'MG',
+                'country' => 'Brasil',
             ]
         );
         $response->assertStatus(Response::HTTP_OK);

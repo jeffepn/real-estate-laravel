@@ -14,42 +14,43 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class TypePersonTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
-    const FORMAT_RESOURCE = [
+    public const FORMAT_RESOURCE = [
         'type', 'id',
         'attributes' => [
-            'slug', "name"
+            'slug', 'name',
         ],
         'relationships' => [],
     ];
 
-    const FORMAT_RESOURCE_SHOW = [
+    public const FORMAT_RESOURCE_SHOW = [
         'data' => self::FORMAT_RESOURCE,
         'included' => [],
         'error',
-        'message'
+        'message',
     ];
 
-    const FORMAT_RESOURCE_INDEX = [
+    public const FORMAT_RESOURCE_INDEX = [
         'data' => [self::FORMAT_RESOURCE],
         'included' => [],
         'error',
-        'message'
+        'message',
     ];
 
-    const DARA_RESOURCE = [
+    public const DARA_RESOURCE = [
         'data' => [],
         'included' => [],
         'error' => false,
-        'message' => ''
+        'message' => '',
     ];
 
-    const DARA_RESOURCE_TYPE = [
+    public const DARA_RESOURCE_TYPE = [
         'data' => [
             'type' => 'type_person',
-            'id' => null
-        ]
+            'id' => null,
+        ],
     ];
 
     /**
@@ -90,7 +91,7 @@ class TypePersonTest extends TestCase
             })->toArray(),
             'included' => [],
             'error' => false,
-            'message' => ''
+            'message' => '',
         ], $response->json());
     }
 
@@ -143,7 +144,7 @@ class TypePersonTest extends TestCase
     public function storeWithSuccess()
     {
         $dataStore = [
-            'name' =>  $this->faker->name(),
+            'name' => $this->faker->name(),
         ];
 
         $response = $this->postJson(
@@ -168,14 +169,14 @@ class TypePersonTest extends TestCase
         $typePerson = factory(TypePerson::class)->create();
 
         $response = $this->patchJson(route('jp_realestate.api.type_person.update', $typePerson->id), [
-            'name' => "Other name",
+            'name' => 'Other name',
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals(
             [
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.save')
+                'message' => Terminologies::get('all.resource.success.save'),
             ],
             $response->json()
         );
@@ -183,7 +184,7 @@ class TypePersonTest extends TestCase
         $this->assertEquals([
             'id' => $typePerson->id,
             'slug' => Str::slug('Other name'),
-            'name' => "Other name",
+            'name' => 'Other name',
         ], Arr::only($data, ['id', 'slug', 'name']));
     }
 
@@ -202,7 +203,7 @@ class TypePersonTest extends TestCase
         $this->assertEquals(
             [
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.delete')
+                'message' => Terminologies::get('all.resource.success.delete'),
             ],
             $response->json()
         );
@@ -227,7 +228,7 @@ class TypePersonTest extends TestCase
         $this->assertEquals(
             [
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.delete_relationships')
+                'message' => Terminologies::get('all.resource.error.delete_relationships'),
             ],
             $response->json()
         );
@@ -254,7 +255,6 @@ class TypePersonTest extends TestCase
             ['key' => 'name', 'value' => null],
             ['key' => 'name', 'value' => Str::random(2)],
             ['key' => 'name', 'value' => Str::random(256)],
-
         ];
         foreach ($array_validation as $item) {
             $aux = $data;
@@ -266,7 +266,7 @@ class TypePersonTest extends TestCase
 
         $response = $this->patchJson(
             route('jp_realestate.api.type_person.update', $typePerson->id),
-            ["name" => "Test name"]
+            ['name' => 'Test name']
         );
 
         $response->assertStatus(Response::HTTP_OK);

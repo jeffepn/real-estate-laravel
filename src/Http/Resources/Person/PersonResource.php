@@ -21,9 +21,9 @@ class PersonResource extends BaseResource
                     'data' => [
                         'type' => 'type_person',
                         'id' => $this->type_person_id,
-                    ]
-                ])
-            ]
+                    ],
+                ]),
+            ],
         ];
     }
 }

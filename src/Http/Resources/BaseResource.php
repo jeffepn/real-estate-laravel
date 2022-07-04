@@ -23,17 +23,19 @@ abstract class BaseResource extends JsonResource
      * @param  mixed  $resource
      * @return void
      */
-    public function __construct($resource, $message = '', int $code = null)
+    public function __construct($resource, $message = '', ?int $code = null)
     {
         parent::__construct($resource);
         $this->includes = collect([]);
         $this->relationships = [];
 
-        if ($code) $this->response()->setStatusCode($code);
+        if ($code) {
+            $this->response()->setStatusCode($code);
+        }
 
         $this->additional([
             'error' => false,
-            'message' => $message
+            'message' => $message,
         ]);
     }
 
@@ -43,13 +45,15 @@ abstract class BaseResource extends JsonResource
         $this->mountIncludes();
 
         return [
-            'included' => $this->includes->unique()->toArray()
+            'included' => $this->includes->unique()->toArray(),
         ];
     }
 
     public function loadRelationships(Request $request): void
     {
-        if (!$request->with) return;
+        if (!$request->with) {
+            return;
+        }
         $this->relationships = explode(',', $request->with);
         $this->resource->loadMissing($this->relationships);
     }
@@ -60,7 +64,9 @@ abstract class BaseResource extends JsonResource
             $currentResource = $this->resource;
             $dots = explode('.', $relationship);
 
-            foreach ($dots as $dot) $currentResource = $currentResource->{$dot};
+            foreach ($dots as $dot) {
+                $currentResource = $currentResource->{$dot};
+            }
 
             $classOfResource = $this->resolverEntity(get_class($currentResource));
             $this->includes->push(new $classOfResource($currentResource));

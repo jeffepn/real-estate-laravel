@@ -27,8 +27,8 @@ class TypeCollection extends ResourceCollection
                     ->flatten()
                     ->unique()
                     ->values()
-                    ->sortBy("name")
-            )
+                    ->sortBy('name')
+            ),
         ];
     }
 }

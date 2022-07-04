@@ -15,42 +15,43 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class PersonTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
-    const FORMAT_RESOURCE = [
+    public const FORMAT_RESOURCE = [
         'type', 'id',
         'attributes' => [
-            'slug', "name", "bio"
+            'slug', 'name', 'bio',
         ],
         'relationships' => [],
     ];
 
-    const FORMAT_RESOURCE_SHOW = [
+    public const FORMAT_RESOURCE_SHOW = [
         'data' => self::FORMAT_RESOURCE,
         'included' => [],
         'error',
-        'message'
+        'message',
     ];
 
-    const FORMAT_RESOURCE_INDEX = [
+    public const FORMAT_RESOURCE_INDEX = [
         'data' => [self::FORMAT_RESOURCE],
         'included' => [],
         'error',
-        'message'
+        'message',
     ];
 
-    const DARA_RESOURCE = [
+    public const DARA_RESOURCE = [
         'data' => [],
         'included' => [],
         'error' => false,
-        'message' => ''
+        'message' => '',
     ];
 
-    const DARA_RESOURCE_TYPE = [
+    public const DARA_RESOURCE_TYPE = [
         'data' => [
             'type' => 'type_person',
-            'id' => null
-        ]
+            'id' => null,
+        ],
     ];
 
     /**
@@ -91,7 +92,7 @@ class PersonTest extends TestCase
             })->toArray(),
             'included' => [],
             'error' => false,
-            'message' => ''
+            'message' => '',
         ], $response->json());
     }
 
@@ -117,7 +118,7 @@ class PersonTest extends TestCase
                     'id' => $person->id,
                     'attributes' => Arr::only($person->toArray(), ['slug', 'name', 'bio']),
                     'relationships' => [
-                        'type' => Arr::add(self::DARA_RESOURCE_TYPE, 'data.id', $person->type_person_id)
+                        'type' => Arr::add(self::DARA_RESOURCE_TYPE, 'data.id', $person->type_person_id),
                     ],
                 ];
             })->toArray(),
@@ -125,11 +126,11 @@ class PersonTest extends TestCase
                 return [
                     'type' => 'type_person', 'id' => $type->id,
                     'attributes' => Arr::only($type->toArray(), ['slug', 'name']),
-                    'relationships' => []
+                    'relationships' => [],
                 ];
             })->unique()->sortBy('id')->values()->toArray(),
             'error' => false,
-            'message' => ''
+            'message' => '',
         ], $response->json());
     }
 
@@ -185,7 +186,7 @@ class PersonTest extends TestCase
         $person->refresh();
 
         $response = $this->getJson(
-            route('jp_realestate.api.person.show', $person->id) . "?with=type"
+            route('jp_realestate.api.person.show', $person->id) . '?with=type'
         );
 
         $response->assertStatus(Response::HTTP_OK);
@@ -194,18 +195,18 @@ class PersonTest extends TestCase
                 'type' => 'person', 'id' => $person->id,
                 'attributes' => Arr::only($person->toArray(), ['slug', 'name', 'bio']),
                 'relationships' => [
-                    'type' => Arr::add(self::DARA_RESOURCE_TYPE, 'data.id', $person->type_person_id)
+                    'type' => Arr::add(self::DARA_RESOURCE_TYPE, 'data.id', $person->type_person_id),
                 ],
             ],
             'included' => [
                 [
                     'type' => 'type_person', 'id' => $person->type_person_id,
                     'attributes' => Arr::only($person->type->toArray(), ['slug', 'name']),
-                    'relationships' => []
-                ]
+                    'relationships' => [],
+                ],
             ],
             'error' => false,
-            'message' => ''
+            'message' => '',
         ], $response->json());
     }
 
@@ -217,11 +218,11 @@ class PersonTest extends TestCase
      */
     public function storeWithSuccess()
     {
-        $typePerson = factory(TypePerson::class)->create(['name' => "Name of type person"]);
+        $typePerson = factory(TypePerson::class)->create(['name' => 'Name of type person']);
         $dataStore = [
             'type_person_id' => $typePerson->id,
-            'name' =>  $this->faker->name(),
-            'bio' => $this->faker->sentence(20)
+            'name' => $this->faker->name(),
+            'bio' => $this->faker->sentence(20),
         ];
 
         $response = $this->postJson(
@@ -247,7 +248,7 @@ class PersonTest extends TestCase
         $person = factory(Person::class)->create();
 
         $response = $this->patchJson(route('jp_realestate.api.person.update', $person->id), [
-            'name' => "Other name",
+            'name' => 'Other name',
             'bio' => 'test bio edit',
         ]);
 
@@ -255,7 +256,7 @@ class PersonTest extends TestCase
         $this->assertEquals(
             [
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.save')
+                'message' => Terminologies::get('all.resource.success.save'),
             ],
             $response->json()
         );
@@ -264,7 +265,7 @@ class PersonTest extends TestCase
             'id' => $person->id,
             'type_person_id' => $person->type_person_id,
             'slug' => Str::slug('Other name'),
-            'name' => "Other name",
+            'name' => 'Other name',
             'bio' => 'test bio edit',
         ], Arr::only($data, ['id', 'type_person_id', 'slug', 'name', 'bio']));
     }
@@ -284,7 +285,7 @@ class PersonTest extends TestCase
         $this->assertEquals(
             [
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.delete')
+                'message' => Terminologies::get('all.resource.success.delete'),
             ],
             $response->json()
         );
@@ -307,7 +308,7 @@ class PersonTest extends TestCase
         $this->assertEquals(
             [
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.delete_relationships')
+                'message' => Terminologies::get('all.resource.error.delete_relationships'),
             ],
             $response->json()
         );
@@ -324,7 +325,7 @@ class PersonTest extends TestCase
     {
         $typePerson = factory(TypePerson::class)->create();
         $data = [
-            'type_person_id' =>  $typePerson->id,
+            'type_person_id' => $typePerson->id,
             'name' => 'Test name',
             'bio' => 'test bio',
         ];
@@ -339,7 +340,6 @@ class PersonTest extends TestCase
             ['key' => 'bio', 'value' => Str::random(501)],
             ['key' => 'type_person_id', 'value' => null],
             ['key' => 'type_person_id', 'value' => Str::uuid()],
-
         ];
         foreach ($array_validation as $item) {
             $aux = $data;
@@ -351,7 +351,7 @@ class PersonTest extends TestCase
 
         $response = $this->patchJson(
             route('jp_realestate.api.person.update', $person->id),
-            ["name" => "Test name"]
+            ['name' => 'Test name']
         );
 
         $response->assertStatus(Response::HTTP_OK);

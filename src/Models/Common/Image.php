@@ -14,7 +14,7 @@ class Image extends Model
     public $table = 'images_realestate';
 
     protected $fillable = [
-        'way', 'alt', 'title', 'description', 'author'
+        'way', 'alt', 'title', 'description', 'author',
     ];
 
     protected $appends = ['way_url'];

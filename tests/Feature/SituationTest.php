@@ -28,9 +28,9 @@ class SituationTest extends TestCase
             'data' => [
                 [
                     'type', 'id',
-                    'attributes' => ['slug', 'name']
-                ]
-            ]
+                    'attributes' => ['slug', 'name'],
+                ],
+            ],
         ], $response->json());
     }
 
@@ -45,9 +45,9 @@ class SituationTest extends TestCase
         $response = $this->getJson(route('jp_realestate.api.situation.show', $situation->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
-            "data" => [
-                'type', 'id', 'attributes' => ['slug', 'name']
-            ]
+            'data' => [
+                'type', 'id', 'attributes' => ['slug', 'name'],
+            ],
         ], $response->json());
         $this->assertEquals([
             'type' => 'situation',
@@ -55,9 +55,10 @@ class SituationTest extends TestCase
             'attributes' => [
                 'slug' => $situation->slug,
                 'name' => Str::title($situation->name),
-            ]
+            ],
         ], $response->json()['data']);
     }
+
     /**
      * @test
      * @group situation
@@ -68,12 +69,12 @@ class SituationTest extends TestCase
         $response = $this->postJson(route('jp_realestate.api.situation.store'), ['name' => 'Test of name']);
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure(['data' => [
-            'type', 'id', 'attributes' => ['slug', 'name']
+            'type', 'id', 'attributes' => ['slug', 'name'],
         ], 'error', 'message']);
 
         $this->assertEquals(2, Situation::count());
-        $this->assertEquals("test-of-name", Situation::firstWhere('name', 'TEST OF NAME')->slug);
-        $this->assertEquals("TEST OF NAME", Situation::firstWhere('name', 'TEST OF NAME')->name);
+        $this->assertEquals('test-of-name', Situation::firstWhere('name', 'TEST OF NAME')->slug);
+        $this->assertEquals('TEST OF NAME', Situation::firstWhere('name', 'TEST OF NAME')->name);
     }
 
     /**
@@ -89,7 +90,7 @@ class SituationTest extends TestCase
             ['name' => 'Test of name2']
         );
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals("test-of-name2", Situation::firstWhere('name', 'TEST OF NAME2')->slug);
+        $this->assertEquals('test-of-name2', Situation::firstWhere('name', 'TEST OF NAME2')->slug);
     }
 
     /**

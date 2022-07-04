@@ -8,8 +8,8 @@ use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 class ImagePropertyObserver
 {
-    const COLUMN_ORDER_IMAGE = "order";
-    const COLUMN_ID_PROPERTY = "property_id";
+    public const COLUMN_ORDER_IMAGE = 'order';
+    public const COLUMN_ID_PROPERTY = 'property_id';
 
     public function deleting(ImageProperty $imageProperty)
     {

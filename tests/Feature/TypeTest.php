@@ -25,7 +25,7 @@ class TypeTest extends TestCase
         $response = $this->getJson(route('jp_realestate.api.type.index'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
-            'data' => [['type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types']]]
+            'data' => [['type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types']]],
         ], $response->json());
     }
 
@@ -39,9 +39,9 @@ class TypeTest extends TestCase
         $response = $this->getJson(route('jp_realestate.api.type.show', $type->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
-            "data" => [
-                'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types']
-            ]
+            'data' => [
+                'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types'],
+            ],
         ], $response->json());
         $this->assertEquals([
             'type' => 'type',
@@ -49,9 +49,10 @@ class TypeTest extends TestCase
             'attributes' => [
                 'slug' => $type->slug,
                 'name' => Str::title($type->name),
-            ], 'relationships' => ['sub_types' => ['data' => []]]
+            ], 'relationships' => ['sub_types' => ['data' => []]],
         ], $response->json()['data']);
     }
+
     /**
      * @test
      * @group type
@@ -61,10 +62,10 @@ class TypeTest extends TestCase
         $response = $this->postJson(route('jp_realestate.api.type.store'), ['name' => 'Test of name']);
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure(['data' => [
-            'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types' => ['data' => []]]
+            'type', 'id', 'attributes' => ['slug', 'name'], 'relationships' => ['sub_types' => ['data' => []]],
         ], 'error', 'message']);
-        $this->assertEquals("test-of-name", Type::first()->slug);
-        $this->assertEquals("TEST OF NAME", Type::first()->name);
+        $this->assertEquals('test-of-name', Type::first()->slug);
+        $this->assertEquals('TEST OF NAME', Type::first()->name);
     }
 
     /**
@@ -79,7 +80,7 @@ class TypeTest extends TestCase
             ['name' => 'Test of name2']
         );
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals("test-of-name2", Type::first()->slug);
+        $this->assertEquals('test-of-name2', Type::first()->slug);
     }
 
     /**

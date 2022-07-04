@@ -7,14 +7,13 @@ use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 
 class AppSettings extends Model
 {
-    const NAME_KEY_ROUTE = 'name';
-
     use UsesUuid;
+    public const NAME_KEY_ROUTE = 'name';
 
     protected $fillable = ['name', 'value'];
 
     protected $casts = [
-        'value' => 'array'
+        'value' => 'array',
     ];
 
     public function getValueAttribute($value)

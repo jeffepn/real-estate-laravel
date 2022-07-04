@@ -26,7 +26,7 @@ class PropertyController extends Controller
     {
         try {
             $paginate = request()->paginate;
-            $properties = Property::select('properties.*')->orderBy('code', "desc");
+            $properties = Property::select('properties.*')->orderBy('code', 'desc');
             if (request()->search) {
                 $properties->search(request()->search);
             }
@@ -36,10 +36,11 @@ class PropertyController extends Controller
                 $paginate ? $properties->paginate($paginate) : $properties->get()
             );
         } catch (\Throwable $th) {
-            Log::error("Error index PropertyController", [$th->getTraceAsString()]);
+            Log::error('Error index PropertyController', [$th->getTraceAsString()]);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.property.error_index')
+                'message' => Terminologies::get('all.property.error_index'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -61,13 +62,91 @@ class PropertyController extends Controller
             if ($request->has('businesses')) {
                 $this->updateBusinessesOfProperty($property, $request->all());
             }
+
             return (new PropertyResource($property->refresh(), Terminologies::get('all.common.save_data')))
                 ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (\Throwable $th) {
-            Log::error("Error store PropertyController", [$th->getTraceAsString()]);
+            Log::error('Error store PropertyController', [$th->getTraceAsString()]);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.common.error_save_data')
+                'message' => Terminologies::get('all.common.error_save_data'),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Property $property): JsonResource
+    {
+        return new PropertyResource($property);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdatePropertyRequest $request, Property $property): Response
+    {
+        try {
+            if ($request->has('businesses')) {
+                $this->updateBusinessesOfProperty($property, $request->all());
+            }
+            $property->updateAddres($request->all());
+            $property->update($request->getData());
+
+            return response([
+                'error' => false,
+                'message' => Terminologies::get('all.common.save_data'),
+            ]);
+        } catch (\Throwable $th) {
+            Log::error('Error update PropertyController', [$th->getTraceAsString()]);
+
+            return response([
+                'error' => true,
+                'message' => Terminologies::get('all.common.error_save_data'),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function activeOrInactive(Request $request, Property $property): Response
+    {
+        try {
+            $this->validate($request, ['active' => 'required|boolean']);
+            $property->update(['active' => $request->active]);
+
+            return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')]);
+        } catch (\Throwable $th) {
+            Log::error('Error activeOrInactive PropertyController', [$th->getTraceAsString()]);
+
+            return response([
+                'error' => true,
+                'message' => Terminologies::get('all.property.not_publish_without_dependences'),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Property $property): Response
+    {
+        try {
+            return $property->delete()
+                ? response()->noContent(Response::HTTP_OK)
+                : response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], Response::HTTP_BAD_REQUEST);
+        } catch (\Throwable $th) {
+            Log::error('Error destroy PropertyController', [$th->getTraceAsString()]);
+
+            return response([
+                'error' => true,
+                'message' => Terminologies::get('all.property.not_delete'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -96,77 +175,5 @@ class PropertyController extends Controller
                     $businessProperty->delete();
                 }
             });
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Property  $property
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Property $property): JsonResource
-    {
-        return new PropertyResource($property);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePropertyRequest $request, Property $property): Response
-    {
-        try {
-
-            if ($request->has('businesses')) {
-                $this->updateBusinessesOfProperty($property, $request->all());
-            }
-            $property->updateAddres($request->all());
-            $property->update($request->getData());
-            return response([
-                'error' => false,
-                'message' => Terminologies::get('all.common.save_data')
-            ]);
-        } catch (\Throwable $th) {
-            Log::error("Error update PropertyController", [$th->getTraceAsString()]);
-            return response([
-                'error' => true,
-                'message' => Terminologies::get('all.common.error_save_data')
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public function activeOrInactive(Request $request, Property $property): Response
-    {
-        try {
-            $this->validate($request, ["active" => "required|boolean"]);
-            $property->update(['active' => $request->active]);
-            return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')]);
-        } catch (\Throwable $th) {
-            Log::error("Error activeOrInactive PropertyController", [$th->getTraceAsString()]);
-            return response([
-                'error' => true,
-                'message' => Terminologies::get('all.property.not_publish_without_dependences')
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Property  $property
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Property $property): Response
-    {
-        try {
-            return $property->delete()
-                ? response()->noContent(Response::HTTP_OK)
-                : response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], Response::HTTP_BAD_REQUEST);
-        } catch (\Throwable $th) {
-            Log::error("Error destroy PropertyController", [$th->getTraceAsString()]);
-            return response([
-                'error' => true,
-                'message' => Terminologies::get('all.property.not_delete')
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
     }
 }

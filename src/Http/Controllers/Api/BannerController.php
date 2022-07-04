@@ -21,7 +21,7 @@ class BannerController extends Controller
      */
     public function index()
     {
-        return new BannerCollection(Banner::orderBy('created_at', "desc")->get());
+        return new BannerCollection(Banner::orderBy('created_at', 'desc')->get());
     }
 
     /**
@@ -44,6 +44,7 @@ class BannerController extends Controller
                 return (new BannerResource($banner->refresh(), Terminologies::get('all.common.save_data')))
                     ->response()->setStatusCode(Response::HTTP_CREATED);
             }
+
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
@@ -79,6 +80,7 @@ class BannerController extends Controller
             if ($banner->update($data)) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
+
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
@@ -97,6 +99,7 @@ class BannerController extends Controller
             if ($banner->delete()) {
                 return response()->noContent(Response::HTTP_OK);
             }
+
             return response(['error' => true, 'message' => Terminologies::get('all.property.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);

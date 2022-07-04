@@ -2,7 +2,6 @@
 
 namespace Jeffpereira\RealEstate\Http\Resources\Project;
 
-use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Resources\BaseResource;
 
 class ImageProjectResource extends BaseResource
@@ -25,7 +24,7 @@ class ImageProjectResource extends BaseResource
                 'description' => $this->image->description,
                 'author' => $this->image->author,
             ],
-            'relationships' => []
+            'relationships' => [],
         ];
     }
 }

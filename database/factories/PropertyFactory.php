@@ -7,10 +7,6 @@ use Faker\Generator as Faker;
 use Jeffpereira\RealEstate\Models\Property\Situation;
 use Jeffpereira\RealEstate\Models\Property\SubType;
 use JPAddress\Models\Address\Address;
-use JPAddress\Models\Address\City;
-use JPAddress\Models\Address\Country;
-use JPAddress\Models\Address\Neighborhood;
-use JPAddress\Models\Address\State;
 
 $factory->define(Property::class, function (Faker $faker) {
     return [
@@ -25,18 +21,18 @@ $factory->define(Property::class, function (Faker $faker) {
         'sub_type_id' => function () {
             return factory(SubType::class)->create()->id;
         },
-        'min_description' => $faker->sentence(4, true)
+        'min_description' => $faker->sentence(4, true),
     ];
 });
 
 $factory->state(Property::class, 'active', function (Faker $faker) {
     return [
-        'active' => true
+        'active' => true,
     ];
 });
 
 $factory->state(Property::class, 'inactive', function (Faker $faker) {
     return [
-        'active' => false
+        'active' => false,
     ];
 });

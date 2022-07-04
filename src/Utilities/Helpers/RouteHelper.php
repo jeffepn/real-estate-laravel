@@ -10,14 +10,15 @@ class RouteHelper
     {
         $routes = [
             'Imóveis' => 'jp_realestate.property.index',
-            'Projetos' => 'jp_realestate.project.index'
+            'Projetos' => 'jp_realestate.project.index',
         ];
+
         return collect($routes)->map(function ($route, $name) {
             return [
                 'slug' => Str::slug($name),
                 'title' => $name,
                 'url' => route($route),
-                'path' => route($route, [], false)
+                'path' => route($route, [], false),
             ];
         })->toArray();
     }

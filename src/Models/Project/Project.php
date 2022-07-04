@@ -11,16 +11,19 @@ use Illuminate\Support\Str;
 
 class Project extends Model
 {
-    use UsesUuid, SetSlugByName, Relationships, Scopes;
+    use UsesUuid;
+    use SetSlugByName;
+    use Relationships;
+    use Scopes;
 
     protected $fillable = [
-        'person_id', 'name', 'content'
+        'person_id', 'name', 'content',
     ];
 
     public function generateAltImage()
     {
         return sprintf(
-            "%s de %s",
+            '%s de %s',
             Str::title($this->name),
             Str::title($this->responsible->name),
         );

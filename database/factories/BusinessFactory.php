@@ -8,6 +8,6 @@ use Illuminate\Support\Str;
 
 $factory->define(Business::class, function (Faker $faker) {
     return [
-        'name' => Str::limit($faker->unique()->name(), 30, '')
+        'name' => Str::limit($faker->unique()->name(), 30, ''),
     ];
 });

@@ -32,16 +32,17 @@ trait TreatmentImages
 
         $img->encode('jpg', $optmize ? 60 : 100);
 
-        $nameImage =  $path . '/' . Str::slug($altImage) .  Str::uuid() . '.jpg';
+        $nameImage = $path . '/' . Str::slug($altImage) . Str::uuid() . '.jpg';
         Storage::disk($disk)->put($nameImage, $img);
+
         return $nameImage;
     }
 
     private function insertWatterMark(string $entity, InterventionImage $img): InterventionImage
     {
-
         $appSetting = AppSettings::whereName(AppSettingsEnum::translateEntity($entity))
             ->first();
+
         return $appSetting
             ? $img->insert(
                 $this->formatImageInserWatterMark($appSetting, $img->height()),

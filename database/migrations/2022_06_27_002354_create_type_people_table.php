@@ -15,15 +15,15 @@ class CreateTypePeopleTable extends Migration
     public function up()
     {
         Schema::create('type_people', function (Blueprint $table) {
-            $table->engine = "InnoDB";
+            $table->engine = 'InnoDB';
             $table->uuid('id')->primary();
             $table->string('slug', 30);
             $table->string('name', 30)->unique();
             $table->timestamps();
         });
 
-        if (env("DB_CONNECTION") != "sqlite") {
-            DB::statement("ALTER TABLE type_people ADD FULLTEXT fulltexttype_people_index (name)");
+        if (env('DB_CONNECTION') != 'sqlite') {
+            DB::statement('ALTER TABLE type_people ADD FULLTEXT fulltexttype_people_index (name)');
         }
     }
 

@@ -5,6 +5,11 @@ scripts:
   node: kool docker kooldev/node:14 node
   phpunit: kool exec app ./vendor/bin/phpunit
   phpunitwatch: kool exec app ./vendor/bin/phpunit-watcher watch
+  pipeline:
+    - kool run php-cs-fixer
+    - kool run phpcbf
+    - kool run phpstan
+    - kool run phpunit
   node-setup:
     - kool run yarn install
     - kool run yarn dev
@@ -19,3 +24,7 @@ scripts:
     - kool run artisan key:generate
     - kool run node-setup
   yarn: kool docker kooldev/node:14 yarn
+  phpqa: kool docker kooldev/phpqa:8.0
+  php-cs-fixer: kool run phpqa php-cs-fixer fix --diff
+  phpstan: kool docker ghcr.io/phpstan/phpstan --memory-limit=-1 analyse
+  phpcbf: kool run phpqa phpcbf

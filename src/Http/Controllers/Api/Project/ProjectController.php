@@ -23,23 +23,26 @@ class ProjectController extends Controller
     {
         try {
             $paginate = request()->paginate;
-            $projects = Project::select('projects.*')->orderBy("name");
+            $projects = Project::select('projects.*')->orderBy('name');
 
             if (request()->search) {
                 $projects->search(request()->search);
             }
             $projects->distinct(['projects.id']);
 
-            if (request()->with) $projects->with(explode(',', request()->with));
+            if (request()->with) {
+                $projects->with(explode(',', request()->with));
+            }
 
             return new ProjectCollection(
                 $paginate ? $projects->paginate($paginate) : $projects->get()
             );
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.property.error_index')
+                'message' => Terminologies::get('all.property.error_index'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -55,9 +58,12 @@ class ProjectController extends Controller
         try {
             $project = Project::create($request->all());
 
-            if (!$project) throw new Exception();
+            if (!$project) {
+                throw new Exception();
+            }
 
             $project->loadMissing('responsible');
+
             return new ProjectResource(
                 $project,
                 Terminologies::get('all.common.save_data'),
@@ -65,9 +71,10 @@ class ProjectController extends Controller
             );
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.common.error_save_data')
+                'message' => Terminologies::get('all.common.error_save_data'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -80,7 +87,10 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        if (request()->with) $project->loadMissing(explode(',', request()->with));
+        if (request()->with) {
+            $project->loadMissing(explode(',', request()->with));
+        }
+
         return new ProjectResource($project);
     }
 
@@ -95,15 +105,17 @@ class ProjectController extends Controller
     {
         try {
             $project->update($request->all());
+
             return response([
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.save')
+                'message' => Terminologies::get('all.resource.success.save'),
             ]);
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.save')
+                'message' => Terminologies::get('all.resource.error.save'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -117,17 +129,20 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         try {
-            if (!$project->delete()) throw new Exception();
+            if (!$project->delete()) {
+                throw new Exception();
+            }
 
             return response([
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.delete')
+                'message' => Terminologies::get('all.resource.success.delete'),
             ]);
         } catch (\Throwable $th) {
             $this->registerError($th);
+
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.resource.error.delete')
+                'message' => Terminologies::get('all.resource.error.delete'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -14,11 +13,11 @@ class AddSearchInEntities extends Migration
      */
     public function up()
     {
-        if (env("DB_CONNECTION") != "sqlite") {
-            DB::statement("ALTER TABLE businesses ADD FULLTEXT fulltextbusinesses_index (name)");
-            DB::statement("ALTER TABLE types ADD FULLTEXT fulltexttypes_index (name)");
-            DB::statement("ALTER TABLE sub_types ADD FULLTEXT fulltextsub_types_index (name)");
-            DB::statement("ALTER TABLE situations ADD FULLTEXT fulltextsituations_index (name)");
+        if (env('DB_CONNECTION') != 'sqlite') {
+            DB::statement('ALTER TABLE businesses ADD FULLTEXT fulltextbusinesses_index (name)');
+            DB::statement('ALTER TABLE types ADD FULLTEXT fulltexttypes_index (name)');
+            DB::statement('ALTER TABLE sub_types ADD FULLTEXT fulltextsub_types_index (name)');
+            DB::statement('ALTER TABLE situations ADD FULLTEXT fulltextsituations_index (name)');
         }
     }
 
@@ -29,7 +28,7 @@ class AddSearchInEntities extends Migration
      */
     public function down()
     {
-        if (env("DB_CONNECTION") != "sqlite") {
+        if (env('DB_CONNECTION') != 'sqlite') {
             Schema::table('businesses', function ($table) {
                 $table->dropIndex('fulltextbusinesses_index');
             });

@@ -7,7 +7,7 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class PropertyObserver
 {
-    const COLUMN_CODE = "code";
+    public const COLUMN_CODE = 'code';
 
     public function deleting(Property $property)
     {
@@ -39,6 +39,7 @@ class PropertyObserver
         if (!$property->active || ($haveBusinessesProperty && $haveMedia)) {
             return true;
         }
+
         throw new \Exception(Terminologies::get('all.property.not_publish_without_dependences'));
     }
 }

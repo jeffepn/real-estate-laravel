@@ -35,6 +35,7 @@ class BusinessController extends Controller
                 return (new BusinessResource($business, Terminologies::get('all.common.save_data')))
                     ->response()->setStatusCode(Response::HTTP_CREATED);
             }
+
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
@@ -65,6 +66,7 @@ class BusinessController extends Controller
             if ($business->update($request->all())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
+
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
@@ -83,6 +85,7 @@ class BusinessController extends Controller
             if ($business->delete()) {
                 return response()->noContent(Response::HTTP_OK);
             }
+
             return response(['error' => true, 'message' => Terminologies::get('all.business.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);

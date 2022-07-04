@@ -7,7 +7,6 @@ use Illuminate\Validation\Rule;
 
 class UpdateProjectRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -16,9 +15,9 @@ class UpdateProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["bail", "sometimes", "required", "min:3", "max:150", Rule::unique('projects')->ignore($this->project)],
-            "content" => "bail|sometimes|required",
-            "person_id" => "bail|sometimes|required|uuid|exists:people,id",
+            'name' => ['bail', 'sometimes', 'required', 'min:3', 'max:150', Rule::unique('projects')->ignore($this->project)],
+            'content' => 'bail|sometimes|required',
+            'person_id' => 'bail|sometimes|required|uuid|exists:people,id',
         ];
     }
 
@@ -27,12 +26,12 @@ class UpdateProjectRequest extends FormRequest
         return [
             'min' => 'O campo deve ter no mínimo :min caracteres.',
             'max' => 'Limite o campo a no máximo :max caracteres.',
-            "name.required" => 'O projeto precisa de um nome.',
-            "name.unique" => 'Já existe um projeto com este nome.',
-            "person_id.exists" => 'Forneça um id de responsável válido.',
-            "person_id.uuid" => 'Forneça um id de responsável válido.',
-            "person_id.required" => 'Forneça um id de responsável válido.',
-            "content.required" => 'Forneça um conteúdo para o projeto.',
+            'name.required' => 'O projeto precisa de um nome.',
+            'name.unique' => 'Já existe um projeto com este nome.',
+            'person_id.exists' => 'Forneça um id de responsável válido.',
+            'person_id.uuid' => 'Forneça um id de responsável válido.',
+            'person_id.required' => 'Forneça um id de responsável válido.',
+            'content.required' => 'Forneça um conteúdo para o projeto.',
         ];
     }
 }

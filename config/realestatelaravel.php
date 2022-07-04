@@ -46,5 +46,5 @@ return [
      *  When `use_template` is true, it may be necessary to have a url to go
      *  back to a different admin area, this url will be added to the `General Panel` menu item
      */
-    'url_home' => env('RE_URL_HOME', null)
+    'url_home' => env('RE_URL_HOME', null),
 ];

@@ -12,7 +12,7 @@ class ImageProject extends Model
     use UsesUuid;
 
     protected $fillable = [
-        'project_id', 'image_id'
+        'project_id', 'image_id',
     ];
 
     public function image(): BelongsTo

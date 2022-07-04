@@ -10,7 +10,7 @@ class BusinessProperty extends Pivot
 {
     use UsesUuid;
 
-    protected $table = "business_properties";
+    protected $table = 'business_properties';
 
     protected $guarded = [];
 

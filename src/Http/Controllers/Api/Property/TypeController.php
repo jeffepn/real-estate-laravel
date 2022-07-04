@@ -19,7 +19,7 @@ class TypeController extends Controller
      */
     public function index()
     {
-        return new TypeCollection(Type::orderBy("name", "asc")->get());
+        return new TypeCollection(Type::orderBy('name', 'asc')->get());
     }
 
     /**
@@ -35,6 +35,7 @@ class TypeController extends Controller
                 return (new TypeResource($type, Terminologies::get('all.common.save_data')))
                     ->response()->setStatusCode(Response::HTTP_CREATED);
             }
+
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -65,6 +66,7 @@ class TypeController extends Controller
             if ($type->update($request->all())) {
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
+
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
@@ -86,6 +88,7 @@ class TypeController extends Controller
             if ($type->delete()) {
                 return response()->noContent(Response::HTTP_OK);
             }
+
             return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return response(['error' => true, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);

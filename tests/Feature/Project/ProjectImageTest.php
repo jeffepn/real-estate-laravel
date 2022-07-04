@@ -7,38 +7,35 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Jeffpereira\RealEstate\Models\Person\Person;
-use Jeffpereira\RealEstate\Models\Person\TypePerson;
 use Jeffpereira\RealEstate\Models\Project\ImageProject;
 use Jeffpereira\RealEstate\Models\Project\Project;
 use Jeffpereira\RealEstate\Tests\TestCase;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
-use Prophecy\Promise\ReturnPromise;
 
 class ProjectImageTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
-    const FORMAT_RESOURCE = [
+    public const FORMAT_RESOURCE = [
         'type', 'id',
         'attributes' => [
-            'slug', "name", "content"
+            'slug', 'name', 'content',
         ],
         'relationships' => [],
     ];
-    const FORMAT_RESOURCE_INDEX = [
+    public const FORMAT_RESOURCE_INDEX = [
         'data' => [
             [
                 'type', 'id',
                 'attributes' => [
-                    'way', "alt", "title", "description", "author"
+                    'way', 'alt', 'title', 'description', 'author',
                 ],
                 'relationships' => [],
-            ]
+            ],
         ],
-        'included', 'error', 'message'
+        'included', 'error', 'message',
     ];
 
     /**
@@ -76,9 +73,9 @@ class ProjectImageTest extends TestCase
                 'images' => [
                     [
                         'image' => UploadedFile::fake()->image('avatar.jpg', 400, 400)->size(100),
-                        'alt' => 'teste'
-                    ]
-                ]
+                        'alt' => 'teste',
+                    ],
+                ],
             ]
         );
 
@@ -104,7 +101,7 @@ class ProjectImageTest extends TestCase
             })->toArray(),
             'included' => [],
             'error' => false,
-            'message' => Terminologies::get('all.resource.success.save')
+            'message' => Terminologies::get('all.resource.success.save'),
         ], $response->json());
     }
 
@@ -123,7 +120,7 @@ class ProjectImageTest extends TestCase
         $this->assertEquals(
             [
                 'error' => false,
-                'message' => Terminologies::get('all.resource.success.delete')
+                'message' => Terminologies::get('all.resource.success.delete'),
             ],
             $response->json()
         );
@@ -140,7 +137,7 @@ class ProjectImageTest extends TestCase
     {
         $project = factory(Project::class)->create();
         $data = [
-            'project_id' =>  $project->id,
+            'project_id' => $project->id,
             'images' => [
                 [
                     'image' => UploadedFile::fake()->image('avatar.jpg', 400, 400)->size(100),
@@ -148,7 +145,7 @@ class ProjectImageTest extends TestCase
                     'title' => $this->faker->sentence(4),
                     'description' => $this->faker->sentence(4),
                     'author' => $this->faker->sentence(4),
-                ]
+                ],
             ],
         ];
         $response = $this->postJson(route('jp_realestate.api.image_project.store'), $data);
@@ -163,7 +160,6 @@ class ProjectImageTest extends TestCase
             ['key' => 'images.0.title', 'value' => Str::random(256)],
             ['key' => 'images.0.description', 'value' => Str::random(256)],
             ['key' => 'images.0.author', 'value' => Str::random(256)],
-
         ];
         foreach ($array_validation as $item) {
             $aux = $data;

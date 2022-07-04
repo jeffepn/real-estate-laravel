@@ -8,8 +8,8 @@ class AppSettingsEnum
 {
     public const WATTERMARK_IMAGE_PROPERTY = 'wattermark_image_property';
     public const WATTERMARK_IMAGE_PROJECT = 'wattermark_image_project';
-    private const SLUG_PROPERTY = "properties";
-    private const SLUG_PROJECT = "projects";
+    private const SLUG_PROPERTY = 'properties';
+    private const SLUG_PROJECT = 'projects';
 
     private const TRANSLATE = [
         self::SLUG_PROPERTY => self::WATTERMARK_IMAGE_PROPERTY,

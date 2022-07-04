@@ -15,7 +15,7 @@ class CreatePeopleTable extends Migration
     public function up()
     {
         Schema::create('people', function (Blueprint $table) {
-            $table->engine = "InnoDB";
+            $table->engine = 'InnoDB';
             $table->uuid('id')->primary();
             $table->string('type_person_id', 36);
             $table->foreign('type_person_id')
@@ -27,8 +27,8 @@ class CreatePeopleTable extends Migration
             $table->timestamps();
         });
 
-        if (env("DB_CONNECTION") != "sqlite") {
-            DB::statement("ALTER TABLE people ADD FULLTEXT fulltextpeople_index (name, bio)");
+        if (env('DB_CONNECTION') != 'sqlite') {
+            DB::statement('ALTER TABLE people ADD FULLTEXT fulltextpeople_index (name, bio)');
         }
     }
 

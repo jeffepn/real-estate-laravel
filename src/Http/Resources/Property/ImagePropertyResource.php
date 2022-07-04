@@ -3,8 +3,6 @@
 namespace Jeffpereira\RealEstate\Http\Resources\Property;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ImagePropertyResource extends JsonResource
 {
@@ -42,14 +40,15 @@ class ImagePropertyResource extends JsonResource
                 'way' => $this->way_url,
                 'alt' => $this->alt,
                 'order' => $this->order,
-            ]
+            ],
         ];
     }
+
     public function with($request)
     {
         return [
             'error' => false,
-            'message' => $this->message
+            'message' => $this->message,
         ];
     }
 }

@@ -12,6 +12,6 @@ $factory->define(Project::class, function (Faker $faker) {
         'content' => $faker->sentence(rand(40, 100)),
         'person_id' => function () {
             return factory(Person::class)->create()->id;
-        }
+        },
     ];
 });
