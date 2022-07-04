@@ -12,7 +12,7 @@ export default {
     };
   },
   mounted() {
-    this.$eventBus.$on("loading-container-master", (loading) => {
+    window.eventBus.$on("loading-container-master", (loading) => {
       this.visible = loading;
     });
   },

@@ -3,9 +3,9 @@
     <div class="col">
       <re-select
         v-model="selected"
-        :data="subTypes"
+        :data="people"
         :select-first="true"
-        placeholder="Sub Tipo"
+        placeholder="Pessoa"
         :error="error"
         :error-message="errorMessage"
       ></re-select>
@@ -14,23 +14,22 @@
       <button
         type="button"
         class="btn btn-primary btn-circle btn-sm ms-2"
-        data-bs-toggle="tooltip"
-        data-bs-placement="bottom"
-        title="Caso não encontre um Sub Tipo, cadastre outro."
         @click.prevent="showModal = true"
         v-if="create"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        title="Caso não encontre uma Pessoa, cadastre outra."
       >
         <i class="fas fa-plus"></i>
       </button>
     </div>
     <re-modal
-      title="Adicionar novo Sub Tipo"
+      title="Adicionar nova Pessoa "
       :show="showModal"
-      @close="closeModalAddSubType"
+      @close="closeModalAddPerson"
       :footer="false"
     >
-      <re-add-sub-type :show="showModal" @submitSuccess="submitSuccess">
-      </re-add-sub-type>
+      <re-add-person @submitSuccess="submitSuccess" />
     </re-modal>
   </div>
 </template>
@@ -38,12 +37,13 @@
 <script>
 import ReSelect from "@/components/Controls/Inputs/Select";
 import ReModal from "@/components/Modal";
-import ReAddSubType from "@/components/Forms/AddSubType";
+import ReAddPerson from "@/components/Forms/AddPerson";
 export default {
+  name: "ChoosePerson",
   components: {
     ReSelect,
     ReModal,
-    ReAddSubType,
+    ReAddPerson,
   },
   props: {
     value: {
@@ -58,7 +58,7 @@ export default {
       type: String,
       default: "",
     },
-    typeId: {
+    typePersonId: {
       type: String,
       default: null,
     },
@@ -75,9 +75,9 @@ export default {
     };
   },
   computed: {
-    subTypes() {
+    people() {
       return this.data.reduce((acumulator, currentValue) => {
-        if (currentValue.relationships.type.data.id === this.typeId) {
+        if (currentValue.relationships.type.data.id === this.typePersonId) {
           acumulator.push({
             value: currentValue.id,
             label: currentValue.attributes.name,
@@ -97,27 +97,29 @@ export default {
   },
   methods: {
     async getData() {
-      await reaxios(window.reroute("jp_realestate.api.sub_type.index")).then(
-        ({ data }) => {
-          this.data = data.data;
+      await reaxios(window.reroute("jp_realestate.api.person.index"), {
+        params: {
+          with: "type",
         },
-      );
+      }).then(({ data }) => {
+        this.data = data.data;
+      });
     },
     submitSuccess() {
       this.getData();
     },
-    closeModalAddSubType() {
+    closeModalAddPerson() {
       this.showModal = false;
-      window.eventBus.$emit("clear-add-sub-type");
+      window.eventBus.$emit("clear-add-person");
     },
   },
-  async created() {
+  async beforeMount() {
     await this.getData();
-    if (this.value) {
-      this.selected = this.value;
-    }
   },
   mounted() {
+    window.eventBus.$on("reload-add-person", () => {
+      this.getData();
+    });
     window.retooltip();
   },
 };

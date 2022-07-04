@@ -23,7 +23,7 @@ export default {
     };
   },
   mounted() {
-    this.$eventBus.$on("add-toast-master", this.addToast);
+    window.eventBus.$on("add-toast-master", this.addToast);
   },
   methods: {
     addToast({ data }) {

@@ -21,8 +21,7 @@ class BaseResourceCollection extends ResourceCollection
         $this->includes = collect([]);
 
         if ($code) $this->response()->setStatusCode($code);
-        //dd($message);
-        //dd($this->response()->status(), $code);
+
         $this->additional([
             'error' => false,
             'message' => $message

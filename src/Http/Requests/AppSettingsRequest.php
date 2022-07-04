@@ -57,4 +57,12 @@ class AppSettingsRequest extends FormRequest
             'image_watter' => 'required|image|mimes:jpeg,png|max:300'
         ];
     }
+
+    private function rulesWattermarkImageProject(): array
+    {
+        return [
+            'name' => ['required', Rule::unique('app_settings')->ignore($this->app_setting), 'max:255', Rule::in(AppSettingsEnum::getAll())],
+            'image_watter' => 'required|image|mimes:jpeg,png|max:300'
+        ];
+    }
 }

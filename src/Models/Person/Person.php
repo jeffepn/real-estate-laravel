@@ -13,9 +13,4 @@ class Person extends Model
     use UsesUuid, SetSlugByName, Relationships, Scopes;
 
     protected $fillable = ['type_person_id', 'name', 'bio'];
-
-    public function canDelete()
-    {
-        # code...
-    }
 }

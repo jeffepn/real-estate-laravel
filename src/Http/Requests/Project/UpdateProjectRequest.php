@@ -17,7 +17,7 @@ class UpdateProjectRequest extends FormRequest
     {
         return [
             "name" => ["bail", "sometimes", "required", "min:3", "max:150", Rule::unique('projects')->ignore($this->project)],
-            "content" => ["bail", "nullable"],
+            "content" => "bail|sometimes|required",
             "person_id" => "bail|sometimes|required|uuid|exists:people,id",
         ];
     }
@@ -32,6 +32,7 @@ class UpdateProjectRequest extends FormRequest
             "person_id.exists" => 'Forneça um id de responsável válido.',
             "person_id.uuid" => 'Forneça um id de responsável válido.',
             "person_id.required" => 'Forneça um id de responsável válido.',
+            "content.required" => 'Forneça um conteúdo para o projeto.',
         ];
     }
 }

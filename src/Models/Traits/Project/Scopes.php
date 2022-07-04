@@ -18,7 +18,7 @@ trait Scopes
                 [$search]
             )
             ->orWhereRaw(
-                'MATCH(people.name. people.bio) AGAINST(?)',
+                'MATCH(people.name, people.bio) AGAINST(?)',
                 [$search]
             )->orWhereRaw(
                 'MATCH(type_people.name) AGAINST(?)',

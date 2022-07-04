@@ -14,7 +14,7 @@ trait Errors
         $method = __METHOD__;
         Log::error(
             "Error in method {$method} of {$controller}",
-            [$ex->getTraceAsString()]
+            $ex->getTrace()
         );
     }
 }

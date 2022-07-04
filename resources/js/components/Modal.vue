@@ -21,7 +21,7 @@
               class="btn btn-secondary"
               data-bs-dismiss="modal"
               v-text="textButtonCancel"
-              @click="$emit('cancel')"
+              @click="cancel"
             ></button>
           </slot>
           <slot v-if="buttonOk" name="button-ok">
@@ -107,6 +107,10 @@ export default {
     },
     close() {
       this.$emit("close");
+    },
+    cancel() {
+      this.$emit("close");
+      this.$emit("cancel");
     },
   },
 };

@@ -101,14 +101,14 @@ export default {
     },
     closeModalAddType() {
       this.showModal = false;
-      this.$eventBus.$emit("clear-add-type");
+      window.eventBus.$emit("clear-add-type");
     },
   },
   async beforeMount() {
     await this.getData();
   },
   mounted() {
-    this.$eventBus.$on("reload-add-type", () => {
+    window.eventBus.$on("reload-add-type", () => {
       this.getData();
     });
     window.retooltip();

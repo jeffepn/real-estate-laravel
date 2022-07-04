@@ -11,6 +11,7 @@ $factory->define(Person::class, function (Faker $faker) {
         'name' => $faker->name(),
         'type_person_id' => function () {
             return factory(TypePerson::class)->create()->id;
-        }
+        },
+        'bio' => $faker->sentence(4)
     ];
 });

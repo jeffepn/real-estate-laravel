@@ -1,6 +1,4 @@
 import Vue from "vue";
-window.eventBus = new Vue();
-Vue.prototype.$eventBus = window.eventBus;
 
 import axios from "axios";
 axios.defaults.headers.common = {

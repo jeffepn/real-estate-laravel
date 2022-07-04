@@ -1,4 +1,8 @@
 import Vue from "vue";
+
+window.eventBus = new Vue();
+//Vue.prototype.$eventBus = window.eventBus;
+
 // Template
 import "bootstrap/dist/css/bootstrap.min.css";
 

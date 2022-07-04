@@ -40,8 +40,14 @@
 
 <script>
 import Form from "@/supports/form.js";
-import { WATTERMARK_IMAGE_PROPERTY } from "@/enums/app_settings.js";
+import { resolveSettingsWattermark } from "@/enums/app_settings.js";
 export default {
+  props: {
+    entity: {
+      type: String,
+      default: null,
+    },
+  },
   computed: {
     existWatterMark() {
       return this.watterMark ? true : false;
@@ -57,12 +63,13 @@ export default {
     urlPostImage() {
       return this.edit
         ? reroute("jp_realestate.api.app_setting.update", [
-            WATTERMARK_IMAGE_PROPERTY,
+            this.settingsWattermark,
           ])
         : reroute("jp_realestate.api.app_setting.store");
     },
   },
   data: () => ({
+    settingsWattermark: "",
     watterMark: null,
     functionUpload: "add",
     headers: {
@@ -73,7 +80,7 @@ export default {
     form: new Form({}),
   }),
   methods: {
-    upload() {},
+    resolveSettingsWattermark,
     setOptionFunctionUpload(option = "add") {
       this.functionUpload = option;
     },
@@ -89,13 +96,20 @@ export default {
         .catch(({ response }) => {
           if (response && response.status === 422) {
             this.form.errors = response.data.errors;
+            return;
+          }
+          if (response) {
+            this.$toast.message({
+              message: response.data.message,
+              type: "danger",
+            });
           }
         });
     },
     dataRequest(file) {
       let dataForm = new FormData();
       dataForm.append("image_watter", file);
-      dataForm.append("name", WATTERMARK_IMAGE_PROPERTY);
+      dataForm.append("name", this.settingsWattermark);
       if (this.edit) {
         dataForm.append("_method", "PATCH");
       }
@@ -105,7 +119,7 @@ export default {
       await reaxios
         .delete(
           reroute("jp_realestate.api.app_setting.destroy", [
-            WATTERMARK_IMAGE_PROPERTY,
+            this.settingsWattermark,
           ]),
         )
         .then(() => {
@@ -116,7 +130,7 @@ export default {
       await reaxios
         .get(
           reroute("jp_realestate.api.app_setting.show", [
-            WATTERMARK_IMAGE_PROPERTY,
+            this.settingsWattermark,
           ]),
         )
         .catch(({ response }) => {
@@ -132,6 +146,7 @@ export default {
     },
   },
   created() {
+    this.settingsWattermark = this.resolveSettingsWattermark(this.entity);
     this.getWatterMark();
   },
 };

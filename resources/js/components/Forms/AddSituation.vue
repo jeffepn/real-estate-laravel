@@ -33,7 +33,10 @@ export default {
     submit() {
       this.form.clearErrors();
       reaxios
-        .post(window.reroute("jp_realestate.api.situation.store"), this.form.data)
+        .post(
+          window.reroute("jp_realestate.api.situation.store"),
+          this.form.data,
+        )
         .then((response) => {
           this.$toast.message({
             message: response.data.message,
@@ -59,7 +62,7 @@ export default {
     },
   },
   mounted() {
-    this.$eventBus.$on("clear-add-type", () => {
+    window.eventBus.$on("clear-add-type", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });

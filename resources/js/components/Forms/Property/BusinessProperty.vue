@@ -106,7 +106,7 @@ export default {
     },
     closeModalAddBusiness() {
       this.showModal = false;
-      this.$eventBus.$emit("clear-add-business");
+      window.eventBus.$emit("clear-add-business");
     },
     submitSuccess() {
       this.getBusinesses();

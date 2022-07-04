@@ -14,20 +14,20 @@ class ProjectController extends Controller
      */
     public function index(): View
     {
-        return view('jprealestate::project.list');
+        return view('jprealestate::projects.list');
     }
     /**
      * View create new resource.
      */
     public function create(Request $request): View
     {
-        return view('jprealestate::project.create_or_edit', ['tab' => $request->tab ?? null]);
+        return view('jprealestate::projects.create_or_edit', ['tab' => $request->tab ?? null]);
     }
     /**
      * View create edit resource.
      */
     public function edit(Request $request, Project $project): View
     {
-        return view('jprealestate::project.create_or_edit', ["propertyId" => $project->id, 'tab' => $request->tab ?? null]);
+        return view('jprealestate::projects.create_or_edit', ["propertyId" => $project->id, 'tab' => $request->tab ?? null]);
     }
 }

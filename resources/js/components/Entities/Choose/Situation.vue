@@ -102,14 +102,14 @@ export default {
     },
     closeModalAddType() {
       this.showModal = false;
-      this.$eventBus.$emit("clear-add-situation");
+      window.eventBus.$emit("clear-add-situation");
     },
   },
   async beforeMount() {
     await this.getData();
   },
   mounted() {
-    this.$eventBus.$on("reload-add-situation", () => {
+    window.eventBus.$on("reload-add-situation", () => {
       this.getData();
     });
     window.retooltip();

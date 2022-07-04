@@ -2,6 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Resources\Project;
 
+use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Resources\BaseResource;
 
 class ImageProjectResource extends BaseResource
@@ -18,7 +19,8 @@ class ImageProjectResource extends BaseResource
             'type' => 'image_project',
             'id' => $this->id,
             'attributes' => [
-                'way' => $this->image->way,
+                'way' => Storage::disk(config('realestatelaravel.filesystem.entities.projects.disk'))
+                    ->url($this->image->way),
                 'alt' => $this->image->alt,
                 'title' => $this->image->title,
                 'description' => $this->image->description,

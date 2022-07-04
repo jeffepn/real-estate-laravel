@@ -244,7 +244,7 @@ export default {
       return this.edit ? "Editar Imóvel" : "Novo Imóvel";
     },
     urlBack() {
-      return window.reroute("jp_realestate.property.list");
+      return window.reroute("jp_realestate.property.index");
     },
   },
   methods: {
@@ -376,7 +376,7 @@ export default {
             this.setProperty(response.data);
           }
           if (!tab) {
-            location.href = window.reroute("jp_realestate.property.list");
+            location.href = window.reroute("jp_realestate.property.index");
           }
           this.setTabShow(tab);
         })
@@ -398,7 +398,7 @@ export default {
     setActive() {
       this.active(this.idProperty, true)
         .then((response) => {
-          location.href = window.reroute("jp_realestate.property.list");
+          location.href = window.reroute("jp_realestate.property.index");
         })
         .catch(({ response }) => {
           if (response) {

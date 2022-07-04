@@ -15,9 +15,9 @@ trait TreatmentImages
 
     private function storageImage(string $entity, UploadedFile $image, string $altImage, ?bool $useWatterMark = false): string
     {
-        $optmize = config("realestatelaravel.filesystem.entities.{$entity}.optmize");
-        $path = config("realestatelaravel.filesystem.entities.{$entity}.path");
-        $disk = config("realestatelaravel.filesystem.entities.{$entity}.disk");
+        $optmize = config("realestatelaravel.filesystem.entities.{$entity}.optmize") ?? true;
+        $path = config("realestatelaravel.filesystem.entities.{$entity}.path") ?? $entity;
+        $disk = config("realestatelaravel.filesystem.entities.{$entity}.disk") ?? 'public';
         $img = Image::make($image);
         if ($useWatterMark) {
             $img = $this->insertWatterMark($entity, $img);

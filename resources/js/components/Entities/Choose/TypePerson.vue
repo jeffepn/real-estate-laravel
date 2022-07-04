@@ -3,9 +3,9 @@
     <div class="col">
       <re-select
         v-model="selected"
-        :data="subTypes"
+        :data="typePeople"
         :select-first="true"
-        placeholder="Sub Tipo"
+        placeholder="Tipo de Pessoa"
         :error="error"
         :error-message="errorMessage"
       ></re-select>
@@ -14,23 +14,22 @@
       <button
         type="button"
         class="btn btn-primary btn-circle btn-sm ms-2"
-        data-bs-toggle="tooltip"
-        data-bs-placement="bottom"
-        title="Caso não encontre um Sub Tipo, cadastre outro."
         @click.prevent="showModal = true"
         v-if="create"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        title="Caso não encontre um Tipo de Pessoa, cadastre outro."
       >
         <i class="fas fa-plus"></i>
       </button>
     </div>
     <re-modal
-      title="Adicionar novo Sub Tipo"
+      title="Adicionar novo Tipo Pessoa "
       :show="showModal"
-      @close="closeModalAddSubType"
+      @close="closeModalAddPerson"
       :footer="false"
     >
-      <re-add-sub-type :show="showModal" @submitSuccess="submitSuccess">
-      </re-add-sub-type>
+      <re-add-type-person @submitSuccess="submitSuccess" />
     </re-modal>
   </div>
 </template>
@@ -38,12 +37,13 @@
 <script>
 import ReSelect from "@/components/Controls/Inputs/Select";
 import ReModal from "@/components/Modal";
-import ReAddSubType from "@/components/Forms/AddSubType";
+import ReAddTypePerson from "@/components/Forms/AddTypePerson";
 export default {
+  name: "ChooseTypePerson",
   components: {
     ReSelect,
     ReModal,
-    ReAddSubType,
+    ReAddTypePerson,
   },
   props: {
     value: {
@@ -58,10 +58,6 @@ export default {
       type: String,
       default: "",
     },
-    typeId: {
-      type: String,
-      default: null,
-    },
     create: {
       type: Boolean,
       default: false,
@@ -75,14 +71,12 @@ export default {
     };
   },
   computed: {
-    subTypes() {
+    typePeople() {
       return this.data.reduce((acumulator, currentValue) => {
-        if (currentValue.relationships.type.data.id === this.typeId) {
-          acumulator.push({
-            value: currentValue.id,
-            label: currentValue.attributes.name,
-          });
-        }
+        acumulator.push({
+          value: currentValue.id,
+          label: currentValue.attributes.name,
+        });
         return acumulator;
       }, []);
     },
@@ -97,7 +91,7 @@ export default {
   },
   methods: {
     async getData() {
-      await reaxios(window.reroute("jp_realestate.api.sub_type.index")).then(
+      await reaxios(window.reroute("jp_realestate.api.type_person.index")).then(
         ({ data }) => {
           this.data = data.data;
         },
@@ -106,18 +100,18 @@ export default {
     submitSuccess() {
       this.getData();
     },
-    closeModalAddSubType() {
+    closeModalAddPerson() {
       this.showModal = false;
-      window.eventBus.$emit("clear-add-sub-type");
+      window.eventBus.$emit("clear-add-type-person");
     },
   },
-  async created() {
+  async beforeMount() {
     await this.getData();
-    if (this.value) {
-      this.selected = this.value;
-    }
   },
   mounted() {
+    window.eventBus.$on("reload-add-type-person", () => {
+      this.getData();
+    });
     window.retooltip();
   },
 };

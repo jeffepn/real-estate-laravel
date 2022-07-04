@@ -1,13 +1,15 @@
 <template>
   <div>
-    <re-input
-      placeholder="Nome*"
-      :max-length="30"
-      v-model.lazy="form.data.name"
-      :error="form.hasError('name')"
-      :error-message="form.firstError('name')"
-      @pressEnter="submit"
-    ></re-input>
+    <div class="col-12 mb-2">
+      <re-input
+        placeholder="Nome*"
+        :max-length="30"
+        v-model.lazy="form.data.name"
+        :error="form.hasError('name')"
+        :error-message="form.firstError('name')"
+        @pressEnter="submit"
+      />
+    </div>
     <div class="mt-2 text-end">
       <button type="button" class="btn btn-primary" @click="submit">
         Salvar
@@ -20,7 +22,7 @@
 import Form from "@/supports/form.js";
 import ReInput from "@/components/Controls/Inputs/Input";
 export default {
-  name: "AddType",
+  name: "AddTypePerson",
   components: {
     ReInput,
   },
@@ -33,7 +35,10 @@ export default {
     submit() {
       this.form.clearErrors();
       reaxios
-        .post(window.reroute("jp_realestate.api.type.store"), this.form.data)
+        .post(
+          window.reroute("jp_realestate.api.type_person.store"),
+          this.form.data,
+        )
         .then((response) => {
           this.$toast.message({
             message: response.data.message,

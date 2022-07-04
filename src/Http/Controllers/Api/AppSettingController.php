@@ -41,7 +41,13 @@ class AppSettingController extends Controller
                 ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             logger()->error("Erro in store  AppSettingController: " . $th->getMessage(), $th->getTrace());
-            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
+            return response(
+                [
+                    'error' => true,
+                    'message' => Terminologies::get('all.common.error_save_data')
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         }
     }
 
@@ -78,13 +84,24 @@ class AppSettingController extends Controller
         $wrappers = $this->handleWrapper();
         return Arr::has($wrappers, $request->name)
             ? $this->handleWrapper()[$request->name]($request)
-            : Arr::get($request->all(), ['name', 'value']);
+            : Arr::only($request->all(), ['name', 'value']);
     }
 
     private function handleWrapper(): array
     {
         return [
             AppSettingsEnum::WATTERMARK_IMAGE_PROPERTY => function (AppSettingsRequest $request): array {
+                $data = Arr::only($request->all(), 'name');
+                $data['value'] = [
+                    'image' => Storage::disk(config('realestatelaravel.filesystem.disk'))
+                        ->put(
+                            'images',
+                            $request->image_watter
+                        )
+                ];
+                return $data;
+            },
+            AppSettingsEnum::WATTERMARK_IMAGE_PROJECT => function (AppSettingsRequest $request): array {
                 $data = Arr::only($request->all(), 'name');
                 $data['value'] = [
                     'image' => Storage::disk(config('realestatelaravel.filesystem.disk'))

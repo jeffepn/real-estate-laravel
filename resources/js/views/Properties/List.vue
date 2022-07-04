@@ -141,8 +141,7 @@
       title="Atenção!"
       text-button-cancel="Cancelar"
       text-button-ok="Sim"
-      @close="idDelete = null"
-      @cancel="idDelete = null"
+      @close="closeDelete"
       @ok="deleteProperty"
     >
       <p>Tem certeza da exclusão do imóvel?</p>
@@ -363,15 +362,17 @@ export default {
       this.idDelete = id;
       this.showModalDelete = true;
     },
+    closeDelete() {
+      this.idDelete = null;
+      this.showModalDelete = false;
+    },
     deleteProperty() {
       reaxios
         .delete(
           window.reroute("jp_realestate.api.property.destroy", [this.idDelete]),
         )
-        .then((response) => {
-          this.data = this.data.filter(
-            (element) => element.id !== this.idDelete,
-          );
+        .then(() => {
+          this.getProperties();
           this.idDelete = null;
         })
         .catch(({ response }) => {

@@ -53,7 +53,7 @@ export default {
         {
           label: "Imóveis",
           icon: "<i class='fas fa-building'></i>",
-          url: window.reroute("jp_realestate.property.list"),
+          url: window.reroute("jp_realestate.property.index"),
         },
         {
           label: "Banners",

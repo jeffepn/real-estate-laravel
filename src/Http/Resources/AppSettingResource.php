@@ -63,4 +63,11 @@ class AppSettingResource extends JsonResource
             'image' => Storage::disk(config('realestatelaravel.filesystem.disk'))->url($value['image'])
         ];
     }
+
+    private function formatValueWattermarkImageProject(array $value): array
+    {
+        return [
+            'image' => Storage::disk(config('realestatelaravel.filesystem.disk'))->url($value['image'])
+        ];
+    }
 }
