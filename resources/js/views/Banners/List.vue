@@ -187,7 +187,7 @@ export default {
   methods: {
     getBanners() {
       reaxios
-        .get(window.reroute("jp_realestate.api.banner.index"))
+        .get(reroute("jp_realestate.api.banner.index"))
         .then((response) => {
           this.data = response.data.data;
           this.included = response.data.included;
@@ -211,7 +211,7 @@ export default {
     },
     deleteBanner() {
       reaxios
-        .delete(window.reroute("jp_realestate.api.banner.destroy", [this.idDelete]))
+        .delete(reroute("jp_realestate.api.banner.destroy", [this.idDelete]))
         .then((response) => {
           this.data = this.data.filter(
             (element) => element.id !== this.idDelete,

@@ -2,6 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
+use Exception;
 use Illuminate\Http\Response;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\Property\TypeRequest;
@@ -36,9 +37,17 @@ class TypeController extends Controller
                     ->response()->setStatusCode(Response::HTTP_CREATED);
             }
 
-            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
+            throw new Exception();
         } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data') . $th->getMessage()], Response::HTTP_BAD_REQUEST);
+            $this->registerError($th, __METHOD__);
+
+            return response(
+                [
+                    'error' => true,
+                    'message' => Terminologies::get('all.resource.error.save'),
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -67,9 +76,17 @@ class TypeController extends Controller
                 return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
             }
 
-            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
+            throw new Exception();
         } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
+            $this->registerError($th, __METHOD__);
+
+            return response(
+                [
+                    'error' => true,
+                    'message' => Terminologies::get('all.resource.error.save'),
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -89,9 +106,17 @@ class TypeController extends Controller
                 return response()->noContent(Response::HTTP_OK);
             }
 
-            return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete')], Response::HTTP_BAD_REQUEST);
+            throw new Exception();
         } catch (\Throwable $th) {
-            return response(['error' => true, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+            $this->registerError($th, __METHOD__);
+
+            return response(
+                [
+                    'error' => true,
+                    'message' => Terminologies::get('all.resource.error.delete'),
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

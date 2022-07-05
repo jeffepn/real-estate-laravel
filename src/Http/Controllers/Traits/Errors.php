@@ -7,13 +7,14 @@ use Illuminate\Support\Facades\Log;
 
 trait Errors
 {
-    public function registerError(Exception $ex): void
+    public function registerError(Exception $ex, $method = __METHOD__): void
     {
-        $controller = __CLASS__;
-        $method = __METHOD__;
         Log::error(
-            "Error in method {$method} of {$controller}",
-            $ex->getTrace()
+            "Error in {$method}",
+            [
+                'message' => $ex->getMessage(),
+                'trace' => $ex->getTraceAsString(),
+            ]
         );
     }
 }

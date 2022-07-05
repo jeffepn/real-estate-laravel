@@ -244,7 +244,7 @@ export default {
       return this.edit ? "Editar Imóvel" : "Novo Imóvel";
     },
     urlBack() {
-      return window.reroute("jp_realestate.property.index");
+      return reroute("jp_realestate.property.index");
     },
   },
   methods: {
@@ -361,22 +361,17 @@ export default {
       delete data["active"];
       let request = this.edit
         ? reaxios.patch(
-            window.reroute("jp_realestate.api.property.update", [
-              this.idProperty,
-            ]),
+            reroute("jp_realestate.api.property.update", [this.idProperty]),
             data,
           )
-        : reaxios.post(
-            window.reroute("jp_realestate.api.property.store"),
-            data,
-          );
+        : reaxios.post(reroute("jp_realestate.api.property.store"), data);
       request
         .then((response) => {
           if (!this.edit) {
             this.setProperty(response.data);
           }
           if (!tab) {
-            location.href = window.reroute("jp_realestate.property.index");
+            location.href = reroute("jp_realestate.property.index");
           }
           this.setTabShow(tab);
         })
@@ -398,7 +393,7 @@ export default {
     setActive() {
       this.active(this.idProperty, true)
         .then((response) => {
-          location.href = window.reroute("jp_realestate.property.index");
+          location.href = reroute("jp_realestate.property.index");
         })
         .catch(({ response }) => {
           if (response) {
@@ -413,7 +408,7 @@ export default {
     initialiseProperty() {
       this.idProperty = this.property.id;
       this.setUrlHistory(
-        window.reroute("jp_realestate.property.edit", [this.idProperty]),
+        reroute("jp_realestate.property.edit", [this.idProperty]),
       );
       this.setDataBaseProperty();
     },
@@ -472,7 +467,7 @@ export default {
     },
     async getProperty() {
       await reaxios
-        .get(window.reroute("jp_realestate.api.property.show", [this.id]))
+        .get(reroute("jp_realestate.api.property.show", [this.id]))
         .then((response) => this.setProperty(response.data));
     },
     initialiseTabs() {

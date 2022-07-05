@@ -210,7 +210,7 @@ export default {
       return this.search && this.search.trim().length;
     },
     urlCreate() {
-      return window.reroute("jp_realestate.property.create");
+      return reroute("jp_realestate.property.create");
     },
   },
   methods: {
@@ -243,7 +243,7 @@ export default {
       if (this.searchIsNotEmpty) params.search = this.search;
 
       reaxios
-        .get(window.reroute("jp_realestate.api.property.index"), {
+        .get(reroute("jp_realestate.api.property.index"), {
           params,
         })
         .then((response) => {
@@ -368,9 +368,7 @@ export default {
     },
     deleteProperty() {
       reaxios
-        .delete(
-          window.reroute("jp_realestate.api.property.destroy", [this.idDelete]),
-        )
+        .delete(reroute("jp_realestate.api.property.destroy", [this.idDelete]))
         .then(() => {
           this.getProperties();
           this.idDelete = null;
@@ -386,7 +384,7 @@ export default {
         .finally(() => (this.showModalDelete = false));
     },
     generateUrlEdit(propertyId) {
-      return window.reroute("jp_realestate.property.edit", [propertyId]);
+      return reroute("jp_realestate.property.edit", [propertyId]);
     },
   },
   async beforeMount() {

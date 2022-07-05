@@ -41,14 +41,14 @@ class AppSettingController extends Controller
             return (new AppSettingResource($appSetting, Terminologies::get('all.common.save_data')))
                 ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (\Throwable $th) {
-            logger()->error('Erro in store  AppSettingController: ' . $th->getMessage(), $th->getTrace());
+            $this->registerError($th, __METHOD__);
 
             return response(
                 [
                     'error' => true,
-                    'message' => Terminologies::get('all.common.error_save_data'),
+                    'message' => Terminologies::get('all.resource.error.save'),
                 ],
-                Response::HTTP_BAD_REQUEST
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -63,9 +63,15 @@ class AppSettingController extends Controller
             return (new AppSettingResource($appSettings, Terminologies::get('all.common.save_data')))
                 ->response()->setStatusCode(Response::HTTP_OK);
         } catch (\Throwable $th) {
-            logger()->error('Erro in update AppSettingController: ' . $th->getMessage(), $th->getTrace());
+            $this->registerError($th, __METHOD__);
 
-            return response(['error' => true, 'message' => Terminologies::get('all.common.error_save_data')], Response::HTTP_BAD_REQUEST);
+            return response(
+                [
+                    'error' => true,
+                    'message' => Terminologies::get('all.resource.error.save'),
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -76,9 +82,15 @@ class AppSettingController extends Controller
                 ? response()->noContent(Response::HTTP_OK)
                 : response(['error' => true, 'message' => Terminologies::get('all.app_setting.not_delete')], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            logger('Error destroy AppSettingController: ' . $th->getMessage(), $th->getTrace());
+            $this->registerError($th, __METHOD__);
 
-            return response(['error' => true, 'message' => $th->getMessage()], 500);
+            return response(
+                [
+                    'error' => true,
+                    'message' => Terminologies::get('all.resource.error.delete'),
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 

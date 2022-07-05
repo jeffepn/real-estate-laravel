@@ -197,7 +197,7 @@ export default {
       return this.edit ? "Editar Projeto" : "Novo Projeto";
     },
     urlBack() {
-      return window.reroute("jp_realestate.project.index");
+      return reroute("jp_realestate.project.index");
     },
   },
   methods: {
@@ -257,19 +257,17 @@ export default {
       data.with = "responsible,responsible.type";
       let request = this.edit
         ? reaxios.patch(
-            window.reroute("jp_realestate.api.project.update", [
-              this.idProject,
-            ]),
+            reroute("jp_realestate.api.project.update", [this.idProject]),
             data,
           )
-        : reaxios.post(window.reroute("jp_realestate.api.project.store"), data);
+        : reaxios.post(reroute("jp_realestate.api.project.store"), data);
       request
         .then((response) => {
           if (!this.edit) {
             this.setProject(response.data);
           }
           if (!tab) {
-            location.href = window.reroute("jp_realestate.project.index");
+            location.href = reroute("jp_realestate.project.index");
           }
           this.setTabShow(tab);
         })
@@ -290,7 +288,7 @@ export default {
     initialiseProject() {
       this.idProject = this.project.id;
       this.setUrlHistory(
-        window.reroute("jp_realestate.project.edit", [this.idProject]),
+        reroute("jp_realestate.project.edit", [this.idProject]),
       );
       this.setDataBaseProject();
     },
@@ -312,7 +310,7 @@ export default {
     },
     async getProject() {
       await reaxios
-        .get(window.reroute("jp_realestate.api.project.show", [this.id]), {
+        .get(reroute("jp_realestate.api.project.show", [this.id]), {
           params: {
             with: "responsible,responsible.type",
           },

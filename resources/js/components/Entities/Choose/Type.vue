@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     async getData() {
-      await reaxios(window.reroute("jp_realestate.api.type.index")).then(
+      await reaxios(reroute("jp_realestate.api.type.index")).then(
         ({ data }) => {
           this.data = data.data;
         },

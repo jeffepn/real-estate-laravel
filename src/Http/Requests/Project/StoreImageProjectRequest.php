@@ -43,4 +43,11 @@ class StoreImageProjectRequest extends FormRequest
             'project_id.required' => 'Forneça um id de projeto válido.',
         ];
     }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'use_watter_mark' => $this->use_watter_mark && $this->use_watter_mark != 'false' ? true : false,
+        ]);
+    }
 }

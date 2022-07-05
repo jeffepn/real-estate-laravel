@@ -15,5 +15,4 @@ import toast from "@/toast";
 Vue.prototype.$toast = toast;
 
 import VueDND from "awe-dnd";
-
 Vue.use(VueDND);

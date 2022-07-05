@@ -57,7 +57,7 @@ class ImagePropertyController extends Controller
 
             return response()->noContent(Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
-            logger()->error('Error in store ImagePropertyController: ' . $th->getMessage(), $th->getTrace());
+            $this->registerError($th, __METHOD__);
 
             return response()->noContent(Response::HTTP_INTERNAL_SERVER_ERROR);
         }

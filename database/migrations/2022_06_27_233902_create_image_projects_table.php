@@ -19,11 +19,13 @@ class CreateImageProjectsTable extends Migration
             $table->string('image_id', 36);
             $table->foreign('image_id')
                 ->references('id')
-                ->on('images_realestate');
+                ->on('images_realestate')
+                ->onDelete('cascade');
             $table->string('project_id', 36);
             $table->foreign('project_id')
                 ->references('id')
-                ->on('projects');
+                ->on('projects')
+                ->onDelete('cascade');
             $table->unique(['image_id', 'project_id']);
             $table->timestamps();
         });

@@ -83,7 +83,7 @@ class ImageProjectController extends Controller
             return response(
                 [
                     'error' => true,
-                    'message' => Terminologies::get('all.resource.error.save') . $th->getMessage(),
+                    'message' => Terminologies::get('all.resource.error.save'),
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );

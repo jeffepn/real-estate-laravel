@@ -47,7 +47,7 @@ export default {
     submit() {
       this.form.clearErrors();
       reaxios
-        .post(window.reroute("jp_realestate.api.person.store"), this.form.data)
+        .post(reroute("jp_realestate.api.person.store"), this.form.data)
         .then((response) => {
           this.$toast.message({
             message: response.data.message,

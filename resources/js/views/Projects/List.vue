@@ -193,7 +193,7 @@ export default {
       return this.search && this.search.trim().length;
     },
     urlCreate() {
-      return window.reroute("jp_realestate.project.create");
+      return reroute("jp_realestate.project.create");
     },
   },
   methods: {
@@ -207,7 +207,7 @@ export default {
       if (this.searchIsNotEmpty) params.search = this.search;
 
       reaxios
-        .get(window.reroute("jp_realestate.api.project.index"), {
+        .get(reroute("jp_realestate.api.project.index"), {
           params,
         })
         .then((response) => {
@@ -244,9 +244,7 @@ export default {
     },
     deleteProject() {
       reaxios
-        .delete(
-          window.reroute("jp_realestate.api.project.destroy", [this.idDelete]),
-        )
+        .delete(reroute("jp_realestate.api.project.destroy", [this.idDelete]))
         .then(() => {
           this.getProjects();
           this.idDelete = null;
@@ -262,7 +260,7 @@ export default {
         .finally(() => (this.showModalDelete = false));
     },
     generateUrlEdit(projectId) {
-      return window.reroute("jp_realestate.project.edit", [projectId]);
+      return reroute("jp_realestate.project.edit", [projectId]);
     },
     nameResponsible(project) {
       const nameProject = project.responsible.attributes.name;
