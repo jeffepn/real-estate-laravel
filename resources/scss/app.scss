@@ -17,6 +17,7 @@ main {
   flex-direction: column;
   width: 100%;
 }
+@import "~bootstrap/scss/bootstrap";
 @import "sidebar.scss";
 @import "context.scss";
 @import "elements.scss";

@@ -42,7 +42,7 @@ class BannerResource extends JsonResource
                 'title' => $this->title,
                 'content' => $this->content,
                 'link' => $this->link,
-            ]
+            ],
         ];
     }
 
@@ -50,7 +50,7 @@ class BannerResource extends JsonResource
     {
         return [
             'error' => false,
-            'message' => $this->message
+            'message' => $this->message,
         ];
     }
 }

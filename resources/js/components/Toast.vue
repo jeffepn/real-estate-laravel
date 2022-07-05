@@ -18,13 +18,14 @@
         <rect width="100%" height="100%" :fill="fill"></rect>
       </svg>
       <strong class="me-auto" v-text="title"></strong>
-      <small v-text="startTime.format('DD/MM/YYYY HH:mm:ss')"></small>
+      <small v-text="now().format('DD/MM/YYYY HH:mm:ss')"></small>
     </div>
     <div class="toast-body" v-html="message"></div>
   </div>
 </template>
 
 <script>
+import moment from "moment";
 export default {
   props: {
     id: {
@@ -50,7 +51,6 @@ export default {
   },
   data() {
     return {
-      startTime: this.now(),
       idToast: null,
       toast: null,
       fill: null,
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     now() {
-      return window.remoment();
+      return moment();
     },
     initialise() {
       this.idToast = this.id ? this.id : `id-toast-master-${this._uid}`;

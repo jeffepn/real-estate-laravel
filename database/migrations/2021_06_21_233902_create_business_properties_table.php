@@ -14,7 +14,7 @@ class CreateBusinessPropertiesTable extends Migration
     public function up()
     {
         Schema::create('business_properties', function (Blueprint $table) {
-            $table->engine = "InnoDB";
+            $table->engine = 'InnoDB';
             $table->uuid('id')->primary();
             $table->string('property_id', 36);
             $table->foreign('property_id')
@@ -25,7 +25,7 @@ class CreateBusinessPropertiesTable extends Migration
                 ->references('id')
                 ->on('businesses');
             $table->double('value', 10, 2)->nullable();
-            $table->boolean("status")->default(true);
+            $table->boolean('status')->default(true);
             $table->unique(['property_id', 'business_id']);
             $table->timestamps();
         });

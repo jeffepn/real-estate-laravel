@@ -2,22 +2,17 @@
 
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
-use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Models\Property\Situation;
-use Jeffpereira\RealEstate\Models\Property\SubType;
-use Jeffpereira\RealEstate\Models\Property\Type;
 use Jeffpereira\RealEstate\Tests\TestCase;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class SituationTest extends TestCase
 {
     use RefreshDatabase;
-    const URL_API = 'api/situation';
 
     /**
      * @test
@@ -27,15 +22,15 @@ class SituationTest extends TestCase
     public function verifyFormatReturnIndex()
     {
         factory(Situation::class)->create();
-        $response = $this->getJson(self::URL_API);
-        $response->assertStatus(200);
+        $response = $this->getJson(route('jp_realestate.api.situation.index'));
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'data' => [
                 [
                     'type', 'id',
-                    'attributes' => ['slug', 'name']
-                ]
-            ]
+                    'attributes' => ['slug', 'name'],
+                ],
+            ],
         ], $response->json());
     }
 
@@ -47,12 +42,12 @@ class SituationTest extends TestCase
     public function verifyFormatReturnShow()
     {
         $situation = factory(Situation::class)->create();
-        $response = $this->getJson(self::URL_API . "/$situation->id");
-        $response->assertStatus(200);
+        $response = $this->getJson(route('jp_realestate.api.situation.show', $situation->id));
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
-            "data" => [
-                'type', 'id', 'attributes' => ['slug', 'name']
-            ]
+            'data' => [
+                'type', 'id', 'attributes' => ['slug', 'name'],
+            ],
         ], $response->json());
         $this->assertEquals([
             'type' => 'situation',
@@ -60,9 +55,10 @@ class SituationTest extends TestCase
             'attributes' => [
                 'slug' => $situation->slug,
                 'name' => Str::title($situation->name),
-            ]
+            ],
         ], $response->json()['data']);
     }
+
     /**
      * @test
      * @group situation
@@ -70,15 +66,15 @@ class SituationTest extends TestCase
      */
     public function storeWitSuccess()
     {
-        $response = $this->postJson(self::URL_API, ['name' => 'Test of name']);
-        $response->assertStatus(201);
+        $response = $this->postJson(route('jp_realestate.api.situation.store'), ['name' => 'Test of name']);
+        $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure(['data' => [
-            'type', 'id', 'attributes' => ['slug', 'name']
+            'type', 'id', 'attributes' => ['slug', 'name'],
         ], 'error', 'message']);
 
         $this->assertEquals(2, Situation::count());
-        $this->assertEquals("test-of-name", Situation::firstWhere('name', 'TEST OF NAME')->slug);
-        $this->assertEquals("TEST OF NAME", Situation::firstWhere('name', 'TEST OF NAME')->name);
+        $this->assertEquals('test-of-name', Situation::firstWhere('name', 'TEST OF NAME')->slug);
+        $this->assertEquals('TEST OF NAME', Situation::firstWhere('name', 'TEST OF NAME')->name);
     }
 
     /**
@@ -89,9 +85,12 @@ class SituationTest extends TestCase
     public function updateWithSuccess()
     {
         $situation = factory(Situation::class)->create();
-        $response = $this->patchJson(self::URL_API . "/$situation->id", ['name' => 'Test of name2']);
-        $response->assertStatus(200);
-        $this->assertEquals("test-of-name2", Situation::firstWhere('name', 'TEST OF NAME2')->slug);
+        $response = $this->patchJson(
+            route('jp_realestate.api.situation.update', $situation->id),
+            ['name' => 'Test of name2']
+        );
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertEquals('test-of-name2', Situation::firstWhere('name', 'TEST OF NAME2')->slug);
     }
 
     /**
@@ -103,8 +102,8 @@ class SituationTest extends TestCase
     {
         $situation = factory(Situation::class)->create();
         $this->assertNotNull(Situation::first());
-        $response = $this->deleteJson(self::URL_API . "/$situation->id");
-        $response->assertStatus(200);
+        $response = $this->deleteJson(route('jp_realestate.api.situation.destroy', $situation->id));
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertNull(Situation::find($situation->id));
     }
 
@@ -119,8 +118,8 @@ class SituationTest extends TestCase
         $situation = factory(Situation::class)->create();
         $this->assertNotNull(Situation::first());
         $situation->properties()->save(factory(Property::class)->make());
-        $response = $this->deleteJson(self::URL_API . "/$situation->id");
-        $response->assertStatus(400);
+        $response = $this->deleteJson(route('jp_realestate.api.situation.destroy', $situation->id));
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $this->assertNotNull(Situation::first());
         $this->assertEquals(Terminologies::get('all.type.not_delete_with_relations'), $response->json()['message']);
     }
@@ -135,19 +134,19 @@ class SituationTest extends TestCase
         // $request = new typeRequest();
         $situation = factory(Situation::class)->create(['name' => 'teste']);
 
-        $response = $this->postJson(self::URL_API, ['name' => Str::random(30)]);
+        $response = $this->postJson(route('jp_realestate.api.situation.store'), ['name' => Str::random(30)]);
         $response->assertStatus(Response::HTTP_CREATED);
 
-        $response = $this->postJson(self::URL_API, ['name' => Str::random(31)]);
+        $response = $this->postJson(route('jp_realestate.api.situation.store'), ['name' => Str::random(31)]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->postJson(self::URL_API, ['name' => '']);
+        $response = $this->postJson(route('jp_realestate.api.situation.store'), ['name' => '']);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->postJson(self::URL_API, ['name' => 'teste']);
+        $response = $this->postJson(route('jp_realestate.api.situation.store'), ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $response = $this->patchJson(self::URL_API . "/$situation->id", ['name' => 'teste']);
+        $response = $this->patchJson(route('jp_realestate.api.situation.update', $situation->id), ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_OK);
     }
 }

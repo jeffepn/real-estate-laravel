@@ -41,9 +41,9 @@ class SubTypeResource extends JsonResource
                     'data' => [
                         'type' => 'type',
                         'id' => $this->type->id,
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -51,10 +51,10 @@ class SubTypeResource extends JsonResource
     {
         return [
             'included' => [
-                new TypeResource($this->type)
+                new TypeResource($this->type),
             ],
             'error' => false,
-            'message' => $this->message
+            'message' => $this->message,
         ];
     }
 }

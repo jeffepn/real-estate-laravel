@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     async getData() {
-      await reaxios(window.reroute("jp_realestate.situation.index")).then(
+      await reaxios(reroute("jp_realestate.api.situation.index")).then(
         ({ data }) => {
           this.data = data.data;
         },
@@ -102,14 +102,14 @@ export default {
     },
     closeModalAddType() {
       this.showModal = false;
-      this.$eventBus.$emit("clear-add-situation");
+      window.eventBus.$emit("clear-add-situation");
     },
   },
   async beforeMount() {
     await this.getData();
   },
   mounted() {
-    this.$eventBus.$on("reload-add-situation", () => {
+    window.eventBus.$on("reload-add-situation", () => {
       this.getData();
     });
     window.retooltip();

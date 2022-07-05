@@ -2,12 +2,8 @@
 
 namespace Jeffpereira\RealEstate\Tests\Unit;
 
-use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Jeffpereira\RealEstate\Http\Requests\Property\BusinessRequest;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Models\Property\SubType;
@@ -24,6 +20,7 @@ class PropertyTest extends TestCase
     {
         $property = factory(Property::class)->create();
         $codeException = null;
+
         try {
             factory(Property::class)->create(['slug' => $property->slug]);
         } catch (\Illuminate\Database\QueryException $ex) {
@@ -39,21 +36,21 @@ class PropertyTest extends TestCase
         $subType = factory(SubType::class)->create();
         $property = Property::create([
             'sub_type_id' => $subType->id,
-            'address_id' => $address->id, 'min_description' => "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni necessitatibus non architecto adipisci quidem",
-            'max_dormitory' => 3, 'max_bathroom' => 2, 'max_suite' => 1, 'max_garage' => 2
+            'address_id' => $address->id, 'min_description' => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni necessitatibus non architecto adipisci quidem',
+            'max_dormitory' => 3, 'max_bathroom' => 2, 'max_suite' => 1, 'max_garage' => 2,
         ]);
         $this->assertEquals(
             Str::slug(
                 Str::limit(
                     sprintf(
-                        "%s em %s - %s %s %s %s %s",
+                        '%s em %s - %s %s %s %s %s',
                         Str::title($property->sub_type->name),
                         Str::title($property->address->neighborhood->name),
                         Str::title($property->address->neighborhood->city->state->initials),
-                        $property->max_dormitory ? "$property->max_dormitory dormitórios," : '',
-                        $property->max_bathroom ? "$property->max_bathroom banheiros," : '',
-                        $property->max_suite ? "$property->max_suite suites," : '',
-                        $property->max_garage ? "$property->max_garage garagens," : '',
+                        $property->max_dormitory ? "{$property->max_dormitory} dormitórios," : '',
+                        $property->max_bathroom ? "{$property->max_bathroom} banheiros," : '',
+                        $property->max_suite ? "{$property->max_suite} suites," : '',
+                        $property->max_garage ? "{$property->max_garage} garagens," : '',
                     ),
                     150
                 )

@@ -5,10 +5,11 @@ namespace Jeffpereira\RealEstate\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 class AppSettingResource extends JsonResource
 {
-    const PREFIX_METHOD_RESOURCE = "formatValue";
+    public const PREFIX_METHOD_RESOURCE = 'formatValue';
     /**
      * Message response
      *
@@ -37,15 +38,16 @@ class AppSettingResource extends JsonResource
     public function toArray($request)
     {
         $nameMethod = self::PREFIX_METHOD_RESOURCE . Str::studly($this->name ?? 'name_method_not_found');
+
         return [
             'type' => 'app_setting',
             'id' => $this->id,
             'attributes' => [
                 'name' => $this->name,
                 'value' => method_exists($this, $nameMethod)
-                    ? $this->$nameMethod($this->value)
+                    ? $this->{$nameMethod}($this->value)
                     : $this->value,
-            ]
+            ],
         ];
     }
 
@@ -53,14 +55,21 @@ class AppSettingResource extends JsonResource
     {
         return [
             'error' => false,
-            'message' => $this->message
+            'message' => $this->message,
         ];
     }
 
     private function formatValueWattermarkImageProperty(array $value): array
     {
         return [
-            'image' => Storage::disk(config('realestatelaravel.filesystem.disk'))->url($value['image'])
+            'image' => Storage::disk(ConfigHelper::get('filesystem.disk'))->url($value['image']),
+        ];
+    }
+
+    private function formatValueWattermarkImageProject(array $value): array
+    {
+        return [
+            'image' => Storage::disk(ConfigHelper::get('filesystem.disk'))->url($value['image']),
         ];
     }
 }

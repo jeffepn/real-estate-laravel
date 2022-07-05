@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 
 class BusinessRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -17,15 +16,16 @@ class BusinessRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ['required', 'max:30', Rule::unique('businesses')->ignore($this->business)],
+            'name' => ['required', 'max:30', Rule::unique('businesses')->ignore($this->business)],
         ];
     }
+
     public function messages()
     {
         return [
             'max' => 'Limite o campo a no máximo :max caracteres.',
-            'name.required' => "É necessário fornecer um nome para o negócio.",
-            'name.unique' => "Já existe um negócio com esse nome.",
+            'name.required' => 'É necessário fornecer um nome para o negócio.',
+            'name.unique' => 'Já existe um negócio com esse nome.',
         ];
     }
 

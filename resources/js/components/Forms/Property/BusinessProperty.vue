@@ -80,7 +80,7 @@ export default {
   methods: {
     async getBusinesses() {
       await reaxios
-        .get(window.reroute("jp_realestate.business.index"))
+        .get(reroute("jp_realestate.api.business.index"))
         .then((response) => {
           this.originalBusinesses = response.data.data;
           this.formatBusinesses();
@@ -106,7 +106,7 @@ export default {
     },
     closeModalAddBusiness() {
       this.showModal = false;
-      this.$eventBus.$emit("clear-add-business");
+      window.eventBus.$emit("clear-add-business");
     },
     submitSuccess() {
       this.getBusinesses();

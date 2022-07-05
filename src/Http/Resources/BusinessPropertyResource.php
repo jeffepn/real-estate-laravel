@@ -3,7 +3,6 @@
 namespace Jeffpereira\RealEstate\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
 
 class BusinessPropertyResource extends JsonResource
 {
@@ -42,14 +41,15 @@ class BusinessPropertyResource extends JsonResource
                 'business_id' => $this->business_id,
                 'value' => $this->value,
                 'status' => $this->status,
-            ]
+            ],
         ];
     }
+
     public function with($request)
     {
         return [
             'error' => false,
-            'message' => $this->message
+            'message' => $this->message,
         ];
     }
 }

@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ImagePropertyUpdateOrderRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -15,10 +14,11 @@ class ImagePropertyUpdateOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            "orders.*.id" => "required|uuid",
-            "orders.*.order" => "required|integer",
+            'orders.*.id' => 'required|uuid',
+            'orders.*.order' => 'required|integer',
         ];
     }
+
     public function messages()
     {
         return [

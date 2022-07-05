@@ -23,8 +23,8 @@ class SubTypeCollection extends ResourceCollection
     {
         return [
             'included' => [
-                new TypeCollection($this->collection->pluck('type')->unique()->values())
-            ]
+                new TypeCollection($this->collection->pluck('type')->unique()->values()),
+            ],
         ];
     }
 }
