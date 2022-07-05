@@ -57,11 +57,12 @@ export default {
     },
     successSubmit(data) {
       this.$emit("submitSuccess", data);
+     eventBus.$emit("new-type-person");
       this.form.clearFields();
     },
   },
   mounted() {
-    window.eventBus.$on("clear-add-type", () => {
+   eventBus.$on("clear-add-type", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });

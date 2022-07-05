@@ -110,17 +110,16 @@ export default {
     },
     closeModalAddPerson() {
       this.showModal = false;
-      window.eventBus.$emit("clear-add-person");
+     eventBus.$emit("clear-add-person");
     },
   },
   async beforeMount() {
     await this.getData();
   },
   mounted() {
-    window.eventBus.$on("reload-add-person", () => {
+   eventBus.$on("reload-add-person", () => {
       this.getData();
     });
-    window.retooltip();
   },
 };
 </script>

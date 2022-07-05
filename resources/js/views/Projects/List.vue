@@ -272,9 +272,6 @@ export default {
   async beforeMount() {
     await this.getProjects();
   },
-  mounted() {
-    window.retooltip();
-  },
 };
 </script>
 

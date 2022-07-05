@@ -390,7 +390,7 @@ export default {
   async beforeMount() {
     await this.getProperties();
   },
-  mounted() {
+  updated() {
     window.retooltip();
   },
 };

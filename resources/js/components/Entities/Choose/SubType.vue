@@ -108,7 +108,7 @@ export default {
     },
     closeModalAddSubType() {
       this.showModal = false;
-      window.eventBus.$emit("clear-add-sub-type");
+     eventBus.$emit("clear-add-sub-type");
     },
   },
   async created() {
@@ -116,9 +116,6 @@ export default {
     if (this.value) {
       this.selected = this.value;
     }
-  },
-  mounted() {
-    window.retooltip();
   },
 };
 </script>

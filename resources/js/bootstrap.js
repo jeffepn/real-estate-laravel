@@ -8,3 +8,4 @@ window.retooltip = () => {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 };
+

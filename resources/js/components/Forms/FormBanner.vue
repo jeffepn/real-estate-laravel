@@ -158,7 +158,7 @@ export default {
     },
   },
   mounted() {
-    window.eventBus.$on("clear-add-business", () => {
+   eventBus.$on("clear-add-business", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });
