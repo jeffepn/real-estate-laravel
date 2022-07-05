@@ -17,4 +17,7 @@ new Vue({
       toast: [],
     };
   },
+  mounted(){
+    retooltip();
+  }
 });

@@ -101,17 +101,16 @@ export default {
     },
     closeModalAddType() {
       this.showModal = false;
-      window.eventBus.$emit("clear-add-type");
+     eventBus.$emit("clear-add-type");
     },
   },
   async beforeMount() {
     await this.getData();
   },
   mounted() {
-    window.eventBus.$on("reload-add-type", () => {
+   eventBus.$on("reload-add-type", () => {
       this.getData();
     });
-    window.retooltip();
   },
 };
 </script>

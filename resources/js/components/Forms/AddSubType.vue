@@ -51,7 +51,7 @@ export default {
   watch: {
     show() {
       if (this.show) {
-        window.eventBus.$emit("reload-add-type");
+       eventBus.$emit("reload-add-type");
       }
     },
   },
@@ -86,7 +86,7 @@ export default {
     },
   },
   mounted() {
-    window.eventBus.$on("clear-add-sub-type", () => {
+   eventBus.$on("clear-add-sub-type", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });

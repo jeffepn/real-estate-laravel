@@ -182,7 +182,6 @@ export default {
       this.initialiseProject();
     },
     type_person_id() {
-      console.log("Clear person_id");
       this.form.data.person_id = null;
     },
   },

@@ -102,17 +102,20 @@ export default {
     },
     closeModalAddPerson() {
       this.showModal = false;
-      window.eventBus.$emit("clear-add-type-person");
+     eventBus.$emit("clear-add-type-person");
     },
   },
   async beforeMount() {
     await this.getData();
   },
   mounted() {
-    window.eventBus.$on("reload-add-type-person", () => {
+   eventBus.$on("reload-add-type-person", () => {
       this.getData();
     });
-    window.retooltip();
+
+    eventBus.$on('new-type-person', () =>{
+      this.getData();
+    })
   },
 };
 </script>

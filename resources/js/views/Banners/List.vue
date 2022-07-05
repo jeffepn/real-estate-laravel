@@ -238,9 +238,6 @@ export default {
   async beforeMount() {
     await this.getBanners();
   },
-  mounted() {
-    window.retooltip();
-  },
 };
 </script>
 

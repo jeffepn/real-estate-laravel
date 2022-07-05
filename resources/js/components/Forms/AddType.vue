@@ -59,7 +59,7 @@ export default {
     },
   },
   mounted() {
-    window.eventBus.$on("clear-add-type", () => {
+   eventBus.$on("clear-add-type", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });

@@ -20,7 +20,6 @@ trait TreatmentImages
         $disk = ConfigHelper::get('filesystem.disk');
         $img = Image::make($image);
         if ($useWatterMark) {
-            logger('deu gato');
             $img = $this->insertWatterMark($entity, $img);
         }
         $img->orientate();

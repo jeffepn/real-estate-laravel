@@ -53,7 +53,6 @@ export default {
             message: response.data.message,
             type: "success",
           });
-          console.log("Then", response);
           this.successSubmit(response.data.data);
         })
         .catch((error) => {
@@ -74,7 +73,7 @@ export default {
     },
   },
   mounted() {
-    window.eventBus.$on("clear-add-type-person", () => {
+   eventBus.$on("clear-add-type-person", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });

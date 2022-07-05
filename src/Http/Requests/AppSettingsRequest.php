@@ -19,8 +19,6 @@ class AppSettingsRequest extends FormRequest
     public function rules()
     {
         $nameMethod = self::PREFIX_METHOD_RULES . Str::studly($this->name ?? 'name_method_not_found');
-        logger('  $nameMethod: ' . $nameMethod);
-        logger('  $this->name: ' . $this->name);
 
         return method_exists($this, $nameMethod)
             ? $this->{$nameMethod}()
