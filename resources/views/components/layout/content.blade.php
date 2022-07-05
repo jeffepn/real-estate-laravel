@@ -1,6 +1,7 @@
 @php
-$useTemplate = config('realestatelaravel.use_template');
-$template = $useTemplate ? 'jprealestate::layout.template' : config('realestatelaravel.template');
+$useTemplate = Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper::get('use_template');
+$template = $useTemplate ? 'jprealestate::layout.template' :
+Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper::get('template');
 @endphp
 
 @extends($template)
@@ -12,7 +13,7 @@ $template = $useTemplate ? 'jprealestate::layout.template' : config('realestatel
 @endsection
 
 @else
-@section(config('realestatelaravel.section_content'))
+@section(Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper::get('section_content'))
 <div id="content-realestate">
     {{ $slot }}
     <re-container-toast id="container-toast-master"></re-container-toast>

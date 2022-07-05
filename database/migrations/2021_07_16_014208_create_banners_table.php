@@ -14,12 +14,12 @@ class CreateBannersTable extends Migration
     public function up()
     {
         Schema::create('banners', function (Blueprint $table) {
-            $table->engine = "InnoDB";
+            $table->engine = 'InnoDB';
             $table->uuid('id')->primary();
-            $table->string("way");
-            $table->string("title")->nullable()->default(null);
-            $table->string("content")->nullable()->default(null);
-            $table->string("link")->nullable()->default(null);
+            $table->string('way');
+            $table->string('title')->nullable()->default(null);
+            $table->string('content')->nullable()->default(null);
+            $table->string('link')->nullable()->default(null);
             $table->timestamps();
         });
     }

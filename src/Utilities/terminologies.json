@@ -1,13 +1,40 @@
 {
-    "all.common.save_data": "Os dados foram salvos.",
-    "all.common.error_save_data": "Erro ao salvar os dados.",
-    "all.business.not_delete_with_relations": "Não é possivel remover um negócio, com imóveis relacionados a ele.",
-    "all.business.not_delete": "Não foi possível excluir o negócio.",
-    "all.type.not_delete_with_relations": "Não é possivel remover um tipo, com subtipos relacionados a ele.",
-    "all.type.not_delete": "Não foi possível excluir o tipo de imóvel.",
-    "all.sub_type.not_delete_with_relations": "Não é possivel remover um subtipo, com imóveis relacionados a ele.",
-    "all.sub_type.not_delete": "Não foi possível excluir o subtipo de imóvel.",
-    "all.property.not_delete": "Não foi possível excluir o imóvel.",
-    "all.property.not_publish_without_dependences": "Não é possível publicar imóvel sem pelos menos uma imagem/embed ou negócio.",
-    "all.app_setting.not_delete": "Não foi possível excluir a configuração."
+    "all": {
+        "common": {
+            "save_data": "Os dados foram salvos.",
+            "error_save_data": "Erro ao salvar os dados."
+        },
+        "business": {
+            "not_delete_with_relations": "Não é possivel remover um negócio, com imóveis relacionados a ele.",
+            "not_delete": "Não foi possível excluir o negócio."
+        },
+        "type": {
+            "not_delete_with_relations": "Não é possivel remover um tipo, com subtipos relacionados a ele.",
+            "not_delete": "Não foi possível excluir o tipo de imóvel."
+        },
+        "sub_type": {
+            "not_delete_with_relations": "Não é possivel remover um subtipo, com imóveis relacionados a ele.",
+            "not_delete": "Não foi possível excluir o subtipo de imóvel."
+        },
+        "property": {
+            "not_delete": "Não foi possível excluir o imóvel.",
+            "not_publish_without_dependences": "Não é possível publicar imóvel sem pelos menos uma imagem/embed ou negócio.",
+            "error_index": "Não foi possível realizar a busca. Se o problema persistir, contacte o suporte."
+        },
+        "app_setting": {
+            "not_delete": "Não foi possível excluir a configuração."
+        },
+        "resource": {
+            "success": {
+                "delete": "Recurso excluído com sucesso.",
+                "save": "Os dados do recurso foram salvos com sucesso."
+            },
+            "error": {
+                "get": "Não foi possível realizar a busca. Se o problema persistir, contacte o suporte.",
+                "delete": "Não foi possível excluir o recurso. Se o problema persistir, contacte o suporte.",
+                "delete_relationships": "Este recurso possui vínculos e por isso não pode ser removido.",
+                "save": "Não foi possível salvar o recurso. Se o problema persistir, contacte o suporte."
+            }
+        }
+    }
 }

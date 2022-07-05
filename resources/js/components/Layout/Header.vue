@@ -47,18 +47,18 @@ export default {
         {
           label: "Home",
           icon: " <i class='fas fa-boxes'></i>",
-          url: window.reroute("jp_realestate.dashboard"),
+          url: reroute("jp_realestate.dashboard"),
         },
 
         {
           label: "Imóveis",
           icon: "<i class='fas fa-building'></i>",
-          url: window.reroute("jp_realestate.property.list"),
+          url: reroute("jp_realestate.property.index"),
         },
         {
           label: "Banners",
           icon: "<i class='fas fa-building'></i>",
-          url: window.reroute("jp_realestate.banner.list"),
+          url: reroute("jp_realestate.banner.list"),
         },
       ],
       urlHome: null,
@@ -87,7 +87,7 @@ export default {
   mounted() {
     this.urlHome = this.homeMaster
       ? this.homeMaster
-      : window.reroute("jp_realestate.dashboard");
+      : reroute("jp_realestate.dashboard");
   },
 };
 </script>

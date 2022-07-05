@@ -33,9 +33,12 @@ return [
         'disk' => env('RE_DISK', 'public'),
         'entities' => [
             'properties' => [
-                'disk' => env('RE_DISK_PROPERTY', 'public'),
                 'path' => env('RE_PATH_PROPERTY', 'properties'),
                 'optmize' => env('RE_OPTMIZE_PROPERTY', true),
+            ],
+            'projects' => [
+                'path' => env('RE_PATH_PROJECT', 'projects'),
+                'optmize' => env('RE_OPTMIZE_PROJECT', true),
             ],
         ],
     ],
@@ -43,5 +46,5 @@ return [
      *  When `use_template` is true, it may be necessary to have a url to go
      *  back to a different admin area, this url will be added to the `General Panel` menu item
      */
-    'url_home' => env('RE_URL_HOME', null)
+    'url_home' => env('RE_URL_HOME', null),
 ];

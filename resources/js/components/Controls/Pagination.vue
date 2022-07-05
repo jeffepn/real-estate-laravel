@@ -111,7 +111,6 @@ export default {
   },
   watch: {
     selectPerPage(newValue) {
-      this.$emit("changePage", 1);
       this.$emit("changePerPage", parseInt(newValue));
     },
   },

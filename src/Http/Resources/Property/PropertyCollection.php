@@ -4,7 +4,6 @@ namespace Jeffpereira\RealEstate\Http\Resources\Property;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Jeffpereira\RealEstate\Http\Resources\BusinessPropertyResource;
-use JPAddress\Resources\AddressCollection;
 use JPAddress\Resources\AddressResource;
 use JPAddress\Resources\CityResource;
 use JPAddress\Resources\CountryResource;
@@ -67,7 +66,7 @@ class PropertyCollection extends ResourceCollection
         $includes = array_merge($includes, $countries);
 
         return [
-            'included' =>  $includes
+            'included' => $includes,
         ];
     }
 }

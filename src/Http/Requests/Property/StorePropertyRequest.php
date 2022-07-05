@@ -9,7 +9,6 @@ use Jeffpereira\RealEstate\Models\Property\Property;
 
 class StorePropertyRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -18,43 +17,43 @@ class StorePropertyRequest extends FormRequest
     public function rules()
     {
         return [
-            "slug" => ["sometimes", "bail", "slug", "min:3", "max:150", Rule::unique('properties')->ignore($this->property)],
-            "code" => ['sometimes', "bail", "integer", Rule::unique('properties')->ignore($this->property)],
-            "businesses.*.id" => "bail|required|uuid",
-            "businesses.*.value" => "bail|nullable|numeric|between:0,99999999.99",
-            "situation_id" => "bail|nullable|uuid",
-            "sub_type_id" => "bail|required|uuid",
-            "min_description" => "bail|nullable|min:10|max:200",
-            "total_area" => "bail|nullable|numeric|between:0,99999999.99",
-            "building_area" => "bail|nullable|numeric|between:0,99999999.99",
-            "useful_area" => "bail|nullable|numeric|between:0,99999999.99",
-            "ground_area" => "bail|nullable|numeric|between:0,99999999.99",
-            "min_dormitory" => "bail|nullable|integer|min:0|lte:max_dormitory",
-            "max_dormitory" => "bail|nullable|integer|min:0",
-            "min_suite" => "bail|nullable|integer|min:0|lte:max_suite",
-            "max_suite" => "bail|nullable|integer|min:0",
-            "min_bathroom" => "bail|nullable|integer|min:0|lte:max_bathroom",
-            "max_bathroom" => "bail|nullable|integer|min:0",
-            "min_garage" => "bail|nullable|integer|min:0|lte:max_garage",
-            "max_garage" => "bail|nullable|integer|min:0",
-            "embed" => "bail|nullable|url|max:300",
-            "address" => "sometimes|bail|nullable|max:100",
-            "number" => "sometimes|nullable|integer|min:0",
-            "complement" => "max:15",
-            "cep" => "sometimes|bail|nullable|formato_cep",
-            "latitude" => "sometimes|nullable|integer",
-            "longitude" => "sometimes|nullable|integer",
-            "neighborhood" => "bail|required|min:2|max:100",
-            "city" => "bail|required|min:2|max:100",
-            "state" => "bail|min:2|max:100",
-            "initials" => "bail|required|min:2|max:2",
+            'slug' => ['sometimes', 'bail', 'slug', 'min:3', 'max:150', Rule::unique('properties')->ignore($this->property)],
+            'code' => ['sometimes', 'bail', 'integer', Rule::unique('properties')->ignore($this->property)],
+            'businesses.*.id' => 'bail|required|uuid',
+            'businesses.*.value' => 'bail|nullable|numeric|between:0,99999999.99',
+            'situation_id' => 'bail|nullable|uuid',
+            'sub_type_id' => 'bail|required|uuid',
+            'min_description' => 'bail|nullable|min:10|max:200',
+            'total_area' => 'bail|nullable|numeric|between:0,99999999.99',
+            'building_area' => 'bail|nullable|numeric|between:0,99999999.99',
+            'useful_area' => 'bail|nullable|numeric|between:0,99999999.99',
+            'ground_area' => 'bail|nullable|numeric|between:0,99999999.99',
+            'min_dormitory' => 'bail|nullable|integer|min:0|lte:max_dormitory',
+            'max_dormitory' => 'bail|nullable|integer|min:0',
+            'min_suite' => 'bail|nullable|integer|min:0|lte:max_suite',
+            'max_suite' => 'bail|nullable|integer|min:0',
+            'min_bathroom' => 'bail|nullable|integer|min:0|lte:max_bathroom',
+            'max_bathroom' => 'bail|nullable|integer|min:0',
+            'min_garage' => 'bail|nullable|integer|min:0|lte:max_garage',
+            'max_garage' => 'bail|nullable|integer|min:0',
+            'embed' => 'bail|nullable|url|max:300',
+            'address' => 'sometimes|bail|nullable|max:100',
+            'number' => 'sometimes|nullable|integer|min:0',
+            'complement' => 'max:15',
+            'cep' => 'sometimes|bail|nullable|formato_cep',
+            'latitude' => 'sometimes|nullable|integer',
+            'longitude' => 'sometimes|nullable|integer',
+            'neighborhood' => 'bail|required|min:2|max:100',
+            'city' => 'bail|required|min:2|max:100',
+            'state' => 'bail|min:2|max:100',
+            'initials' => 'bail|required|min:2|max:2',
         ];
     }
 
     public function messages()
     {
         return [
-            "lte" => 'O valor mínimo deve ser menor ou igual ao máximo.',
+            'lte' => 'O valor mínimo deve ser menor ou igual ao máximo.',
             'min' => 'O campo deve ter no mínimo :min caracteres.',
             'max' => 'Limite o campo a no máximo :max caracteres.',
             'numeric' => 'Formato de número inválido.',
@@ -84,16 +83,17 @@ class StorePropertyRequest extends FormRequest
                 'uuid' => 'Escolha um tipo de negócio',
             ],
             // Address
-            "neighborhood.required" => "Forneça um bairro.",
-            "city.required" => "Forneça uma cidade.",
-            "initials.required" => "Forneça um estado.",
+            'neighborhood.required' => 'Forneça um bairro.',
+            'city.required' => 'Forneça uma cidade.',
+            'initials.required' => 'Forneça um estado.',
         ];
     }
+
     public function getData(): array
     {
         return $this->except(
             array_merge(
-                ["businesses"],
+                ['businesses'],
                 Property::$columnsAddress,
                 Property::$columnsCreateUpdateNeighborhood
             )
@@ -112,7 +112,7 @@ class StorePropertyRequest extends FormRequest
             'city' => Str::upper($this->city),
             'state' => $this->state ? Str::upper($this->state) : $this->getStateByInitials($this->initials),
             'initials' => Str::upper($this->initials),
-            'country' => $this->country ? Str::upper($this->country) : "BRASIL",
+            'country' => $this->country ? Str::upper($this->country) : 'BRASIL',
         ]);
     }
 
@@ -120,34 +120,35 @@ class StorePropertyRequest extends FormRequest
     {
         $initials = Str::upper($initials);
         $states = [
-            ["AC" => "Acre"],
-            ["AL" => "Alagoas"],
-            ["AP" => "Amapá"],
-            ["AM" => "Amazonas"],
-            ["BA" => "Bahia"],
-            ["CE" => "Ceará"],
-            ["DF" => "Distrito Federal"],
-            ["ES" => "Espírito Santo"],
-            ["GO" => "Goiás"],
-            ["MA" => "Maranhão"],
-            ["MT" => "Mato Grosso"],
-            ["MS" => "Mato Grosso do Sul"],
-            ["MG" => "Minas Gerais"],
-            ["PA" => "Pará"],
-            ["PB" => "Paraíba"],
-            ["PR" => "Paraná"],
-            ["PE" => "Pernambuco"],
-            ["PI" => "Piauí"],
-            ["RJ" => "Rio de Janeiro"],
-            ["RN" => "Rio Grande do Norte"],
-            ["RS" => "Rio Grande do Sul"],
-            ["RO" => "Rondônia"],
-            ["RR" => "Roraima"],
-            ["SC" => "Santa Catarina"],
-            ["SP" => "São Paulo"],
-            ["SE" => "Sergipe"],
-            ["TO" => "Tocantins"],
+            ['AC' => 'Acre'],
+            ['AL' => 'Alagoas'],
+            ['AP' => 'Amapá'],
+            ['AM' => 'Amazonas'],
+            ['BA' => 'Bahia'],
+            ['CE' => 'Ceará'],
+            ['DF' => 'Distrito Federal'],
+            ['ES' => 'Espírito Santo'],
+            ['GO' => 'Goiás'],
+            ['MA' => 'Maranhão'],
+            ['MT' => 'Mato Grosso'],
+            ['MS' => 'Mato Grosso do Sul'],
+            ['MG' => 'Minas Gerais'],
+            ['PA' => 'Pará'],
+            ['PB' => 'Paraíba'],
+            ['PR' => 'Paraná'],
+            ['PE' => 'Pernambuco'],
+            ['PI' => 'Piauí'],
+            ['RJ' => 'Rio de Janeiro'],
+            ['RN' => 'Rio Grande do Norte'],
+            ['RS' => 'Rio Grande do Sul'],
+            ['RO' => 'Rondônia'],
+            ['RR' => 'Roraima'],
+            ['SC' => 'Santa Catarina'],
+            ['SP' => 'São Paulo'],
+            ['SE' => 'Sergipe'],
+            ['TO' => 'Tocantins'],
         ];
-        return isset($states[$initials]) ? Str::upper($states[$initials]) : "UNDEFINED";
+
+        return isset($states[$initials]) ? Str::upper($states[$initials]) : 'UNDEFINED';
     }
 }

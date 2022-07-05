@@ -15,8 +15,9 @@ use Jeffpereira\RealEstate\Observers\Property\PropertyObserver;
 class RealEstateServiceProvider extends ServiceProvider
 {
     protected $commands = [
-        'Jeffpereira\RealEstate\Console\Commands\Install'
+        'Jeffpereira\RealEstate\Console\Commands\Install',
     ];
+
     /**
      * Register services.
      *
@@ -26,13 +27,9 @@ class RealEstateServiceProvider extends ServiceProvider
     {
         $this->commands($this->commands);
         $this->mergeConfigFrom(__DIR__ . '/../config/realestatelaravel.php', 'realestatelaravel');
-        /*
-        * Register the service provider for the dependency.
-        */
+        // Register the service provider for the dependency.
         $this->app->register('Intervention\Image\ImageServiceProvider');
-        /*
-        * Create aliases for the dependency.
-        */
+        // Create aliases for the dependency.
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
     }
@@ -71,8 +68,8 @@ class RealEstateServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadFactoriesFrom(__DIR__ . "/../database/factories");
-        $this->loadViewsFrom(__DIR__ . "/../resources/views", "jprealestate");
+        $this->loadFactoriesFrom(__DIR__ . '/../database/factories');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'jprealestate');
     }
 
     protected function registerCustomRules()

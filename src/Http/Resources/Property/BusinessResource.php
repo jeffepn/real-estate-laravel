@@ -40,14 +40,15 @@ class BusinessResource extends JsonResource
             'attributes' => [
                 'slug' => $this->slug,
                 'name' => Str::title($this->name),
-            ]
+            ],
         ];
     }
+
     public function with($request)
     {
         return [
             'error' => false,
-            'message' => $this->message
+            'message' => $this->message,
         ];
     }
 }

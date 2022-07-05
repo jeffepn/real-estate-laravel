@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     async getData() {
-      await reaxios(window.reroute("jp_realestate.type.index")).then(
+      await reaxios(reroute("jp_realestate.api.type.index")).then(
         ({ data }) => {
           this.data = data.data;
         },
@@ -101,14 +101,14 @@ export default {
     },
     closeModalAddType() {
       this.showModal = false;
-      this.$eventBus.$emit("clear-add-type");
+      window.eventBus.$emit("clear-add-type");
     },
   },
   async beforeMount() {
     await this.getData();
   },
   mounted() {
-    this.$eventBus.$on("reload-add-type", () => {
+    window.eventBus.$on("reload-add-type", () => {
       this.getData();
     });
     window.retooltip();

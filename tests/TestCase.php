@@ -5,7 +5,6 @@ namespace Jeffpereira\RealEstate\Tests;
 use Faker\Provider\pt_BR\Address as Pt_BRAddress;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Config;
 use Jeffpereira\RealEstate\RealEstateServiceProvider;
 use JPAddress\JPAddressServiceProvider;
 use JPAddress\Models\Address\Address;
@@ -20,23 +19,30 @@ use LaravelLegends\PtBrValidator\ValidatorProvider;
 class TestCase extends \Orchestra\Testbench\TestCase
 {
     use WithFaker;
+
+    public function createAddress()
+    {
+        return factory(Address::class)->create([
+            'cep' => '99999999',
+            'neighborhood_id' => factory(Neighborhood::class)->create([
+                'city_id' => factory(City::class)->create([
+                    'state_id' => factory(State::class)->create([
+                        'country_id' => Country::firstOrCreate(['name' => 'brasil'])->id,
+                    ]),
+                ])->id,
+            ])->id,
+        ]);
+    }
     //protected $loadEnvironmentVariables = true;
 
     // When testing inside of a Laravel installation, this is not needed
     protected function getPackageProviders($app)
     {
         return [
-            RealEstateServiceProvider::class, JPAddressServiceProvider::class, ValidatorProvider::class
+            RealEstateServiceProvider::class, JPAddressServiceProvider::class, ValidatorProvider::class,
         ];
     }
-    // When testing inside of a Laravel installation, this is not needed
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->artisan('config:clear')->run();
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
-        $this->faker->addProvider(new Pt_BRAddress($this->faker));
-    }
+
     /**
      * Define environment setup.
      *
@@ -50,34 +56,28 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $app['config']->set('realestatelaravel', config('realestatelaravel'));
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'mysql',
-            'host'        => env('DB_HOST', 'localhost'),
-            'port'        => env('DB_PORT', 3306),
-            'database'    => env('DB_DATABASE', 'database'),
-            'username'    => env('DB_USERNAME', 'forge'),
-            'password'    => env('DB_PASSWORD', 'forge'),
-            'unix_socket' => "",
-            'charset'     => 'utf8mb4',
-            'collation'   => 'utf8mb4_unicode_ci',
-            'prefix'      => '',
-            'strict'      => true,
-            'engine'      => env('DB_ENGINE', null),
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', 3306),
+            'database' => env('DB_DATABASE', 'database'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', 'forge'),
+            'unix_socket' => '',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => env('DB_ENGINE', null),
         ]);
         parent::getEnvironmentSetUp($app);
     }
 
-
-    public function createAddress()
+    // When testing inside of a Laravel installation, this is not needed
+    protected function setUp(): void
     {
-        return factory(Address::class)->create([
-            'cep' => '99999999',
-            'neighborhood_id' => factory(Neighborhood::class)->create([
-                'city_id' => factory(City::class)->create([
-                    'state_id' => factory(State::class)->create([
-                        'country_id' => Country::firstOrCreate(['name' => 'brasil'])->id
-                    ])
-                ])->id
-            ])->id
-        ]);
+        parent::setUp();
+        $this->artisan('config:clear')->run();
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+        $this->faker->addProvider(new Pt_BRAddress($this->faker));
     }
 }

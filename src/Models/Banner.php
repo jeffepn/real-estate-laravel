@@ -5,6 +5,7 @@ namespace Jeffpereira\RealEstate\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 class Banner extends Model
 {
@@ -17,6 +18,6 @@ class Banner extends Model
 
     public function getWayUrlAttribute()
     {
-        return Storage::disk(config('realestatelaravel.filesystem.disk'))->url($this->way);
+        return Storage::disk(ConfigHelper::get('filesystem.disk'))->url($this->way);
     }
 }

@@ -51,7 +51,7 @@ export default {
   watch: {
     show() {
       if (this.show) {
-        this.$eventBus.$emit("reload-add-type");
+        window.eventBus.$emit("reload-add-type");
       }
     },
   },
@@ -59,7 +59,7 @@ export default {
     submit() {
       this.form.clearErrors();
       reaxios
-        .post(window.reroute("jp_realestate.sub-type.store"), this.form.data)
+        .post(reroute("jp_realestate.api.sub_type.store"), this.form.data)
         .then((response) => {
           this.$toast.message({
             message: response.data.message,
@@ -86,7 +86,7 @@ export default {
     },
   },
   mounted() {
-    this.$eventBus.$on("clear-add-sub-type", () => {
+    window.eventBus.$on("clear-add-sub-type", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });

@@ -10,17 +10,10 @@ use Jeffpereira\RealEstate\Models\Traits\SetSlug;
 
 class Type extends Model
 {
-    use UsesUuid, SetSlug;
+    use UsesUuid;
+    use SetSlug;
 
     protected $guarded = [];
-
-    protected static function boot()
-    {
-        parent::boot();
-        static::saving(function ($type) {
-            $type->name = Str::upper($type->name);
-        });
-    }
 
     // Relationships
     public function sub_types(): HasMany
@@ -31,5 +24,13 @@ class Type extends Model
     protected function generateSlug()
     {
         return Str::slug($this->name);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::saving(function ($type) {
+            $type->name = Str::upper($type->name);
+        });
     }
 }

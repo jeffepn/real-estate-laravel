@@ -126,10 +126,10 @@ export default {
       }
       return this.edit
         ? reaxios.post(
-            window.reroute("jp_realestate.banner.update", [this.banner.id]),
+            reroute("jp_realestate.api.banner.update", [this.banner.id]),
             formData,
           )
-        : reaxios.post(window.reroute("jp_realestate.banner.store"), formData);
+        : reaxios.post(reroute("jp_realestate.api.banner.store"), formData);
     },
     successSubmit(data) {
       this.$emit("submitSuccess", data);
@@ -158,7 +158,7 @@ export default {
     },
   },
   mounted() {
-    this.$eventBus.$on("clear-add-business", () => {
+    window.eventBus.$on("clear-add-business", () => {
       this.form.clearFields();
       this.form.clearErrors();
     });

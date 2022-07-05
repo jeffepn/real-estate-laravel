@@ -11,17 +11,11 @@ use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 
 class Business extends Model
 {
-    use UsesUuid, SetSlug;
+    use UsesUuid;
+    use SetSlug;
 
     protected $guarded = [];
 
-    protected static function boot()
-    {
-        parent::boot();
-        static::saving(function ($business) {
-            $business->name = Str::upper($business->name);
-        });
-    }
     // Relationships
     public function properties(): BelongsToMany
     {
@@ -45,5 +39,13 @@ class Business extends Model
     protected function generateSlug()
     {
         return Str::slug($this->name);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::saving(function ($business) {
+            $business->name = Str::upper($business->name);
+        });
     }
 }

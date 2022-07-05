@@ -4,7 +4,6 @@ namespace Jeffpereira\RealEstate\Http\Resources\Property;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Jeffpereira\RealEstate\Http\Resources\BusinessPropertyResource;
-use Jeffpereira\RealEstate\Models\Property\BusinessProperty;
 use JPAddress\Resources\AddressResource;
 use JPAddress\Resources\CityResource;
 use JPAddress\Resources\CountryResource;
@@ -62,38 +61,39 @@ class PropertyResource extends JsonResource
                 'min_garage' => $this->min_garage,
                 'max_garage' => $this->max_garage,
                 'embed' => $this->embed,
-                'active' => (bool)$this->active,
+                'active' => (bool) $this->active,
             ],
             'relationships' => [
                 'situation' => [
                     'data' => [
                         'type' => 'situation',
                         'id' => $this->situation_id,
-                    ]
+                    ],
                 ],
                 'sub_type' => [
                     'data' => [
                         'type' => 'sub_type',
                         'id' => $this->sub_type_id,
-                    ]
+                    ],
                 ],
                 'address' => [
                     'data' => [
                         'type' => 'address',
                         'id' => $this->address_id,
-                    ]
+                    ],
                 ],
                 'businesses' => $this->businessesProperty->map(function ($businessProperty) {
                     return [
                         'data' => [
                             'type' => 'business_property',
-                            'id' => $businessProperty->id
-                        ]
+                            'id' => $businessProperty->id,
+                        ],
                     ];
                 }),
-            ]
+            ],
         ];
     }
+
     public function with($request)
     {
         $includeds = [
@@ -116,10 +116,11 @@ class PropertyResource extends JsonResource
         })->toArray();
         $includeds = array_merge($includeds, $businessesProperty);
         $includeds = array_merge($includeds, $businesses);
+
         return [
             'included' => $includeds,
             'error' => false,
-            'message' => $this->message
+            'message' => $this->message,
         ];
     }
 }

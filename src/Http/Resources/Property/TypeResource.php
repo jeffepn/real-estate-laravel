@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 
 class TypeResource extends JsonResource
 {
-
     private $message;
 
     /**
@@ -21,6 +20,7 @@ class TypeResource extends JsonResource
         parent::__construct($resource);
         $this->message = $message;
     }
+
     /**
      * Transform the resource into an array.
      *
@@ -41,11 +41,11 @@ class TypeResource extends JsonResource
                     'data' => $this->sub_types->map(function ($subType) {
                         return [
                             'type' => 'sub_type',
-                            'id' => $subType->id
+                            'id' => $subType->id,
                         ];
-                    })
+                    }),
                 ],
-            ]
+            ],
         ];
     }
 
@@ -54,7 +54,7 @@ class TypeResource extends JsonResource
         return [
             'included' => new SubTypeCollection($this->sub_types),
             'error' => false,
-            'message' => $this->message
+            'message' => $this->message,
         ];
     }
 }

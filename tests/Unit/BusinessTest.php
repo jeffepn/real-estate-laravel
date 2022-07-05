@@ -4,12 +4,7 @@ namespace Jeffpereira\RealEstate\Tests\Unit;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Jeffpereira\RealEstate\Http\Requests\Property\BusinessRequest;
 use Jeffpereira\RealEstate\Models\Property\Business;
-use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Tests\TestCase;
 
 class BusinessTest extends TestCase
@@ -21,7 +16,7 @@ class BusinessTest extends TestCase
      */
     public function slug_is_defined_per_name_of_business()
     {
-        $business = factory(Business::class)->create(['name' => "Nome teste de negócio"]);
+        $business = factory(Business::class)->create(['name' => 'Nome teste de negócio']);
         $this->assertEquals('nome-teste-de-negocio', $business->slug);
     }
 
@@ -30,11 +25,12 @@ class BusinessTest extends TestCase
      */
     public function is_name_of_unique_must_be_unique()
     {
-        $business = factory(Business::class)->create(['name' => "Nome teste de negócio"]);
+        $business = factory(Business::class)->create(['name' => 'Nome teste de negócio']);
         $this->assertEquals('nome-teste-de-negocio', $business->slug);
         $codeError = null;
+
         try {
-            $business = factory(Business::class)->create(['name' => "Nome teste de negócio"]);
+            $business = factory(Business::class)->create(['name' => 'Nome teste de negócio']);
             $this->assertEquals('nome-teste-de-negocio', $business->slug);
         } catch (QueryException $ex) {
             $codeError = $ex->getCode();
@@ -53,6 +49,4 @@ class BusinessTest extends TestCase
     //     $business->properties()->saveMany(factory(Property::class, 20)->make());
     //     $this->assertEquals(21, $business->refresh()->properties->count());
     // }
-
-
 }

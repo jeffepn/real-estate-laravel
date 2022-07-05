@@ -1,6 +1,4 @@
 import Vue from "vue";
-window.eventBus = new Vue();
-Vue.prototype.$eventBus = window.eventBus;
 
 import axios from "axios";
 axios.defaults.headers.common = {
@@ -17,5 +15,4 @@ import toast from "@/toast";
 Vue.prototype.$toast = toast;
 
 import VueDND from "awe-dnd";
-
 Vue.use(VueDND);

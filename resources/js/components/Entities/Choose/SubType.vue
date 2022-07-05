@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     async getData() {
-      await reaxios(window.reroute("jp_realestate.sub-type.index")).then(
+      await reaxios(reroute("jp_realestate.api.sub_type.index")).then(
         ({ data }) => {
           this.data = data.data;
         },
@@ -108,7 +108,7 @@ export default {
     },
     closeModalAddSubType() {
       this.showModal = false;
-      this.$eventBus.$emit("clear-add-sub-type");
+      window.eventBus.$emit("clear-add-sub-type");
     },
   },
   async created() {

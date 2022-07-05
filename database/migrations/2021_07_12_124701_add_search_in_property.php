@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -14,8 +13,8 @@ class AddSearchInProperty extends Migration
      */
     public function up()
     {
-        if (env("DB_CONNECTION") != "sqlite") {
-            DB::statement("ALTER TABLE properties ADD FULLTEXT fulltextproperties_index (min_description, content)");
+        if (env('DB_CONNECTION') != 'sqlite') {
+            DB::statement('ALTER TABLE properties ADD FULLTEXT fulltextproperties_index (min_description, content)');
         }
     }
 
@@ -26,8 +25,10 @@ class AddSearchInProperty extends Migration
      */
     public function down()
     {
-        Schema::table('properties', function ($table) {
-            $table->dropIndex('fulltextproperties_index');
-        });
+        if (env('DB_CONNECTION') != 'sqlite') {
+            Schema::table('properties', function ($table) {
+                $table->dropIndex('fulltextproperties_index');
+            });
+        }
     }
 }
