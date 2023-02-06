@@ -5,9 +5,15 @@
 </p>
 
 <p align="center">
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/jeffersonpereira/realestatelaravel" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/jeffersonpereira/realestatelaravel" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/jeffersonpereira/realestatelaravel" alt="License"></a>
+<a href="https://packagist.org/packages/jeffersonpereira/realestatelaravel">
+<img src="https://img.shields.io/packagist/dt/jeffersonpereira/realestatelaravel" alt="Total Downloads">
+</a>
+<a href="https://packagist.org/packages/jeffersonpereira/realestatelaravel">
+<img src="https://img.shields.io/packagist/v/jeffersonpereira/realestatelaravel" alt="Latest Stable Version">
+</a>
+<a href="https://packagist.org/packages/jeffersonpereira/realestatelaravel">
+<img src="https://img.shields.io/packagist/l/jeffersonpereira/realestatelaravel" alt="License">
+</a>
 </p>
 
 ## Description
