@@ -6,13 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\HasMedia;
 
-class ImageProperty extends Model implements HasMedia
+class ImageProperty extends Model
 {
     use UsesUuid;
-    use InteractsWithMedia;
 
     protected $table = 'image_properties';
 
