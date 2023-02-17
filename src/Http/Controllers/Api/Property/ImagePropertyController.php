@@ -2,12 +2,12 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Jeffpereira\RealEstate\Models\Property\Property;
-use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyResource;
@@ -16,6 +16,9 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 use Jeffpereira\RealEstate\Http\Controllers\Traits\TreatmentImages;
 use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyUpdateOrderRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyCollection;
+use Jeffpereira\RealEstate\Services\DownloadService;
+use Throwable;
+use TypeError;
 
 class ImagePropertyController extends Controller
 {
@@ -106,5 +109,28 @@ class ImagePropertyController extends Controller
         }
 
         return response(['error' => false, 'message' => Terminologies::get('all.common.save_data')], 200);
+    }
+
+    public function bulkDownload(Request $request, DownloadService $downloadService)
+    {
+        try {
+            $files = ImageProperty::whereIn('id', $request->ids)->get();
+
+            return response()->download(
+                $downloadService->createZipDownload(
+                    $files->map(function ($file) {
+                        return $file->urlStorage();
+                    })->toArray()
+                )
+            );
+        } catch (TypeError $err) {
+            $this->registerError(new Exception($err->getMessage(), $err->getCode()));
+
+            return redirect()->back();
+        } catch (Throwable $th) {
+            $this->registerError($th);
+
+            return redirect()->back();
+        }
     }
 }

@@ -61,6 +61,36 @@
       </p>
       <p class="text-danger" v-if="errors.length" v-text="errors[0]"></p>
     </div>
+    <div class="row justify-content-between align-content-center mt-2 mb-4">
+      <div
+        class="col-sm-8 d-flex justify-content-center flex-column text-start"
+      >
+        <div class="w-100 ">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              v-model="checkAll"
+              id="flexCheckAll"
+            />
+            <label
+              class="form-check-label"
+              for="flexCheckAll"
+              v-text="checkAll ? 'Desmarcar tudo' : 'Marcar tudo'"
+            >
+            </label>
+          </div>
+        </div>
+        <small
+          class="text-danger mt-2"
+          v-if="errorBulk"
+          v-text="messageBulk"
+        ></small>
+      </div>
+      <div class="col-sm-4 text-end">
+        <ReButtonFloat :actions="actionsBulk" v-on:bulk-event="bulkEvent" />
+      </div>
+    </div>
     <div class="row">
       <div
         class="color-item col-auto mb-2 position-relative"
@@ -68,16 +98,11 @@
         :key="index"
         v-dragging="{ item: image, list: images, group: 'image' }"
       >
-        <div
-          class="item-image"
-          :style="`background-image: url(${image.way})`"
-        ></div>
-        <re-button
-          classes="btn btn-danger btn-circle button-trash"
-          @click="removeImage(image.id)"
-        >
-          <i class="fas fa-trash"></i>
-        </re-button>
+        <ReItemImageMedia
+          :ref="`${prefixImage}${image.id}`"
+          :image="image"
+          v-on:deleted-image="removeImageOfContext"
+        />
       </div>
     </div>
   </div>
@@ -88,6 +113,9 @@ import ReInput from "@/components/Controls/Inputs/Input";
 import ReCheckbox from "@/components/Controls/Inputs/Checkbox";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
 import ReEditWatterMark from "@/components/Entities/AppSettings/WatterMark/Edit";
+import ReButtonFloat from "@/components/Buttons/ButtonFloat";
+import ReItemImageMedia from "@/components/Images/ItemImageMedia";
+import ReSelect from "@/components/Controls/Inputs/Select";
 
 export default {
   name: "MediaProperty",
@@ -102,6 +130,14 @@ export default {
     ReButton,
     ReCheckbox,
     ReEditWatterMark,
+    ReButtonFloat,
+    ReItemImageMedia,
+    ReSelect,
+  },
+  watch: {
+    checkAll(newValue) {
+      this.updateCheckAllImages(newValue);
+    },
   },
   data() {
     return {
@@ -109,6 +145,18 @@ export default {
       loadingFiles: false,
       useWatterMark: false,
       errors: [],
+      prefixImage: "item-image-media-",
+      selectedActionBulk: null,
+      errorBulk: false,
+      messageBulk: "Selecion pelo menos um item para aplicar a ação.",
+      actionsBulk: [
+        {
+          label: "Download",
+          slug: "download",
+          icon: '<i class="fas fa-download"></i>',
+        },
+      ],
+      checkAll: false,
     };
   },
   methods: {
@@ -183,16 +231,48 @@ export default {
           });
         });
     },
-    removeImage(id) {
-      reaxios
-        .delete(reroute("jp_realestate.api.image_property.destroy", [id]))
-        .then(() => {
-          this.images = this.images.filter((element) => element.id !== id);
-        });
-    },
     updateOrderOfImages(data) {
       reaxios.patch(reroute("jp_realestate.api.image_property.update_order"), {
         orders: data,
+      });
+    },
+    removeImageOfContext(id) {
+      this.images = this.images.filter((element) => element.id !== id);
+    },
+    bulkEvent(action) {
+      this.errorBulk = false;
+      switch (action.slug) {
+        case "download":
+          this.bulkDownload();
+          break;
+      }
+    },
+    bulkDownload() {
+      const ids = [];
+      this.images.forEach((image) => {
+        const ref = `${this.prefixImage}${image.id}`;
+        if (this.$refs[ref][0] && this.$refs[ref][0].checked) {
+          ids.push(image.id);
+        }
+      });
+
+      if (!ids.length) {
+        this.errorBulk = true;
+        return;
+      }
+
+      let url = `${reroute("jp_realestate.image_property.bulk_download")}?`;
+
+      ids.forEach((el) => url += `ids[]=${el}&`);
+
+      window.location.assign(url.toString());
+    },
+    updateCheckAllImages(checked) {
+      this.images.forEach((image) => {
+        const ref = `${this.prefixImage}${image.id}`;
+        if (this.$refs[ref][0]) {
+          this.$refs[ref][0].checked = checked;
+        }
       });
     },
   },
@@ -207,23 +287,12 @@ export default {
       });
       this.updateOrderOfImages(data);
     });
+    retooltip();
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.button-trash {
-  position: absolute;
-  right: 0;
-  top: -5px;
-}
-.item-image {
-  width: 150px;
-  height: 150px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-}
 $sizeSquareWatterMark: 50px;
 .square-upload {
   width: $sizeSquareWatterMark;
