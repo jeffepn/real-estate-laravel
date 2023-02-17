@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Jeffpereira\RealEstate\Http\Controllers\Api\Property\ImagePropertyController;
 use Jeffpereira\RealEstate\Http\Controllers\HomeController;
 use Jeffpereira\RealEstate\Http\Controllers\ProjectController;
 use Jeffpereira\RealEstate\Http\Controllers\PropertyController;
@@ -22,6 +23,7 @@ Route::middleware(ConfigHelper::get('middleware.web'))->group(function () {
             //Banners
             //Route::get('banners', 'BannerController@list')->name('jp_realestate.banner.list');
             //Route::get('banners/edit/{banner}', 'BannerController@edit')->name('jp_realestate.banner.edit');
+            Route::get('image-property/bulk-download', [ImagePropertyController::class, 'bulkDownload'])->name('image_property.bulk_download');
         });
     });
 });
