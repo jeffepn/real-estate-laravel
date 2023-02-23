@@ -13,29 +13,37 @@ use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 trait TreatmentImages
 {
-    private function storageImage(string $entity, UploadedFile $image, string $altImage, ?bool $useWatterMark = false): string
+    private function storageImage(string $entity, UploadedFile $image, string $altImage, ?bool $useWatterMark = false): array
     {
-        $optmize = ConfigHelper::get("realestatelaravel.filesystem.entities.{$entity}.optmize");
-        $path = ConfigHelper::get("realestatelaravel.filesystem.entities.{$entity}.path");
+        $optmize = ConfigHelper::get("filesystem.entities.{$entity}.optmize");
+        $path = ConfigHelper::get("filesystem.entities.{$entity}.path");
         $disk = ConfigHelper::get('filesystem.disk');
         $img = Image::make($image);
+
         if ($useWatterMark) {
             $img = $this->insertWatterMark($entity, $img);
         }
         $img->orientate();
+        $imgThumbnail = clone $img;
         if ($optmize) {
-            $img->resize(null, 1080, function ($constraint) {
+            $img->resize(1080, null, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });
         }
+        $extension = 'jpg';
+        $img->encode($extension, $optmize ? 60 : 100);
 
-        $img->encode('jpg', $optmize ? 60 : 100);
+        $nameImage = Str::slug($altImage) . '-' . Str::uuid();
+        $completNameImage = "{$path}/{$nameImage}.{$extension}";
 
-        $nameImage = $path . '/' . Str::slug($altImage) . Str::uuid() . '.jpg';
-        Storage::disk($disk)->put($nameImage, $img);
+        Storage::disk($disk)->put($completNameImage, $img);
+        $wayThumbnail = $this->createThumbnail($imgThumbnail, 300, $entity, "{$nameImage}-small.{$extension}", $optmize);
 
-        return $nameImage;
+        return [
+            'way' => $completNameImage,
+            'thumbnail' => $wayThumbnail,
+        ];
     }
 
     private function insertWatterMark(string $entity, InterventionImage $img): InterventionImage
@@ -63,5 +71,21 @@ trait TreatmentImages
         });
 
         return $img;
+    }
+
+    private function createThumbnail(InterventionImage $image, int $width, string $entity, string $nameImage, bool $optmize): string
+    {
+        $image->resize($width, null, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+
+        $path = ConfigHelper::get("filesystem.entities.{$entity}.path");
+        $disk = ConfigHelper::get('filesystem.disk');
+
+        $nameImage = "{$path}/thumbnail/{$nameImage}";
+        $image->encode('jpg', $optmize ? 80 : 100);
+        Storage::disk($disk)->put($nameImage, $image);
+
+        return $nameImage;
     }
 }

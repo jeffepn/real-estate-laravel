@@ -22,6 +22,11 @@ class ImageProperty extends Model
         return Storage::disk(ConfigHelper::get('filesystem.disk'))->url($this->way);
     }
 
+    public function getThumbnailUrlAttribute()
+    {
+        return Storage::disk(ConfigHelper::get('filesystem.disk'))->url($this->thumbnail);
+    }
+
     public function urlStorage()
     {
         return Storage::disk(ConfigHelper::get('filesystem.disk'))

@@ -10,6 +10,8 @@ scripts:
     - kool run phpcbf
     - kool run phpstan
     - kool run phpunit
+    - kool run yarn install
+    - kool run yarn production
   node-setup:
     - kool run yarn install
     - kool run yarn dev

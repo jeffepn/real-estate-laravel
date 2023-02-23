@@ -61,7 +61,7 @@
       >
         <div
           class="item-image"
-          :style="`background-image: url(${image.way})`"
+          :style="`background-image: url(${image.thumbnail ? image.thumbnail : image.way})`"
         ></div>
         <re-button
           classes="btn btn-danger btn-circle button-trash"
@@ -119,6 +119,7 @@ export default {
               acumulator.push({
                 id: currentValue.id,
                 way: currentValue.attributes.way,
+                thumbnail: currentValue.attributes.thumbnail,
                 alt: currentValue.attributes.alt,
               });
               return acumulator;
@@ -155,6 +156,7 @@ export default {
             this.images.push({
               id: image.id,
               way: image.attributes.way,
+              thumbnail: image.attributes.thumbnail,
               alt: image.attributes.alt,
             });
           });

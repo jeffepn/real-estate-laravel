@@ -94,7 +94,10 @@ class ProjectImageTest extends TestCase
                             $imageProject->image->toArray(),
                             ['alt', 'title', 'description', 'author']
                         ),
-                        ['way' => $imageProject->image->way_url]
+                        [
+                            'way' => $imageProject->image->way_url,
+                            'thumbnail' => $imageProject->image->thumbnail_url,
+                        ]
                     ),
                     'relationships' => [],
                 ];
