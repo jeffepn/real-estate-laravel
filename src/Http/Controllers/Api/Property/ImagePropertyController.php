@@ -44,10 +44,12 @@ class ImagePropertyController extends Controller
             $altImage = $property->generateAltImage();
             $imagesStore = collect();
             foreach ($request->images as $image) {
+                $ways = $this->storageImage('properties', $image, $altImage, $request->use_watter_mark);
                 $imagesStore->push(
                     ImageProperty::create([
                         'property_id' => $property->id,
-                        'way' => $this->storageImage('properties', $image, $altImage, $request->use_watter_mark),
+                        'way' => $ways['way'],
+                        'thumbnail' => $ways['thumbnail'],
                         'alt' => $altImage,
                     ])
                 );

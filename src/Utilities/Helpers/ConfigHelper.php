@@ -3,6 +3,7 @@
 namespace Jeffpereira\RealEstate\Utilities\Helpers;
 
 use Illuminate\Support\Arr;
+use Jeffpereira\RealEstate\Enum\DirectoryImagesEnum;
 
 class ConfigHelper
 {
@@ -13,9 +14,9 @@ class ConfigHelper
         'middleware.web' => 'web',
         'middleware.api' => 'api',
         'filesystem.disk' => 'public',
-        'filesystem.entities.properties.path' => 'properties',
+        'filesystem.entities.properties.path' => DirectoryImagesEnum::PROPERTY,
         'filesystem.entities.properties.optmize' => true,
-        'filesystem.entities.projects.path' => 'projects',
+        'filesystem.entities.projects.path' => DirectoryImagesEnum::PROJECT,
         'filesystem.entities.projects.optmize' => true,
         'url_home' => null,
     ];

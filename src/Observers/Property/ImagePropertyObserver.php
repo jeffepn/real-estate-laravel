@@ -15,6 +15,10 @@ class ImagePropertyObserver
     {
         Storage::disk(ConfigHelper::get('filesystem.disk'))
             ->delete($imageProperty->way);
+        if ($imageProperty->thumbnail) {
+            Storage::disk(ConfigHelper::get('filesystem.disk'))
+                ->delete($imageProperty->thumbnail);
+        }
     }
 
     public function creating(ImageProperty $imageProperty)

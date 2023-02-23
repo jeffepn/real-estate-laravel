@@ -2,7 +2,11 @@
   <div>
     <div
       :class="classImage"
-      :style="`background-image: url(${image.way})`"
+      :style="
+        `background-image: url(${
+          image.thumbnail ? image.thumbnail : image.way
+        })`
+      "
       @click="checked = !checked"
     ></div>
     <ReButton
@@ -37,12 +41,12 @@ export default {
   }),
   computed: {
     classImage() {
-      return `item-image ${this.checked ? "border border-info" : ""}`;
+      return `item-image ${this.checked ? "border border-info border-3" : ""}`;
     },
   },
   methods: {
     checkImage(check) {
-        this.checked = check;
+      this.checked = check;
     },
     removeImage(id) {
       reaxios

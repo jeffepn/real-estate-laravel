@@ -14,7 +14,7 @@ class Image extends Model
     public $table = 'images_realestate';
 
     protected $fillable = [
-        'way', 'alt', 'title', 'description', 'author',
+        'way', 'thumbnail', 'alt', 'title', 'description', 'author',
     ];
 
     protected $appends = ['way_url'];
@@ -22,5 +22,10 @@ class Image extends Model
     public function getWayUrlAttribute()
     {
         return Storage::disk(ConfigHelper::get('filesystem.disk'))->url($this->way);
+    }
+
+    public function getThumbnailUrlAttribute()
+    {
+        return Storage::disk(ConfigHelper::get('filesystem.disk'))->url($this->thumbnail);
     }
 }
