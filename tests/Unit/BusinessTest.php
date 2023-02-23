@@ -14,7 +14,7 @@ class BusinessTest extends TestCase
     /**
      * @test
      */
-    public function slug_is_defined_per_name_of_business()
+    public function slugIsDefinedPerNameOfBusiness()
     {
         $business = factory(Business::class)->create(['name' => 'Nome teste de negócio']);
         $this->assertEquals('nome-teste-de-negocio', $business->slug);
@@ -23,7 +23,7 @@ class BusinessTest extends TestCase
     /**
      * @test
      */
-    public function is_name_of_unique_must_be_unique()
+    public function isNameOfUniqueMustBeUnique()
     {
         $business = factory(Business::class)->create(['name' => 'Nome teste de negócio']);
         $this->assertEquals('nome-teste-de-negocio', $business->slug);
@@ -41,7 +41,7 @@ class BusinessTest extends TestCase
     /**
      * @test
      */
-    // public function a_business_can_have_one_or_more_properties()
+    // public function aBusinessCanHaveOneOrMoreProperties()
     // {
     //     $business = factory(Business::class)->create();
     //     $business->properties()->save(factory(Property::class)->make());

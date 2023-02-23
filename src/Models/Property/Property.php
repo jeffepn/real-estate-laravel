@@ -28,7 +28,7 @@ class Property extends Model
             Str::title($this->sub_type->name),
             Str::title($this->address->neighborhood->name),
             Str::title($this->address->neighborhood->city->name),
-            Str::title($this->address->neighborhood->city->state->name)
+            Str::title($this->address->neighborhood->city->state->initials)
         );
     }
 

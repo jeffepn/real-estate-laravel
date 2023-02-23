@@ -55,10 +55,12 @@ class ImageProjectController extends Controller
             foreach ($request->images as $dataImage) {
                 $image = $dataImage['image'];
                 $altImage = Arr::get($dataImage, 'alt') ?? $project->generateAltImage();
+                $ways = $this->storageImage('projects', $image, $altImage, $request->use_watter_mark);
                 $image = Image::create(
                     array_merge(
                         [
-                            'way' => $this->storageImage('projects', $image, $altImage, $request->use_watter_mark),
+                            'way' => $ways['way'],
+                            'thumbnail' => $ways['thumbnail'],
                             'alt' => $altImage,
                         ],
                         $request->only(['title', 'description', 'author'])

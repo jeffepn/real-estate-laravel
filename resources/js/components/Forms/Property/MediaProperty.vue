@@ -88,7 +88,11 @@
         ></small>
       </div>
       <div class="col-sm-4 text-end">
-        <ReButtonFloat :actions="actionsBulk" v-on:bulk-event="bulkEvent" />
+        <ReButtonFloat
+          :actions="actionsBulk"
+          v-on:bulk-event="bulkEvent"
+          data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ações em mass"
+        />
       </div>
     </div>
     <div class="row">
@@ -176,6 +180,7 @@ export default {
               acumulator.push({
                 id: currentValue.id,
                 way: currentValue.attributes.way,
+                thumbnail: currentValue.attributes.thumbnail,
                 alt: currentValue.attributes.alt,
               });
               return acumulator;
@@ -210,6 +215,7 @@ export default {
             this.images.push({
               id: image.id,
               way: image.attributes.way,
+              thumbnail: image.attributes.thumbnail,
               alt: image.attributes.alt,
             });
           });
@@ -263,7 +269,7 @@ export default {
 
       let url = `${reroute("jp_realestate.image_property.bulk_download")}?`;
 
-      ids.forEach((el) => url += `ids[]=${el}&`);
+      ids.forEach((el) => (url += `ids[]=${el}&`));
 
       window.location.assign(url.toString());
     },
