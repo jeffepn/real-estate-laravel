@@ -52,14 +52,15 @@ class Property extends Model
         $subType = $this->sub_type ? $this->sub_type : SubType::find($this->sub_type_id);
 
         $generate = sprintf(
-            '%s em %s - %s %s %s %s %s',
+            '%s em %s - %s %s %s %s %s %s',
             Str::title($subType->name),
             Str::title($this->address->neighborhood->name),
             Str::title($this->address->neighborhood->city->state->initials),
             $this->max_dormitory ? $this->max_dormitory . ' dormitórios,' : '',
             $this->max_bathroom ? $this->max_bathroom . ' banheiros,' : '',
             $this->max_suite ? $this->max_suite . ' suites,' : '',
-            $this->max_garage ? $this->max_garage . ' garagens,' : ''
+            $this->max_garage ? $this->max_garage . ' garagens,' : '',
+            $this->max_restroom ? $this->max_restroom . ' lavabos,' : ''
         );
 
         return Str::slug(Str::limit($generate, 150));

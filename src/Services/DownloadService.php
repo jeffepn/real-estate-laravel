@@ -12,11 +12,11 @@ class DownloadService
     public function createZipDownload(array $wayFiles, $deleteFile = true): string
     {
         $zip = new ZipArchive();
-        $fileNameZip = sprintf("app/%s/files_%d.zip", self::PATH_ZIP, time());
+        $fileNameZip = sprintf('app/%s/files_%d.zip', self::PATH_ZIP, time());
         $this->cleanDirectory();
         $this->checkAndCreateDirectoryZip();
 
-        if (true === ($zip->open(storage_path($fileNameZip), ZipArchive::CREATE | ZipArchive::OVERWRITE))) {
+        if (true === ($zip->open(storage_path($fileNameZip), ZipArchive::CREATE|ZipArchive::OVERWRITE))) {
             foreach ($wayFiles as $way) {
                 $relativeName = basename($way);
                 $zip->addFile($way, $relativeName);

@@ -60,7 +60,10 @@ class PropertyResource extends JsonResource
                 'max_suite' => $this->max_suite,
                 'min_garage' => $this->min_garage,
                 'max_garage' => $this->max_garage,
+                'min_restroom' => $this->min_restroom,
+                'max_restroom' => $this->max_restroom,
                 'embed' => $this->embed,
+                'has_plate' => (bool) $this->has_plate,
                 'active' => (bool) $this->active,
             ],
             'relationships' => [
