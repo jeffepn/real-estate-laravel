@@ -38,7 +38,7 @@ class ImagePropertyResource extends JsonResource
             'id' => $this->id,
             'attributes' => [
                 'way' => $this->way_url,
-                'thumbnail' => $this->thumbnail_url,
+                'thumbnail' => $this->thumbnail ? $this->thumbnail_url : null,
                 'alt' => $this->alt,
                 'order' => $this->order,
             ],

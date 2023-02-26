@@ -19,7 +19,7 @@ class ImageProjectResource extends BaseResource
             'id' => $this->id,
             'attributes' => [
                 'way' => $this->image->way_url,
-                'thumbnail' => $this->image->thumbnail_url,
+                'thumbnail' => $this->image->thumbnail ? $this->image->thumbnail_url : null,
                 'alt' => $this->image->alt,
                 'title' => $this->image->title,
                 'description' => $this->image->description,
