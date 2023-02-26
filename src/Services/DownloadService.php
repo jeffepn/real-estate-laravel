@@ -2,19 +2,21 @@
 
 namespace Jeffpereira\RealEstate\Services;
 
+use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 
 class DownloadService
 {
-    private const PATH_ZIP = 'app/zip-downloads';
+    private const PATH_ZIP = 'zip-downloads';
 
-    public function createZipDownload(array $wayFiles): string
+    public function createZipDownload(array $wayFiles, $deleteFile = true): string
     {
         $zip = new ZipArchive();
-        $fileNameZip = self::PATH_ZIP . '/files_' . time() . '.zip';
+        $fileNameZip = sprintf("app/%s/files_%d.zip", self::PATH_ZIP, time());
+        $this->cleanDirectory();
         $this->checkAndCreateDirectoryZip();
 
-        if (true === ($zip->open(storage_path($fileNameZip), ZipArchive::CREATE|ZipArchive::OVERWRITE))) {
+        if (true === ($zip->open(storage_path($fileNameZip), ZipArchive::CREATE | ZipArchive::OVERWRITE))) {
             foreach ($wayFiles as $way) {
                 $relativeName = basename($way);
                 $zip->addFile($way, $relativeName);
@@ -27,8 +29,11 @@ class DownloadService
 
     private function checkAndCreateDirectoryZip(): void
     {
-        if (!file_exists(storage_path(self::PATH_ZIP))) {
-            mkdir(storage_path(self::PATH_ZIP), 0755, true);
-        }
+        Storage::makeDirectory(self::PATH_ZIP);
+    }
+
+    private function cleanDirectory(): void
+    {
+        Storage::delete(Storage::allFiles(self::PATH_ZIP));
     }
 }
