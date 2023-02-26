@@ -180,6 +180,57 @@
           v-text="form.firstError('max_garage')"
         />
       </div>
+      <div class="mb-2 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex flex-column">
+        <div class="col-12">Lavabos</div>
+        <div class="d-flex mt-2">
+          <re-input
+            class="col-5 pe-1"
+            type="number"
+            :precision="0"
+            v-model="form.data.min_restroom"
+            placeholder="Min."
+            @pressEnter="$emit('pressEnter')"
+          ></re-input>
+          <div class="col-auto px-0 d-flex align-items-center">
+            <i class="fas fa-arrows-alt-h"></i>
+          </div>
+          <re-input
+            class="col-5 ps-1"
+            type="number"
+            :precision="0"
+            v-model="form.data.max_restroom"
+            placeholder="Máx."
+            @pressEnter="$emit('pressEnter')"
+          ></re-input>
+        </div>
+        <p
+          class="text-danger"
+          v-if="form.hasError('min_restroom')"
+          v-text="form.firstError('min_restroom')"
+        />
+        <p
+          class="text-danger"
+          v-if="form.hasError('max_restroom')"
+          v-text="form.firstError('max_restroom')"
+        />
+      </div>
+    </div>
+    <div class="border-bottom mt-4 mb-3">
+      <h4 class="mt-0">Mais detalhes</h4>
+    </div>
+    <div class="form-check form-switch">
+      <ReSwitch
+        v-model="form.data.has_plate"
+        label="O imóvel possui placa no lugar"
+      />
+        <p
+          class="text-danger"
+          v-if="form.hasError('has_plate')"
+          v-text="form.firstError('has_plate')"
+        />
+    </div>
+    <div class="border-bottom mt-4 mb-3">
+      <h4 class="mt-0">Conteúdo</h4>
     </div>
     <div class="mb-2 col-12">
       <re-textarea
@@ -209,12 +260,14 @@
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ReInput from "@/components/Controls/Inputs/Input";
+import ReSwitch from "@/components/Controls/Inputs/Switch";
 import ReTextarea from "@/components/Controls/Inputs/Textarea";
 export default {
   components: {
     ckeditor: CKEditor.component,
     ReInput,
     ReTextarea,
+    ReSwitch,
   },
   props: {
     form: {

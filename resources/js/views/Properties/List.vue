@@ -116,7 +116,7 @@
                     </button>
                   </div>
                 </th>
-                <td v-text="formateAddress(property)"></td>
+                <td v-html="formateAddress(property)"></td>
                 <td v-text="businessesOfProperty(property)"></td>
                 <td
                   v-text="`${property.type.name} - ${property.sub_type.name}`"
@@ -271,7 +271,9 @@ export default {
       this.getProperties();
     },
     formateAddress(property) {
-      return `${property.address.neighborhood}, ${property.address.city} - ${property.address.initials}`;
+      return `${property.address.neighborhood}, ${property.address.city} - ${
+        property.address.initials
+      } ${property.has_plate ? '<i class="fas fa-flag text-danger"></i>' : ""}`;
     },
     businessesOfProperty(property) {
       return property.businesses.reduce((acumulator, currentValue) => {
