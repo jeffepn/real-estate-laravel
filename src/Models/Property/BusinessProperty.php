@@ -4,6 +4,7 @@ namespace Jeffpereira\RealEstate\Models\Property;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Jeffpereira\RealEstate\Enum\BusinessPropertySituationEnum;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 
 class BusinessProperty extends Pivot
@@ -15,7 +16,6 @@ class BusinessProperty extends Pivot
     protected $guarded = [];
 
     // Relationships
-
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
@@ -24,5 +24,15 @@ class BusinessProperty extends Pivot
     public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class);
+    }
+
+    public function getIsCompletedAttribute(): bool
+    {
+        return $this->status_situation === BusinessPropertySituationEnum::COMPLETED;
+    }
+
+    public function getHasSituationAttribute(): bool
+    {
+        return !empty($this->business->name_completed);
     }
 }

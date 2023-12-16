@@ -6,7 +6,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use Jeffpereira\RealEstate\Enum\BusinessPropertySituationEnum;
 use Jeffpereira\RealEstate\Models\Property\Business;
+use Jeffpereira\RealEstate\Models\Property\BusinessProperty;
+use Jeffpereira\RealEstate\Models\Property\ImageProperty;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Models\Property\Situation;
 use Jeffpereira\RealEstate\Models\Property\SubType;
@@ -109,7 +112,7 @@ class PropertyTest extends TestCase
                 'address' => ['data' => ['type' => 'address', 'id' => $property->address_id]],
                 'situation' => ['data' => ['type' => 'situation', 'id' => $property->situation_id]],
                 'businesses' => $property->businesses->map(function ($business) {
-                    return  ['data' => ['type' => 'business', 'id' => $business->id]];
+                    return ['data' => ['type' => 'business', 'id' => $business->id]];
                 })->toArray(),
             ],
         ], $response->json()['data']);
@@ -125,6 +128,8 @@ class PropertyTest extends TestCase
     {
         $situation = $this->faker->boolean() ? factory(Situation::class)->create() : null;
         $subType = factory(SubType::class)->create();
+        $businessSale = factory(Business::class)->state('sale')->create();
+        $businessRent = factory(Business::class)->state('rent')->create();
         $response = $this->postJson(
             route('jp_realestate.api.property.store'),
             [
@@ -157,6 +162,10 @@ class PropertyTest extends TestCase
                 'useful_area' => 200,
                 'ground_area' => 100,
                 'embed' => 'http://google.com',
+                'businesses' => [
+                    ['id' => $businessSale->id, 'value' => 100000],
+                    ['id' => $businessRent->id, 'value' => 1000],
+                ],
             ]
         );
         $response->assertStatus(Response::HTTP_CREATED);
@@ -190,11 +199,24 @@ class PropertyTest extends TestCase
                 'address' => ['data' => ['type' => 'address', 'id' => $property->address_id]],
                 'sub_type' => ['data' => ['type' => 'sub_type', 'id' => $property->sub_type_id]],
                 'situation' => ['data' => ['type' => 'situation', 'id' => $property->situation_id]],
-                'businesses' => $property->businesses->map(function ($business) {
-                    return  ['data' => ['type' => 'business', 'id' => $business->id]];
+                'businesses' => $property->businessesProperty->map(function ($businessProperty) {
+                    return ['data' => ['type' => 'business_property', 'id' => $businessProperty->id]];
                 })->toArray(),
             ],
         ], $response->json()['data']);
+        $this->assertEquals(2, $property->businesses->count());
+        $this->assertEquals(
+            $businessRent->id,
+            $property->businesses->filter(function ($b) {
+                return $b->name === 'ALUGUEL';
+            })->first()->id
+        );
+        $this->assertEquals(
+            $businessSale->id,
+            $property->businesses->filter(function ($b) {
+                return $b->name === 'VENDA';
+            })->first()->id
+        );
         $this->assertEquals('av. campos do jordão', $property->address->address);
         $this->assertEquals(2324, $property->address->number);
         $this->assertEquals('apt. 6', $property->address->complement);
@@ -288,6 +310,109 @@ class PropertyTest extends TestCase
     /**
      * @test
      * @group property
+     * @group property-update
+     * @group update
+     */
+    public function updatePropertyWithAddingBusinesses()
+    {
+        $property = factory(Property::class)->create();
+        $businessSale = factory(Business::class)->state('sale')->create();
+        $businessRent = factory(Business::class)->state('rent')->create();
+        $response = $this->patchJson(route('jp_realestate.api.property.update', $property->id), [
+            'neighborhood' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'initials' => $this->faker->stateAbbr(),
+            'businesses' => [
+                ['id' => $businessSale->id, 'value' => 100000],
+                ['id' => $businessRent->id, 'value' => 1000],
+            ],
+        ]);
+
+        $response->assertStatus(Response::HTTP_OK);
+        $property->refresh();
+        $this->assertEquals(
+            $businessRent->id,
+            $property->businesses->filter(function ($b) {
+                return $b->name === 'ALUGUEL';
+            })->first()->id
+        );
+        $this->assertEquals(
+            $businessSale->id,
+            $property->businesses->filter(function ($b) {
+                return $b->name === 'VENDA';
+            })->first()->id
+        );
+    }
+
+    /**
+     * @test
+     * @group property
+     * @group property-update
+     * @group update
+     */
+    public function updatePropertyWithAddingBusinessesSituation()
+    {
+        $property = factory(Property::class)->create();
+        $businessSale = factory(Business::class)->state('sale')->create();
+        $businessRent = factory(Business::class)->state('rent')->create();
+        $response = $this->patchJson(route('jp_realestate.api.property.update', $property->id), [
+            'neighborhood' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'initials' => $this->faker->stateAbbr(),
+            'businesses' => [
+                ['id' => $businessSale->id, 'value' => 100000],
+                ['id' => $businessRent->id, 'value' => 1000, 'status_situation' => BusinessPropertySituationEnum::COMPLETED],
+            ],
+        ]);
+
+        $response->assertStatus(Response::HTTP_OK);
+        $property->refresh();
+        $businessPropertyRent = $property->businessesProperty->filter(function ($b) {
+            return $b->business->name === 'ALUGUEL';
+        })->first();
+        $this->assertEquals($businessRent->id, $businessPropertyRent->business_id);
+        $businessPropertySale = $property->businessesProperty->filter(function ($b) {
+            return $b->business->name === 'VENDA';
+        })->first();
+        $this->assertEquals($businessSale->id, $businessPropertySale->business_id);
+        $this->assertFalse($businessPropertySale->isCompleted);
+    }
+
+    /**
+     * @test
+     * @group property
+     * @group property-update
+     * @group update
+     */
+    public function updatePropertyWithRemoveBusiness()
+    {
+        $property = factory(Property::class)->create();
+        $businessSale = factory(Business::class)->state('sale')->create();
+        $businessRent = factory(Business::class)->state('rent')->create();
+        foreach ([$businessSale, $businessRent] as $currentBusiness) {
+            factory(BusinessProperty::class)
+                ->create(['property_id' => $property->id, 'business_id' => $currentBusiness->id]);
+        }
+
+        $this->assertEquals(2, $property->businesses()->count());
+
+        $response = $this->patchJson(route('jp_realestate.api.property.update', $property->id), [
+            'neighborhood' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'initials' => $this->faker->stateAbbr(),
+            'businesses' => [
+                ['id' => $businessSale->id, 'value' => 100000],
+            ],
+        ]);
+
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertEquals(1, $property->businesses()->count());
+        $this->assertEquals($businessSale->id, $property->businesses()->first()->id);
+    }
+
+    /**
+     * @test
+     * @group property
      * @group property-destroy
      * @group destroy
      */
@@ -317,6 +442,7 @@ class PropertyTest extends TestCase
                 [
                     'id' => $business->id,
                     'value' => 1000.00,
+                    'status_situation' => BusinessPropertySituationEnum::COMPLETED,
                 ],
             ],
             'sub_type_id' => $subType->id,
@@ -393,6 +519,9 @@ class PropertyTest extends TestCase
             ['key' => 'initials', 'value' => ''],
             ['key' => 'initials', 'value' => 'f'],
             ['key' => 'initials', 'value' => Str::random(3)],
+            ['key' => 'businesses', 'value' => [['id' => 9999, 'value' => rand(10, 10000)]]],
+            ['key' => 'businesses', 'value' => [['id' => $business->id, 'value' => 'oiiooi']]],
+            ['key' => 'businesses', 'value' => [['id' => $business->id, 'value' => rand(10, 10000), 'status_situation' => 9]]],
         ];
         foreach ($array_validation as $item) {
             $aux = $data;
@@ -414,6 +543,120 @@ class PropertyTest extends TestCase
             ]
         );
         $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /**
+     * @test
+     * @group feature
+     * @group property
+     * @group scope
+     * @group scope-active
+     */
+    public function routeInactiveProperty()
+    {
+        $property = factory(Property::class)->state('active')->create();
+        $this->assertTrue($property->isActive);
+
+        $response = $this->patchJson(
+            route('jp_realestate.api.property.active_or_inactive', $property->id),
+            ['active' => false]
+        );
+        $property->refresh();
+
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertTrue($property->isInactive);
+    }
+
+    /**
+     * @test
+     * @group feature
+     * @group property
+     * @group scope
+     * @group scope-active
+     */
+    public function routeActivePropertyWithErrorWhenNotPossibleAcivateWithoutBusinesses()
+    {
+        $property = factory(Property::class)->state('inactive')->create();
+        $property->images()
+            ->createMany(
+                factory(ImageProperty::class, 2)
+                    ->make()
+                    ->makeHidden(['way_url'])
+                    ->toArray()
+            );
+        $this->assertTrue($property->isInactive);
+        $this->assertEquals(2, $property->images()->count());
+
+        $response = $this->patchJson(
+            route('jp_realestate.api.property.active_or_inactive', $property->id),
+            ['active' => true]
+        );
+
+        $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * @test
+     * @group feature
+     * @group property
+     * @group scope
+     * @group scope-active
+     */
+    public function routeActivePropertyWithErrorWhenNotPossibleAcivateWithoutImages()
+    {
+        $property = factory(Property::class)->state('inactive')->create();
+        $property->businessesProperty()
+            ->createMany(
+                factory(BusinessProperty::class, 2)
+                    ->make()
+                    ->toArray()
+            );
+        $this->assertTrue($property->isInactive);
+        $this->assertEquals(2, $property->businesses()->count());
+
+        $response = $this->patchJson(
+            route('jp_realestate.api.property.active_or_inactive', $property->id),
+            ['active' => true]
+        );
+
+        $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * @test
+     * @group feature
+     * @group property
+     * @group scope
+     * @group scope-active
+     */
+    public function routeActivePropertyWithSuccessWhenHasImagesAndBusiness()
+    {
+        $property = factory(Property::class)->state('inactive')->create();
+        $property->businessesProperty()
+            ->createMany(
+                factory(BusinessProperty::class, 3)
+                    ->make()
+                    ->toArray()
+            );
+        $property->images()
+            ->createMany(
+                factory(ImageProperty::class, 2)
+                    ->make()
+                    ->makeHidden(['way_url'])
+                    ->toArray()
+            );
+        $this->assertTrue($property->isInactive);
+        $this->assertEquals(3, $property->businesses()->count());
+        $this->assertEquals(2, $property->images()->count());
+
+        $response = $this->patchJson(
+            route('jp_realestate.api.property.active_or_inactive', $property->id),
+            ['active' => true]
+        );
+        $property->refresh();
+
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertTrue($property->isActive);
     }
 
     // Scopes
