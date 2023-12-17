@@ -5,8 +5,10 @@ namespace Jeffpereira\RealEstate\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Enum\BusinessPropertySituationEnum;
+use Jeffpereira\RealEstate\Events\BusinessPropertyFinalizedEvent;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Models\Property\BusinessProperty;
 use Jeffpereira\RealEstate\Models\Property\ImageProperty;
@@ -352,9 +354,15 @@ class PropertyTest extends TestCase
      */
     public function updatePropertyWithAddingBusinessesSituation()
     {
+        Event::fake(BusinessPropertyFinalizedEvent::class);
         $property = factory(Property::class)->create();
         $businessSale = factory(Business::class)->state('sale')->create();
         $businessRent = factory(Business::class)->state('rent')->create();
+        $property->businessesProperty()
+            ->save(
+                factory(BusinessProperty::class)
+                    ->make(['business_id' => $businessRent->id])
+            );
         $response = $this->patchJson(route('jp_realestate.api.property.update', $property->id), [
             'neighborhood' => $this->faker->streetAddress(),
             'city' => $this->faker->city(),
@@ -376,6 +384,7 @@ class PropertyTest extends TestCase
         })->first();
         $this->assertEquals($businessSale->id, $businessPropertySale->business_id);
         $this->assertFalse($businessPropertySale->isCompleted);
+        Event::assertDispatched(BusinessPropertyFinalizedEvent::class);
     }
 
     /**

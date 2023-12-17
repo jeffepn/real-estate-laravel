@@ -30,9 +30,4 @@ class BusinessProperty extends Pivot
     {
         return $this->status_situation === BusinessPropertySituationEnum::COMPLETED;
     }
-
-    public function getHasSituationAttribute(): bool
-    {
-        return !empty($this->business->name_completed);
-    }
 }

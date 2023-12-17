@@ -17,6 +17,7 @@ class BusinessRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:30', Rule::unique('businesses')->ignore($this->business)],
+            'name_completed' => ['nullable', 'max:30'],
         ];
     }
 
