@@ -6,9 +6,11 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Jeffpereira\RealEstate\Models\AppSettings;
+use Jeffpereira\RealEstate\Models\Property\BusinessProperty;
 use Jeffpereira\RealEstate\Models\Property\ImageProperty;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Observers\AppSettingsObserver;
+use Jeffpereira\RealEstate\Observers\Property\BusinessPropertyObserver;
 use Jeffpereira\RealEstate\Observers\Property\ImagePropertyObserver;
 use Jeffpereira\RealEstate\Observers\Property\PropertyObserver;
 
@@ -29,6 +31,7 @@ class RealEstateServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/realestatelaravel.php', 'realestatelaravel');
         // Register the service provider for the dependency.
         $this->app->register('Intervention\Image\ImageServiceProvider');
+        $this->app->register(EventServiceProvider::class);
         // Create aliases for the dependency.
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
@@ -85,6 +88,7 @@ class RealEstateServiceProvider extends ServiceProvider
         Property::observe(PropertyObserver::class);
         ImageProperty::observe(ImagePropertyObserver::class);
         AppSettings::observe(AppSettingsObserver::class);
+        BusinessProperty::observe(BusinessPropertyObserver::class);
     }
 
     protected function registerComponents()

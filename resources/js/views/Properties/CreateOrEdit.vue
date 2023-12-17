@@ -260,6 +260,9 @@ export default {
         max_bathroom: 0,
         min_garage: 0,
         max_garage: 0,
+        min_restroom: 0,
+        max_restroom: 0,
+        has_plate: false,
         min_description: "",
         useful_area: 0,
         building_area: 0,
@@ -321,6 +324,9 @@ export default {
         case "max_bathroom":
         case "min_garage":
         case "max_garage":
+        case "min_restroom":
+        case "max_restroom":
+        case "has_plate":
         case "min_description":
         case "content":
           this.setTabShow("details");
@@ -445,7 +451,10 @@ export default {
         max_suite: data.attributes.max_suite,
         min_garage: data.attributes.min_garage,
         max_garage: data.attributes.max_garage,
+        min_restroom: data.attributes.min_restroom,
+        max_restroom: data.attributes.max_restroom,
         embed: data.attributes.embed,
+        has_plate: data.attributes.has_plate,
         active: data.attributes.active,
         address: address.attributes.address,
         number: address.attributes.number,
@@ -459,6 +468,7 @@ export default {
               return {
                 id: element.attributes.business_id,
                 value: element.attributes.value,
+                status_situation: element.attributes.status_situation,
               };
             })
           : [],

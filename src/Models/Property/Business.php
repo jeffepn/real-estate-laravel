@@ -36,6 +36,11 @@ class Business extends Model
         });
     }
 
+    public function getHasSituationAttribute(): bool
+    {
+        return !empty($this->name_completed);
+    }
+
     protected function generateSlug()
     {
         return Str::slug($this->name);

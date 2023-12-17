@@ -42,7 +42,7 @@ The package has migrations and you will need to run:
 php artisan migrate
 ```
 
-## _Importants Notes:_
+## Importants Notes:
 
 When using your template, import assets with the directive blade and cdn to font-awesome.
 
@@ -108,6 +108,10 @@ Define as configs in your `.env`
 ```
 
 More options, check the `config/realestatelaravel.php` config file
+
+#### Events
+
+- **Jeffpereira\RealEstate\Events\BusinessPropertyFinalizedEvent** - When the business of the property was finalized
 
 ## License
 

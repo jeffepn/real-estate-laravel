@@ -15,6 +15,7 @@ class BusinessTest extends TestCase
 
     /**
      * @test
+     * @group business
      */
     public function verify_format_return_index()
     {
@@ -28,10 +29,11 @@ class BusinessTest extends TestCase
 
     /**
      * @test
+     * @group business
      */
     public function verify_format_return_show()
     {
-        $business = factory(Business::class)->create();
+        $business = factory(Business::class)->create(['name_completed' => 'Example name completed']);
         $response = $this->getJson(route('jp_realestate.api.business.show', $business->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -45,12 +47,15 @@ class BusinessTest extends TestCase
             'attributes' => [
                 'slug' => $business->slug,
                 'name' => Str::title($business->name),
+                'name_completed' => 'Example Name Completed',
+                'has_situation' => true,
             ],
         ], $response->json()['data']);
     }
 
     /**
      * @test
+     * @group business
      */
     public function store_with_success()
     {
@@ -65,6 +70,7 @@ class BusinessTest extends TestCase
 
     /**
      * @test
+     * @group business
      */
     public function update_with_success()
     {
@@ -79,6 +85,7 @@ class BusinessTest extends TestCase
 
     /**
      * @test
+     * @group business
      */
     public function destroy_with_success()
     {
@@ -91,6 +98,7 @@ class BusinessTest extends TestCase
 
     /**
      * @test
+     * @group business
      */
     public function validate_name_request()
     {
@@ -109,8 +117,38 @@ class BusinessTest extends TestCase
         $response = $this->postJson(route('jp_realestate.api.business.store'), ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
+        $response = $this->postJson(
+            route('jp_realestate.api.business.store'),
+            ['name' => 'teste2', 'name_completed' => Str::random(31)]
+        );
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
         $response = $this->patchJson(route('jp_realestate.api.business.update', $business->id), ['name' => 'teste']);
         $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /**
+     * @test
+     * @group business
+     */
+    public function checkHasSituationWhenTheBusinessNotHasNameCompleted()
+    {
+        $business = factory(Business::class)
+            ->create();
+
+        $this->assertFalse($business->hasSituation);
+    }
+
+    /**
+     * @test
+     * @group business
+     */
+    public function checkHasSituationWhenBusinessHasNameCompleted()
+    {
+        $business = factory(Business::class)->create(['name_completed' => 'Teste name completed']);
+
+        $this->assertEquals('Teste name completed', $business->name_completed);
+        $this->assertTrue($business->hasSituation);
     }
 
     /**
@@ -127,8 +165,8 @@ class BusinessTest extends TestCase
         Business::all()->each(function ($business, $key) {
             $business->properties()->attach(
                 $key < 5
-                    ? factory(Property::class)->state('active')->create()->id
-                    : factory(Property::class)->state('inactive')->create()->id
+                ? factory(Property::class)->state('active')->create()->id
+                : factory(Property::class)->state('inactive')->create()->id
             );
         });
         $this->assertCount(5, Business::hasProperties()->get());

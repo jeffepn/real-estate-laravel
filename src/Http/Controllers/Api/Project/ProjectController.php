@@ -14,11 +14,6 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         try {
@@ -42,17 +37,11 @@ class ProjectController extends Controller
 
             return response([
                 'error' => true,
-                'message' => Terminologies::get('all.property.error_index'),
+                'message' => Terminologies::get('all.common.error_index'),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  StoreProjectRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreProjectRequest $request)
     {
         try {
@@ -79,12 +68,6 @@ class ProjectController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  Jeffpereira\RealEstate\Models\Project\Project  $project
-     * @return \Illuminate\Http\Response
-     */
     public function show(Project $project)
     {
         if (request()->with) {
@@ -94,13 +77,6 @@ class ProjectController extends Controller
         return new ProjectResource($project);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  UpdateProjectRequest  $request
-     * @param  Jeffpereira\RealEstate\Models\Project\Project  $project
-     * @return \Illuminate\Http\Response
-     */
     public function update(UpdateProjectRequest $request, Project $project)
     {
         try {
@@ -120,12 +96,6 @@ class ProjectController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Jeffpereira\RealEstate\Models\Project\Project  $project
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Project $project)
     {
         try {

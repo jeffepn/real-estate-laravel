@@ -1,13 +1,14 @@
 <template>
-  <div class="form-check">
+  <div class="form-check form-switch">
     <input
       class="form-check-input"
       type="checkbox"
-      :id="idCheckbox"
+      role="switch"
+      :id="idSwitch"
       :checked="value"
       @change="handleChange"
     />
-    <label class="form-check-label" :for="idCheckbox" v-html="label"></label>
+    <label class="form-check-label" :for="idSwitch" v-text="label"></label>
   </div>
 </template>
 
@@ -29,7 +30,7 @@ export default {
   },
   data() {
     return {
-      idCheckbox: null,
+      idSwitch: null,
     };
   },
   methods: {
@@ -38,7 +39,7 @@ export default {
     },
   },
   beforeMount() {
-    this.idCheckbox = this.id ? this.id : `id-checkbox-defaul-${this._uid}`;
+    this.idSwitch = this.id ? this.id : `id-switch-defaul-${this._uid}`;
   },
 };
 </script>
