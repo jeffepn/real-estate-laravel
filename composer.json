@@ -1,45 +1,45 @@
 {
-    "name": "jeffersonpereira/realestatelaravel",
-    "description": "It's package to make manager real estate in system with laravel",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "jeffepereira",
-            "email": "jefferson.pereira.nascimento10@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "php": " >=7.2.5",
-        "jeffersonpereira/address": "1.*",
-        "laravellegends/pt-br-validator": "dev-master",
-        "tightenco/ziggy": "^1.2",
-        "spatie/laravel-image-optimizer": "1.6.*",
-        "intervention/image": "^2.7",
-        "doctrine/dbal": "2.*"
-    },
-    "require-dev": {
-        "fakerphp/faker": "^1.9.1",
-        "orchestra/testbench": "^4.0",
-        "laravel/legacy-factories": "^1.0@dev",
-        "nunomaduro/collision": "^3.0",
-        "spatie/phpunit-watcher": "^1.23"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Jeffpereira\\RealEstate\\RealEstateServiceProvider"
-            ]
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Jeffpereira\\RealEstate\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Jeffpereira\\RealEstate\\Tests\\": "tests/"
-        }
+  "name": "jeffersonpereira/realestatelaravel",
+  "description": "It's package to make manager real estate in system with laravel",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "jeffepereira",
+      "email": "jefferson.pereira.nascimento10@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": " >=7.2.5",
+    "jeffersonpereira/address": "1.*",
+    "laravellegends/pt-br-validator": "dev-master",
+    "tightenco/ziggy": "^1.2",
+    "spatie/laravel-image-optimizer": "1.6.*",
+    "intervention/image": "^2.7",
+    "doctrine/dbal": "2.*"
+  },
+  "require-dev": {
+    "fakerphp/faker": "^1.9.1",
+    "orchestra/testbench": "^4.0",
+    "laravel/legacy-factories": "^1.0@dev",
+    "nunomaduro/collision": "^3.0",
+    "spatie/phpunit-watcher": "^1.23"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Jeffpereira\\RealEstate\\RealEstateServiceProvider"
+      ]
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Jeffpereira\\RealEstate\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Jeffpereira\\RealEstate\\Tests\\": "tests/"
+    }
+  }
 }

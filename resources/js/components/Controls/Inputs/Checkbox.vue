@@ -7,7 +7,7 @@
       :checked="value"
       @change="handleChange"
     />
-    <label class="form-check-label" :for="idCheckbox" v-text="label"></label>
+    <label class="form-check-label" :for="idCheckbox" v-html="label"></label>
   </div>
 </template>
 

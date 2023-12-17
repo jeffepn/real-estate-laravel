@@ -9,3 +9,4 @@ public/
 node_modules/
 .yarn-integrity
 .php-cs-fixer.cache
+coverage/

@@ -21,6 +21,16 @@ class Property extends Model
 
     protected $guarded = [];
 
+    public function getIsActiveAttribute()
+    {
+        return (bool) $this->active;
+    }
+
+    public function getIsInactiveAttribute()
+    {
+        return !(bool) $this->isActive;
+    }
+
     public function generateAltImage()
     {
         return sprintf(

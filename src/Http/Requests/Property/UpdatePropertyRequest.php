@@ -5,6 +5,7 @@ namespace Jeffpereira\RealEstate\Http\Requests\Property;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Jeffpereira\RealEstate\Enum\BusinessPropertySituationEnum;
 use Jeffpereira\RealEstate\Models\Property\Property;
 
 class UpdatePropertyRequest extends FormRequest
@@ -21,6 +22,7 @@ class UpdatePropertyRequest extends FormRequest
             'code' => ['sometimes', 'bail', 'integer', Rule::unique('properties')->ignore($this->property)],
             'businesses.*.id' => 'sometimes|bail|required|uuid',
             'businesses.*.value' => 'sometimes|bail|nullable|numeric|between:0,99999999.99',
+            'businesses.*.status_situation' => ['sometimes', Rule::in(BusinessPropertySituationEnum::all())],
             'situation_id' => 'sometimes|bail|nullable|uuid',
             'sub_type_id' => 'sometimes|bail|required|uuid',
             'min_description' => 'sometimes|bail|nullable|min:10|max:200',
