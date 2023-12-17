@@ -7,27 +7,33 @@
           d-flex
           flex-wrap
           justify-content-between
-          align-items-center
+          align-items-start
         "
       >
-        <h2>Imóveis</h2>
-        <div class="d-flex flex-wrap">
-          <div class="input-search input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Procurar"
-              aria-label="Procurar"
-              aria-describedby="basic-addon2"
-              v-model="search"
-            />
-            <span class="input-group-text" id="basic-addon2">
-              <i class="fas fa-search"></i>
-            </span>
+        <div class="d-flex mb-2">
+          <h2>Imóveis</h2>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          <div class="d-flex mb-2">
+            <div class="input-search input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Procurar"
+                aria-label="Procurar"
+                aria-describedby="basic-addon2"
+                v-model="search"
+              />
+              <span class="input-group-text" id="basic-addon2">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
           </div>
-          <a :href="urlCreate" class="btn btn-outline-primary ms-2">
-            <i class="fas fa-plus"></i> Novo
-          </a>
+          <div class="d-flex mb-2">
+            <a :href="urlCreate" class="btn btn-outline-primary">
+              <i class="fas fa-plus"></i> Novo
+            </a>
+          </div>
         </div>
       </div>
       <div class="card-body">

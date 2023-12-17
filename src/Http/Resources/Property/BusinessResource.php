@@ -40,6 +40,8 @@ class BusinessResource extends JsonResource
             'attributes' => [
                 'slug' => $this->slug,
                 'name' => Str::title($this->name),
+                'name_completed' => Str::title($this->name_completed),
+                'has_situation' => !empty($this->hasSituation),
             ],
         ];
     }
