@@ -1,4 +1,3 @@
-version: "3.7"
 services:
   app:
     image: kooldev/php:7.4-nginx

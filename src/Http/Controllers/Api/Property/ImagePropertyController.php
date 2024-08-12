@@ -61,7 +61,7 @@ class ImagePropertyController extends Controller
             logger()->error('Error in store ImagePropertyController: ' . $mn->getMessage(), $mn->getTrace());
 
             return response()->noContent(Response::HTTP_BAD_REQUEST);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->registerError($th, __METHOD__);
 
             return response()->noContent(Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -95,7 +95,7 @@ class ImagePropertyController extends Controller
                     'error' => true,
                     'message' => Terminologies::get('all.property.not_delete'),
                 ], Response::HTTP_BAD_REQUEST);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return response([
                 'error' => true,
                 'message' => $th->getMessage(),

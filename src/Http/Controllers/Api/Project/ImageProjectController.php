@@ -21,7 +21,7 @@ class ImageProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -45,7 +45,7 @@ class ImageProjectController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  StoreImageProjectRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(StoreImageProjectRequest $request)
     {
@@ -96,7 +96,7 @@ class ImageProjectController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  ImageProject  $project
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(ImageProject $imageProject)
     {

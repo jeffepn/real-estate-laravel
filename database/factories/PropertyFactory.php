@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/** @var Illuminate\Database\Eloquent\Factory $factory */
 
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Faker\Generator as Faker;

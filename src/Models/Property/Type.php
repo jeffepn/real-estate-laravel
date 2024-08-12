@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 use Jeffpereira\RealEstate\Models\Traits\SetSlug;
+use Jeffpereira\RealEstate\Models\Traits\Type\Scopes;
 
 class Type extends Model
 {
     use UsesUuid;
     use SetSlug;
+    use Scopes;
 
     protected $guarded = [];
 
