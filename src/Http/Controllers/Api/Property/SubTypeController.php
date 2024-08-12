@@ -16,7 +16,7 @@ class SubTypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -27,7 +27,7 @@ class SubTypeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  SubTypeRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(SubTypeRequest $request)
     {
@@ -55,7 +55,7 @@ class SubTypeController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\SubType  $subType
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(SubType $subType)
     {
@@ -67,7 +67,7 @@ class SubTypeController extends Controller
      *
      * @param  SubTypeRequest  $request
      * @param  \App\Models\SubType  $subType
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(SubTypeRequest $request, SubType $subType)
     {
@@ -94,7 +94,7 @@ class SubTypeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\SubType  $subType
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(SubType $subType)
     {
