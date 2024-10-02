@@ -17,7 +17,7 @@ class SituationController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -28,7 +28,7 @@ class SituationController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  StoreSituationRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(StoreSituationRequest $request)
     {
@@ -56,7 +56,7 @@ class SituationController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Situation  $situation
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Situation $situation)
     {
@@ -68,7 +68,7 @@ class SituationController extends Controller
      *
      * @param  UpdateSituationRequest  $request
      * @param  \App\Situation  $situation
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(UpdateSituationRequest $request, Situation $situation)
     {
@@ -95,7 +95,7 @@ class SituationController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Situation  $situation
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Situation $situation)
     {

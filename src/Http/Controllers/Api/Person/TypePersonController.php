@@ -18,7 +18,7 @@ class TypePersonController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -53,7 +53,7 @@ class TypePersonController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  StoreTypePersonRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(StoreTypePersonRequest $request)
     {
@@ -83,7 +83,7 @@ class TypePersonController extends Controller
      * Display the specified resource.
      *
      * @param  TypePerson  $typePerson
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(TypePerson $typePerson)
     {
@@ -95,7 +95,7 @@ class TypePersonController extends Controller
      *
      * @param  UpdateTypePersonRequest  $request
      * @param  TypePerson  $typePerson
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(UpdateTypePersonRequest $request, TypePerson $typePerson)
     {
@@ -120,7 +120,7 @@ class TypePersonController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  TypePerson  $typePerson
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(TypePerson $typePerson)
     {

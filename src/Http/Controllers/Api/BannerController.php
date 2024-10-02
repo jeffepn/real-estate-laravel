@@ -17,7 +17,7 @@ class BannerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -28,7 +28,7 @@ class BannerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  BannerRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(BannerRequest $request)
     {
@@ -55,7 +55,7 @@ class BannerController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Banner  $property
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Banner $property)
     {
@@ -67,7 +67,7 @@ class BannerController extends Controller
      *
      * @param  BannerRequest  $request
      * @param  \App\Models\Banner  $property
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(BannerRequest $request, Banner $banner)
     {
@@ -91,7 +91,7 @@ class BannerController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Banner  $property
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Banner $banner)
     {
