@@ -21,7 +21,7 @@ class ImagePropertyRequest extends FormRequest
         return [
             'images.required' => 'Forneça uma imagem.',
             'alt.max' => 'O alt da imagens deve ter menos de :max caracteres.',
-            'images.max' => 'Escolha uma imagem com menos de :max kB.',
+            'images.*.max' => 'Escolha uma imagem com menos de :max kB.',
             'mimes' => 'Formatos de imagens aceitos: jpg, jpeg e png.',
             'property_id.required' => 'Forneça um id de um imóvel.',
             'property_id.uuid' => 'Forneça um id de um imóvel válido.',
