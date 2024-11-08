@@ -35,6 +35,7 @@ class SubTypeResource extends JsonResource
             'attributes' => [
                 'slug' => $this->slug,
                 'name' => Str::title($this->name),
+                'number_linked_properties' => $this->properties()->count(),
             ],
             'relationships' => [
                 'type' => [

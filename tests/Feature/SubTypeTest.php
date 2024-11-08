@@ -49,6 +49,7 @@ class SubTypeTest extends TestCase
             'attributes' => [
                 'slug' => $subType->slug,
                 'name' => Str::title($subType->name),
+                'number_linked_properties' => 0,
             ],
             'relationships' => [
                 'type' => ['data' => ['type' => 'type', 'id' => $subType->type_id]],

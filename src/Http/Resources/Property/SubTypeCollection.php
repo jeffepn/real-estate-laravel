@@ -6,12 +6,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class SubTypeCollection extends ResourceCollection
 {
-    /**
-     * Transform the resource collection into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
     public function toArray($request)
     {
         return $this->collection->map(function ($subType) {
@@ -22,9 +16,7 @@ class SubTypeCollection extends ResourceCollection
     public function with($request)
     {
         return [
-            'included' => [
-                new TypeCollection($this->collection->pluck('type')->unique()->values()),
-            ],
+            'included' => new TypeCollection($this->collection->pluck('type')->unique()->values()),
         ];
     }
 }
