@@ -13,11 +13,6 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class TypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index()
     {
         $paginate = request()->paginate;
@@ -32,12 +27,6 @@ class TypeController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  TypeRequest $request
-     * @return Response
-     */
     public function store(TypeRequest $request)
     {
         try {
@@ -60,24 +49,11 @@ class TypeController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Type  $type
-     * @return Response
-     */
     public function show(Type $type)
     {
         return new TypeResource($type);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  TypeRequest $request
-     * @param  \App\Models\Type  $type
-     * @return Response
-     */
     public function update(TypeRequest $request, Type $type)
     {
         try {
@@ -99,12 +75,6 @@ class TypeController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Type  $type
-     * @return Response
-     */
     public function destroy(Type $type)
     {
         try {

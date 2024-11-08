@@ -9,10 +9,11 @@ class RealEstateBladeDirective
 {
     public static function mainStyles(): string
     {
+        $rand = rand(1, 9999);
         $assets[] = self::isDebug() || self::environmentIsDev() ? '<!-- Realestatelaravel Styles -->' : '';
         $version = AppSettingsEnum::VERSION_PACKAGE;
         $assets[] = self::environmentIsDev()
-            ? "<link rel='stylesheet' href='http://localhost:9099/realestatelaravel/css/realestatelaravel.css' />"
+            ? "<link rel='stylesheet' href='http://localhost:9099/realestatelaravel/css/realestatelaravel.css?v{$rand}' />"
             : "<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/jeffepereira/real-estate-laravel@{$version}/dist/css/realestatelaravel.css' />";
 
         return implode('', $assets);
@@ -20,10 +21,11 @@ class RealEstateBladeDirective
 
     public static function mainScripts(): string
     {
+        $rand = rand(1, 9999);
         $assets[] = self::isDebug() || self::environmentIsDev() ? '<!-- Realestatelaravel Scripts -->' : '';
         $version = AppSettingsEnum::VERSION_PACKAGE;
         $assets[] = self::environmentIsDev()
-            ? "<script src='http://localhost:9099/realestatelaravel/js/realestatelaravel.js' type='text/javascript'></script>"
+            ? "<script src='http://localhost:9099/realestatelaravel/js/realestatelaravel.js?v={$rand}' type='text/javascript'></script>"
             : "<script src='https://cdn.jsdelivr.net/gh/jeffepereira/real-estate-laravel@{$version}/dist/js/realestatelaravel.js' type='text/javascript'></script>";
 
         return implode('', $assets);

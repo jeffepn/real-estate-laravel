@@ -5,13 +5,14 @@ use Jeffpereira\RealEstate\Http\Controllers\Api\Property\ImagePropertyController
 use Jeffpereira\RealEstate\Http\Controllers\HomeController;
 use Jeffpereira\RealEstate\Http\Controllers\ProjectController;
 use Jeffpereira\RealEstate\Http\Controllers\PropertyController;
+use Jeffpereira\RealEstate\Http\Controllers\SubTypeController;
 use Jeffpereira\RealEstate\Http\Controllers\TypeController;
 use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 Route::middleware(ConfigHelper::get('middleware.web'))->group(function () {
     Route::prefix('panel-realestate')->group(function () {
         Route::name('jp_realestate.')->group(function () {
-            Route::get('dasboard', [HomeController::class, 'dashboard'])->name('jp_realestate.dashboard');
+            Route::get('dasboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
             Route::resource('imoveis', PropertyController::class, ['names' => 'property'])
                 ->parameters(['imoveis' => 'property'])
@@ -22,8 +23,10 @@ Route::middleware(ConfigHelper::get('middleware.web'))->group(function () {
                 ->only(['index', 'create', 'edit']);
 
             Route::resource('tipos', TypeController::class, ['names' => 'type'])
-                ->parameters(['tipos' => 'type'])
-                ->only(['index']);
+                ->parameters(['tipos' => 'type']);
+
+            Route::resource('sub-tipos', SubTypeController::class, ['names' => 'sub_type'])
+                ->parameters(['sub-tipos' => 'subType']);
 
             //Banners
             //Route::get('banners', 'BannerController@list')->name('jp_realestate.banner.list');

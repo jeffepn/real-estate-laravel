@@ -9,6 +9,7 @@ import ReCreateOrEdit from "@/views/Properties/CreateOrEdit.vue";
 import ReListBanners from "@/views/Banners/List.vue";
 import ReListProjects from "@/views/Projects/List.vue";
 import ReListTypes from "@/views/Types/List.vue";
+import ReListSubTypes from "@/views/SubTypes/List.vue";
 import ReCreateOrEditProjects from "@/views/Projects/CreateOrEdit.vue";
 
 Vue.component("re-header", ReHeader);
@@ -25,3 +26,5 @@ Vue.component("re-list-projects", ReListProjects);
 Vue.component("re-create-or-edit-projects", ReCreateOrEditProjects);
 // Types
 Vue.component("re-list-types", ReListTypes);
+Vue.component("re-list-sub-types", ReListSubTypes);
+

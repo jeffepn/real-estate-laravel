@@ -1,8 +1,8 @@
 <?php
 
-namespace Jeffpereira\RealEstate\Models\Traits\Type;
+namespace Jeffpereira\RealEstate\Models\Traits;
 
-trait Scopes
+trait ScopeSearchCommon
 {
     public function scopeSearch($query, $search)
     {

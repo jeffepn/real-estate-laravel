@@ -10,7 +10,7 @@
           align-items-center
         "
       >
-        <h2>Tipos</h2>
+        <h2>Sub Tipos</h2>
         <div class="d-flex">
           <div class="input-search input-group">
             <input
@@ -26,7 +26,7 @@
             </span>
           </div>
           <button
-            @click.prevent="showModalAddType = true"
+            @click.prevent="showModalAddSubType = true"
             class="btn-new btn btn-outline-primary ms-2"
           >
             <i class="fas fa-plus"></i> Novo
@@ -36,7 +36,7 @@
             <small>
               <i class="fas fa-exclamation-triangle text-danger"></i>
               <i>
-                Não é possível excluir um tipo que tenha <b>sub tipos</b> vinculados a ele.
+                Não é possível excluir um sub tipo que tenha <b>imóveis</b> vinculados a ele.
               </i>
             </small>
         </div>
@@ -45,15 +45,15 @@
         <div class="content-table">
           <div
             class="d-flex justify-content-center text-center p-4"
-            v-if="typesIsEmpty || loadingTypes"
+            v-if="subTypesIsEmpty || loadingSubTypes"
           >
-            <div v-if="typesIsEmpty && !loadingTypes">
+            <div v-if="subTypesIsEmpty && !loadingSubTypes">
               <ph-table :size="80" weight="thin" />
               <p>
                 Não encontramos tipos, com os termos de busca.
               </p>
             </div>
-            <div v-if="loadingTypes">
+            <div v-if="loadingSubTypes">
               <ph-circle-notch :size="80" weight="thin">
                 <animateTransform
                   attributeName="transform"
@@ -72,20 +72,21 @@
           </div>
           <table
             class="table table-striped"
-            v-if="typesIsNotEmpty && !loadingTypes"
+            v-if="subTypesIsNotEmpty && !loadingSubTypes"
           >
             <thead>
               <tr>
                 <th scope="col">Nome</th>
-                <th scope="col">Total de sub-tipos</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Qtd. Imóveis</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="type in types" :key="type.id">
+              <tr v-for="subType in subTypes" :key="subType.id">
                 <th>
                   <div class="actions">
                     <button
-                      @click="openModalEditType(type.id)"
+                      @click="openModalEditSubType(subType.id)"
                       class="btn btn-primary btn-sm"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
@@ -93,23 +94,26 @@
                     >
                       <i class="fas fa-edit"></i>
                     </button>
-                    <button                    
-                      v-if="type.relationships.sub_types.data.length < 1"
+                    <button
+                      v-if="subType.number_linked_properties < 1"
                       class="btn btn-danger btn-sm"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Excluir"
-                      @click="openDelete(type.id)"
+                      @click="openDelete(subType.id)"
                     >
                       <i class="fas fa-trash"></i>
                     </button>
                     <span class="ms-2">
-                      {{ type.name }}
+                      {{ subType.name }}
                     </span>
                   </div>
                 </th>
                 <th>
-                    {{ type.relationships.sub_types.data.length }}
+                  {{ getNameType(subType) }}
+                </th>
+                <th>
+                  {{ subType.number_linked_properties }}
                 </th>
               </tr>
             </tbody>
@@ -132,30 +136,32 @@
       text-button-cancel="Cancelar"
       text-button-ok="Sim"
       @close="closeDelete"
-      @ok="deleteType"
+      @ok="deleteSubType"
     >
       <p>Tem certeza da exclusão do tipo?</p>
     </re-modal>
     <re-modal
       title="Adicionar novo Tipo"
-      :show="showModalAddType"
-      @close="closeModalAddType"
+      v-if="showModalAddSubType"
+      :show="showModalAddSubType"
+      @close="closeModalAddSubType"
       :footer="false"
     >
-      <re-add-type @submitSuccess="submitSuccessAddType"> </re-add-type>
+      <re-add-sub-type @submitSuccess="submitSuccessAddSubType"> </re-add-sub-type>
     </re-modal>
     <re-modal
       title="Editar Tipo"
-      :show="showModalEditType"
-      @close="closeModalEditType"
+       v-if="showModalEditSubType"
+      :show="showModalEditSubType"
+      @close="closeModalEditSubType"
       :footer="false"
     >
-      <re-edit-type
-        v-if="!!currentEditTypeId"
-        :id="currentEditTypeId"
-        @submitSuccess="submitSuccessEditType"
+      <re-edit-sub-type
+        v-if="!!currentEditSubTypeId"
+        :id="currentEditSubTypeId"
+        @submitSuccess="submitSuccessEditSubType"
       >
-      </re-edit-type>
+      </re-edit-sub-type>
     </re-modal>
   </div>
 </template>
@@ -164,8 +170,8 @@
 import RePagination from "@/components/Controls/Pagination";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
 import ReModal from "@/components/Modal";
-import ReAddType from "@/components/Forms/Type/AddType";
-import ReEditType from "@/components/Forms/Type/EditType";
+import ReAddSubType from "@/components/Forms/SubType/AddSubType";
+import ReEditSubType from "@/components/Forms/SubType/EditSubType";
 import { PhTable, PhCircleNotch } from "phosphor-vue";
 export default {
   components: {
@@ -174,8 +180,8 @@ export default {
     ReModal,
     PhTable,
     PhCircleNotch,
-    ReAddType,
-    ReEditType,
+    ReAddSubType,
+    ReEditSubType,
   },
   data() {
     return {
@@ -192,13 +198,13 @@ export default {
         page: 1,
       },
       showModalDelete: false,
-      showModalAddType: false,
-      showModalEditType: false,
+      showModalAddSubType: false,
+      showModalEditSubType: false,
       idDelete: null,
       debounceSearch: null,
       timeoutDebounce: 500,
-      loadingTypes: true,
-      currentEditTypeId: null,
+      loadingSubTypes: true,
+      currentEditSubTypeId: null,
     };
   },
   watch: {
@@ -206,33 +212,33 @@ export default {
       clearTimeout(this.debounceSearch);
       this.meta.current_page = 1;
       this.debounceSearch = setTimeout(() => {
-        this.getTypes();
+        this.getSubTypes();
       }, this.timeoutDebounce);
     },
   },
   computed: {
-    types() {
+    subTypes() {
       return this.data.reduce((acumulator, currentValue) => {
         let { id, attributes, relationships } = currentValue;
 
-        let type = Object.assign({}, { id, relationships }, attributes);
-        acumulator.push(type);
+        let subType = Object.assign({}, { id, relationships }, attributes);
+        acumulator.push(subType);
         return acumulator;
       }, []);
     },
-    typesIsEmpty() {
-      return !this.typesIsNotEmpty;
+    subTypesIsEmpty() {
+      return !this.subTypesIsNotEmpty;
     },
-    typesIsNotEmpty() {
-      return this.types.length;
+    subTypesIsNotEmpty() {
+      return this.subTypes.length;
     },
     searchIsNotEmpty() {
       return this.search && this.search.trim().length;
     },
   },
   methods: {
-    getTypes() {
-      this.loadingTypes = true;
+    getSubTypes() {
+      this.loadingSubTypes = true;
       const params = {
         paginate: this.meta.per_page,
         page: this.meta.current_page,
@@ -240,7 +246,7 @@ export default {
       if (this.searchIsNotEmpty) params.search = this.search;
 
       reaxios
-        .get(reroute("jp_realestate.api.type.index"), {
+        .get(reroute("jp_realestate.api.sub_type.index"), {
           params,
         })
         .then((response) => {
@@ -256,16 +262,22 @@ export default {
             message: response.data.message,
           });
         })
-        .finally(() => (this.loadingTypes = false));
+        .finally(() => (this.loadingSubTypes = false));
+    },
+    getNameType(currentSubType) {
+      console.log('currentSubType', currentSubType);
+      const typeId = currentSubType?.relationships?.type?.data?.id;
+      const type =  this.included?.find((el) => el.id === typeId);
+      return type?.attributes?.name ?? '';
     },
     updatePage(page) {
       this.meta.current_page = page;
-      this.getTypes();
+      this.getSubTypes();
     },
     updatePerPage(perPage) {
       this.meta.current_page = 1;
       this.meta.per_page = perPage;
-      this.getTypes();
+      this.getSubTypes();
     },
     openDelete(id) {
       this.idDelete = id;
@@ -275,11 +287,11 @@ export default {
       this.idDelete = null;
       this.showModalDelete = false;
     },
-    deleteType() {
+    deleteSubType() {
       reaxios
-        .delete(reroute("jp_realestate.api.type.destroy", [this.idDelete]))
+        .delete(reroute("jp_realestate.api.sub_type.destroy", [this.idDelete]))
         .then(() => {
-          this.getTypes();
+          this.getSubTypes();
           this.idDelete = null;
         })
         .catch(({ response }) => {
@@ -292,26 +304,26 @@ export default {
         })
         .finally(() => (this.showModalDelete = false));
     },
-    closeModalAddType() {
-      this.showModalAddType = false;
+    closeModalAddSubType() {
+      this.showModalAddSubType = false;
     },
-    submitSuccessAddType() {
-      this.getTypes();
+    submitSuccessAddSubType() {
+      this.getSubTypes();
     },
-    openModalEditType(id) {
-      this.currentEditTypeId = id;
-      this.showModalEditType = true;
+    openModalEditSubType(id) {
+      this.currentEditSubTypeId = id;
+      this.showModalEditSubType = true;
     },
-    closeModalEditType() {
-      this.currentEditTypeId = null;
-      this.showModalEditType = false;
+    closeModalEditSubType() {
+      this.currentEditSubTypeId = null;
+      this.showModalEditSubType = false;
     },
-    submitSuccessEditType() {
-       this.getTypes();
+    submitSuccessEditSubType() {
+       this.getSubTypes();
     },
   },
   async beforeMount() {
-    await this.getTypes();
+    await this.getSubTypes();
   },
 };
 </script>
