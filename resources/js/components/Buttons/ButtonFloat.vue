@@ -1,6 +1,6 @@
 <template>
   <div :class="classFab">
-    <button class="main bg-primary" @click="toggle"></button>
+    <button class="main bg-primary" @click="toggle" :disabled="disabled"></button>
     <ul>
       <li v-for="(action, index) in actions" :key="index">
         <button
@@ -21,6 +21,10 @@ export default {
     actions: {
       type: Array,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data: () => ({
@@ -134,5 +138,9 @@ export default {
 .fab.show button.main + ul li:hover label,
 .fab.show button.main + ul li:hover label {
   opacity: 1;
+}
+
+.bg-primary:disabled {
+    opacity: 0.6;
 }
 </style>

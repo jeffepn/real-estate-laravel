@@ -46,6 +46,7 @@
             id="fileImage"
             ref="fileImage"
             accept="image/png, image/jpeg"
+            :disabled="loadingFiles"
             multiple
             @change="onFileChange"
           />
@@ -55,11 +56,20 @@
         </div>
       </div>
     </div>
+
     <div class="col-12">
-      <p v-if="loadingFiles">
-        <i class="fas fa-spinner fa-pulse me-2"></i> Carregando arquivos...
-      </p>
-      <p class="text-danger" v-if="errors.length" v-text="errors[0]"></p>
+      <div v-if="loadingFiles" class="section_loading_files">
+        <div>
+          <i class="fas fa-spinner fa-pulse fa-3x me-2"></i>
+        </div>
+        <div>
+          <h4>Carregando arquivos</h4>
+        </div>
+      </div>
+      <div v-for="(message, index) in Object.keys(errors)" :key="index">
+        <b>Imagem(ns) com erro:</b> {{ errors[message].join(" | ") }}
+        <p class="text-danger" v-text="message"></p>
+      </div>
     </div>
     <div class="row justify-content-between align-content-center mt-2 mb-4">
       <div
@@ -72,6 +82,7 @@
               type="checkbox"
               v-model="checkAll"
               id="flexCheckAll"
+              :disabled="loadingFiles"
             />
             <label
               class="form-check-label"
@@ -91,22 +102,30 @@
         <ReButtonFloat
           :actions="actionsBulk"
           v-on:bulk-event="bulkEvent"
-          data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ações em mass"
+          data-bs-toggle="tooltip"
+          data-bs-placement="left"
+          data-bs-title="Ações em massa"
+          :disabled="loadingFiles"
         />
       </div>
     </div>
-    <div class="row">
-      <div
-        class="color-item col-auto mb-2 position-relative"
-        v-for="(image, index) in images"
-        :key="index"
-        v-dragging="{ item: image, list: images, group: 'image' }"
-      >
-        <ReItemImageMedia
-          :ref="`${prefixImage}${image.id}`"
-          :image="image"
-          v-on:deleted-image="removeImageOfContext"
-        />
+    <div
+      class="col-12 position-relative py-3"
+      :class="{ 'loading-row-files': loadingFiles }"
+    >
+      <div class="row">
+        <div
+          class="color-item col-auto mb-2 position-relative"
+          v-for="(image, index) in images"
+          :key="index"
+          v-dragging="{ item: image, list: images, group: 'image' }"
+        >
+          <ReItemImageMedia
+            :ref="`${prefixImage}${image.id}`"
+            :image="image"
+            v-on:deleted-image="removeImageOfContext"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -148,7 +167,7 @@ export default {
       images: [],
       loadingFiles: false,
       useWatterMark: false,
-      errors: [],
+      errors: {},
       prefixImage: "item-image-media-",
       selectedActionBulk: null,
       errorBulk: false,
@@ -190,20 +209,51 @@ export default {
         });
     },
     async onFileChange(e) {
-      this.errors = [];
+      this.errors = {};
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.loadingFiles = true;
-      await this.setImage(files);
+      await this.setImages(files);
       this.loadingFiles = false;
     },
-    async setImage(files) {
-      let dataForm = new FormData();
+    async setImages(files) {
+      const errors = {};
       for (var index = 0; index < files.length; index++) {
-        dataForm.append("images[]", files[index]);
+        const result = await this.uploadImage(files[index], index + 1);
+
+        if (result.image) {
+          this.images.push(result.image);
+          continue;
+        }
+
+        if (!result.error) {
+          continue;
+        }
+
+        result.error.errors.forEach((item) => {
+          if (errors.hasOwnProperty(item)) {
+            errors[item].push(result.error.name);
+          } else {
+            errors[item] = [result.error.name];
+          }
+        });
       }
+
+      if (Object.keys(errors).length > 0) {
+        this.errors = errors;
+        this.$toast.message({
+          message: "Confira os erros do upload das imagens.",
+          type: "danger",
+        });
+      }
+    },
+    async uploadImage(file, index) {
+      let dataForm = new FormData();
       dataForm.append("property_id", this.form.data.id);
       dataForm.append("use_watter_mark", this.useWatterMark);
+      dataForm.append("images[]", file);
+
+      let result = { error: null, image: null };
       await reaxios
         .post(reroute("jp_realestate.api.image_property.store"), dataForm, {
           headers: {
@@ -212,20 +262,23 @@ export default {
         })
         .then((response) => {
           response.data.data.forEach((image) => {
-            this.images.push({
+            result.image = {
               id: image.id,
               way: image.attributes.way,
               thumbnail: image.attributes.thumbnail,
               alt: image.attributes.alt,
-            });
+            };
           });
         })
         .catch(({ response }) => {
           let message = "Algo deu errado no upload das imagens.";
           if (response && response.status === 422) {
             let keysErrors = Object.keys(response.data.errors);
-            this.errors = response.data.errors[keysErrors[0]];
-            message = "Confira os erros do upload das imagens.";
+            result.error = {
+              name: file.name,
+              errors: response.data.errors[keysErrors[0]],
+            };
+            return;
           }
           if (response && response.status === 413) {
             message = "Verifique o tamanho total do arquivos, muito grandes.";
@@ -236,6 +289,7 @@ export default {
             type: "danger",
           });
         });
+      return result;
     },
     updateOrderOfImages(data) {
       reaxios.patch(reroute("jp_realestate.api.image_property.update_order"), {
@@ -316,6 +370,13 @@ $sizeSquareWatterMark: 50px;
   input[name="fileImage"] {
     display: none;
   }
+  input[name="fileImage"]:disabled + .square-upload-add {
+    background: #adadad;
+    i {
+      color: #5f5d5d;
+    }
+  }
+
   &-add {
     width: 100%;
     min-height: 100%;
@@ -352,6 +413,27 @@ $sizeSquareWatterMark: 50px;
     bottom: $position;
     background: red;
     color: #fff;
+  }
+}
+.section_loading_files {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  i {
+    color: gray;
+  }
+}
+.loading-row-files {
+  &::after {
+    content: "";
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0.7;
   }
 }
 </style>

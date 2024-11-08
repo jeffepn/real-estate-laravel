@@ -41,6 +41,7 @@ class BusinessPropertyResource extends JsonResource
                 'business_id' => $this->business_id,
                 'value' => $this->value,
                 'status' => $this->status,
+                'status_situation' => $this->status_situation,
             ],
         ];
     }

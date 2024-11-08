@@ -13,22 +13,20 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class TypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return new TypeCollection(Type::orderBy('name', 'asc')->get());
+        $paginate = request()->paginate;
+        $types = Type::orderBy('name', 'asc');
+
+        if (request()->search) {
+            $types->search(request()->search);
+        }
+
+        return new TypeCollection(
+            $paginate ? $types->paginate($paginate) : $types->get()
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  TypeRequest $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(TypeRequest $request)
     {
         try {
@@ -51,24 +49,11 @@ class TypeController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Type  $type
-     * @return \Illuminate\Http\Response
-     */
     public function show(Type $type)
     {
         return new TypeResource($type);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  TypeRequest $request
-     * @param  \App\Models\Type  $type
-     * @return \Illuminate\Http\Response
-     */
     public function update(TypeRequest $request, Type $type)
     {
         try {
@@ -90,12 +75,6 @@ class TypeController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Type  $type
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Type $type)
     {
         try {

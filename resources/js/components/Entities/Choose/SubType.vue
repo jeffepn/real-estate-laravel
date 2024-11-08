@@ -38,7 +38,7 @@
 <script>
 import ReSelect from "@/components/Controls/Inputs/Select";
 import ReModal from "@/components/Modal";
-import ReAddSubType from "@/components/Forms/AddSubType";
+import ReAddSubType from "@/components/Forms/SubType/AddSubType";
 export default {
   components: {
     ReSelect,

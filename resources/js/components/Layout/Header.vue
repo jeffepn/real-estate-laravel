@@ -56,9 +56,14 @@ export default {
           url: reroute("jp_realestate.property.index"),
         },
         {
-          label: "Banners",
-          icon: "<i class='fas fa-building'></i>",
-          url: reroute("jp_realestate.banner.list"),
+          label: "Tipos",
+          icon: "<i class='fas fa-mark'></i>",
+          url: reroute("jp_realestate.type.index"),
+        },
+        {
+          label: "Sub Tipos",
+          icon: "<i class='fas fa-mark'></i>",
+          url: reroute("jp_realestate.sub_type.index"),
         },
       ],
       urlHome: null,

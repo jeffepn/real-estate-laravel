@@ -5,6 +5,7 @@ namespace Jeffpereira\RealEstate\Http\Requests\Property;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Jeffpereira\RealEstate\Enum\BusinessPropertySituationEnum;
 use Jeffpereira\RealEstate\Models\Property\Property;
 
 class UpdatePropertyRequest extends FormRequest
@@ -21,6 +22,7 @@ class UpdatePropertyRequest extends FormRequest
             'code' => ['sometimes', 'bail', 'integer', Rule::unique('properties')->ignore($this->property)],
             'businesses.*.id' => 'sometimes|bail|required|uuid',
             'businesses.*.value' => 'sometimes|bail|nullable|numeric|between:0,99999999.99',
+            'businesses.*.status_situation' => ['sometimes', Rule::in(BusinessPropertySituationEnum::all())],
             'situation_id' => 'sometimes|bail|nullable|uuid',
             'sub_type_id' => 'sometimes|bail|required|uuid',
             'min_description' => 'sometimes|bail|nullable|min:10|max:200',
@@ -34,7 +36,10 @@ class UpdatePropertyRequest extends FormRequest
             'max_bathroom' => 'sometimes|bail|nullable|integer|min:0',
             'min_garage' => 'sometimes|bail|nullable|integer|min:0|lte:max_garage',
             'max_garage' => 'sometimes|bail|nullable|integer|min:0',
+            'min_restroom' => 'sometimes|bail|nullable|integer|min:0|lte:max_restroom',
+            'max_restroom' => 'sometimes|bail|nullable|integer|min:0',
             'embed' => 'sometimes|bail|nullable|url|max:300',
+            'has_plate' => 'sometimes|bail|boolean',
             'address' => 'sometimes|bail|nullable|max:100',
             'number' => 'sometimes|nullable|integer|min:o',
             'complement' => 'max:15',
@@ -67,10 +72,16 @@ class UpdatePropertyRequest extends FormRequest
             'sub_type_id.required' => 'Escolha um tipo de imóvel.',
             'sub_type_id.uuid' => 'Escolha um tipo de imóvel.',
             'slug.unique' => 'Já existe um imóvel com este slug.',
-            'min_dormitory.min' => 'Forneça um número inteiro.',
-            'min_suite.min' => 'Forneça um número inteiro.',
-            'min_bathroom.min' => 'Forneça um número inteiro.',
-            'min_garage.min' => 'Forneça um número inteiro.',
+            'min_dormitory.min' => 'Forneça um valor maior ou igual a 0.',
+            'max_dormitory.min' => 'Forneça um valor maior ou igual a 0.',
+            'min_suite.min' => 'Forneça um valor maior ou igual a 0.',
+            'max_suite.min' => 'Forneça um valor maior ou igual a 0.',
+            'min_bathroom.min' => 'Forneça um valor maior ou igual a 0.',
+            'max_bathroom.min' => 'Forneça um valor maior ou igual a 0.',
+            'min_garage.min' => 'Forneça um valor maior ou igual a 0.',
+            'max_garage.min' => 'Forneça um valor maior ou igual a 0.',
+            'min_restroom.min' => 'Forneça um valor maior ou igual a 0.',
+            'max_restroom.min' => 'Forneça um valor maior ou igual a 0.',
             'number.min' => 'Forneça um número maior do que 0.',
             'businesses.*.id' => [
                 'required' => 'Escolha um tipo de negócio',
@@ -105,6 +116,7 @@ class UpdatePropertyRequest extends FormRequest
             'building_area' => $this->building_area ? $this->building_area : null,
             'total_area' => $this->total_area ? $this->total_area : null,
             'number' => $this->not_number ? null : $this->number,
+            'has_plate' => $this->has_plate ? true : false,
             'neighborhood' => Str::upper($this->neighborhood),
             'city' => Str::upper($this->city),
             'state' => $this->state ? Str::upper($this->state) : $this->getStateByInitials($this->initials),

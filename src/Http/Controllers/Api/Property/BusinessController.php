@@ -12,22 +12,31 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class BusinessController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return new BusinessCollection(Business::orderBy('name')->get());
+        try {
+            $paginate = request()->paginate;
+            $businesses = Business::orderBy('name');
+
+            if (request()->search) {
+                $businesses->search(request()->search);
+            }
+
+            $businesses->distinct(['businesses.id']);
+
+            return new BusinessCollection(
+                $paginate ? $businesses->paginate($paginate) : $businesses->get()
+            );
+        } catch (\Throwable $th) {
+            $this->registerError($th);
+
+            return response([
+                'error' => true,
+                'message' => Terminologies::get('all.common.error_index'),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  BusinessRequest $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(BusinessRequest $request)
     {
         try {
@@ -42,24 +51,11 @@ class BusinessController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Property\Business  $business
-     * @return \Illuminate\Http\Response
-     */
     public function show(Business $business)
     {
         return new BusinessResource($business);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  BusinessRequest  $request
-     * @param  \App\Models\Property\Business  $business
-     * @return \Illuminate\Http\Response
-     */
     public function update(BusinessRequest $request, Business $business)
     {
         try {
@@ -73,12 +69,6 @@ class BusinessController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Property\Business  $business
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Business $business)
     {
         try {
