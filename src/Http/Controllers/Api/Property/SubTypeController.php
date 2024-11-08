@@ -13,22 +13,20 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class SubTypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index()
     {
-        return new SubTypeCollection(SubType::orderBy('name', 'asc')->get());
+        $paginate = request()->paginate;
+        $subTypes = SubType::orderBy('name', 'asc');
+
+        if (request()->search) {
+            $subTypes->search(request()->search);
+        }
+
+        return new SubTypeCollection(
+            $paginate ? $subTypes->paginate($paginate) : $subTypes->get()
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  SubTypeRequest  $request
-     * @return Response
-     */
     public function store(SubTypeRequest $request)
     {
         try {
@@ -51,24 +49,11 @@ class SubTypeController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\SubType  $subType
-     * @return Response
-     */
     public function show(SubType $subType)
     {
         return new SubTypeResource($subType);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  SubTypeRequest  $request
-     * @param  \App\Models\SubType  $subType
-     * @return Response
-     */
     public function update(SubTypeRequest $request, SubType $subType)
     {
         try {
@@ -90,12 +75,6 @@ class SubTypeController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\SubType  $subType
-     * @return Response
-     */
     public function destroy(SubType $subType)
     {
         try {
