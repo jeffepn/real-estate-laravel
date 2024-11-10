@@ -265,7 +265,6 @@ export default {
         .finally(() => (this.loadingSubTypes = false));
     },
     getNameType(currentSubType) {
-      console.log('currentSubType', currentSubType);
       const typeId = currentSubType?.relationships?.type?.data?.id;
       const type =  this.included?.find((el) => el.id === typeId);
       return type?.attributes?.name ?? '';

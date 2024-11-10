@@ -14,11 +14,6 @@ use Jeffpereira\RealEstate\Utilities\Terminologies;
 
 class BannerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index()
     {
         return new BannerCollection(Banner::orderBy('created_at', 'desc')->get());

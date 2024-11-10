@@ -10,10 +10,9 @@ trait Errors
     public function registerError(Exception $ex, $method = __METHOD__): void
     {
         Log::error(
-            "Error in {$method}",
+            "Error in {$method}: " . $ex->getMessage(),
             [
-                'message' => $ex->getMessage(),
-                'trace' => $ex->getTraceAsString(),
+                'exception' => $ex,
             ]
         );
     }

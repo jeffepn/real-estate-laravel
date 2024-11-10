@@ -30,4 +30,9 @@ class BusinessProperty extends Pivot
     {
         return $this->status_situation === BusinessPropertySituationEnum::COMPLETED;
     }
+
+    public function getIsDiscountedAttribute(): bool
+    {
+        return $this->old_value && $this->value && $this->old_value > $this->value;
+    }
 }

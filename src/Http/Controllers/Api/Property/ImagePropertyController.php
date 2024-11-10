@@ -55,10 +55,17 @@ class ImagePropertyController extends Controller
                 );
             }
 
-            return (new ImagePropertyCollection($imagesStore, Terminologies::get('all.common.save_data')))
-                ->response()->setStatusCode(Response::HTTP_CREATED);
+            return (new ImagePropertyCollection($imagesStore))
+                ->additional([
+                    'error' => false,
+                    'message' => Terminologies::get('all.common.save_data'),
+                ])
+                ->response()
+                ->setStatusCode(Response::HTTP_CREATED);
         } catch (ModelNotFoundException $mn) {
-            logger()->error('Error in store ImagePropertyController: ' . $mn->getMessage(), $mn->getTrace());
+            logger()->error('Error in store ImagePropertyController: ' . $mn->getMessage(), [
+                'exception' => $mn,
+            ]);
 
             return response()->noContent(Response::HTTP_BAD_REQUEST);
         } catch (Throwable $th) {
@@ -96,11 +103,34 @@ class ImagePropertyController extends Controller
                     'message' => Terminologies::get('all.property.not_delete'),
                 ], Response::HTTP_BAD_REQUEST);
         } catch (Throwable $th) {
+            logger()->error('Error in destroy ImagePropertyController: ' . $th->getMessage(), [
+                'exception' => $th,
+            ]);
+
             return response([
                 'error' => true,
                 'message' => $th->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function bulkDestroy(Request $request): Response
+    {
+        $imageProperties = ImageProperty::whereIn('id', $request->ids)->get();
+        $ids = [];
+        foreach ($imageProperties as $imageProperty) {
+            try {
+                $imageProperty->delete();
+                array_push($ids, $imageProperty->id);
+            } catch (Throwable $th) {
+            }
+        }
+
+        return response([
+            'error' => false,
+            'message' => Terminologies::get('all.resource.delete'),
+            'ids' => $ids,
+        ], Response::HTTP_OK);
     }
 
     public function updateOrder(ImagePropertyUpdateOrderRequest $request): Response

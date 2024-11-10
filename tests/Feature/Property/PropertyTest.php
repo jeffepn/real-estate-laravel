@@ -1,6 +1,6 @@
 <?php
 
-namespace Jeffpereira\RealEstate\Tests\Feature;
+namespace Jeffpereira\RealEstate\Tests\Feature\Property;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -165,8 +165,8 @@ class PropertyTest extends TestCase
                 'ground_area' => 100,
                 'embed' => 'http://google.com',
                 'businesses' => [
-                    ['id' => $businessSale->id, 'value' => 100000],
-                    ['id' => $businessRent->id, 'value' => 1000],
+                    ['id' => $businessSale->id, 'value' => 100000, 'old_value' => 200000],
+                    ['id' => $businessRent->id, 'value' => 1000, 'old_value' => 200],
                 ],
             ]
         );

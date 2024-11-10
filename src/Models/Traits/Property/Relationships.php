@@ -19,7 +19,7 @@ trait Relationships
         return $this->belongsToMany(Business::class, 'business_properties')
             ->using(BusinessProperty::class)
             ->withPivot([
-                'value', 'id',
+                'value', 'old_value', 'id',
             ]);
     }
 

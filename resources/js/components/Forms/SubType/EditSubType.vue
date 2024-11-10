@@ -82,7 +82,6 @@ export default {
     async getSubType() {
       await reaxios(reroute("jp_realestate.api.sub_type.show", this.id)).then(
         ({ data }) => {
-          console.log("SUB TYPE", data);
           this.subType = data.data;
           this.form.data.name = this.subType.attributes.name;
           this.form.data.type_id = this.subType.relationships.type.data.id;

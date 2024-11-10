@@ -11,6 +11,13 @@
         Adicionar Negócio
         <i class="fas fa-plus"></i>
       </re-button>
+      <div class="col-12">
+        <small class="text-danger">
+          <i>
+            Caso o negócio possuia um valor maior anteriormente, cadastre-o para ser possível destacar a promoção.
+          </i>
+        </small>
+      </div>
     </div>
     <re-modal
       :title="labelModalBusiness"
@@ -46,6 +53,16 @@
               prefix="R$ "
               type="number"
               v-model="business.value"
+              @input="handleInput"
+              @pressEnter="$emit('pressEnter')"
+            ></re-input>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <re-input
+              :placeholder="`Valor antigo do(a) ${business.label}`"
+              prefix="R$ "
+              type="number"
+              v-model="business.old_value"
               @input="handleInput"
               @pressEnter="$emit('pressEnter')"
             ></re-input>
@@ -127,6 +144,7 @@ export default {
             : {
                 checked: false,
                 value: 0,
+                old_value: 0,
                 status_situation_checked: false,
               };
           acumulator[currentValue.id] = Object.assign(t, baseData);
@@ -149,6 +167,7 @@ export default {
             acumulator.push({
               id: key,
               value: this.businesses[key].value,
+              old_value: this.businesses[key].old_value,
               status_situation: this.businesses[key].status_situation_checked
                 ? 1
                 : 0,
@@ -190,6 +209,7 @@ export default {
     this.form.data.businesses.map((element) => {
       if (this.businesses.hasOwnProperty(element.id)) {
         this.businesses[element.id].value = element.value;
+        this.businesses[element.id].old_value = element.old_value;
         this.businesses[
           element.id
         ].status_situation_checked = element.status_situation ? true : false;

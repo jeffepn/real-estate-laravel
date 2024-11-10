@@ -32,8 +32,10 @@ Route::middleware(ConfigHelper::get('middleware.api'))->group(function () {
                 'type_person' => TypePersonController::class,
                 'app_setting' => AppSettingController::class,
             ]);
+
             Route::patch('property/{property}/active_or_inactive', [PropertyController::class, 'activeOrInactive'])->name('property.active_or_inactive');
             Route::patch('image-property/update-order', [ImagePropertyController::class, 'updateOrder'])->name('image_property.update_order');
+            Route::delete('image-property/bulk-destroy', [ImagePropertyController::class, 'bulkDestroy'])->name('image_property.bulk_destroy');
         });
     });
 });
