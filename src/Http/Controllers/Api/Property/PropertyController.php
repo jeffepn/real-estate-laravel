@@ -33,7 +33,9 @@ class PropertyController extends Controller
                 $paginate ? $properties->paginate($paginate) : $properties->get()
             );
         } catch (\Throwable $th) {
-            Log::error('Error index PropertyController', [$th->getTraceAsString()]);
+            Log::error('Error index PropertyController', [
+                'exception' => $th,
+            ]);
 
             return response([
                 'error' => true,
@@ -57,7 +59,9 @@ class PropertyController extends Controller
             return (new PropertyResource($property->refresh(), Terminologies::get('all.common.save_data')))
                 ->response()->setStatusCode(Response::HTTP_CREATED);
         } catch (\Throwable $th) {
-            Log::error('Error store PropertyController', [$th->getTraceAsString()]);
+            Log::error('Error store PropertyController', [
+                'exception' => $th,
+            ]);
 
             return response()
                 ->json(
@@ -84,7 +88,9 @@ class PropertyController extends Controller
             return response()
                 ->json(['error' => false, 'message' => Terminologies::get('all.common.save_data')]);
         } catch (\Throwable $th) {
-            Log::error('Error update PropertyController', [$th->getTraceAsString()]);
+            Log::error('Error update PropertyController', [
+                'exception' => $th,
+            ]);
 
             return response()->json(
                 ['error' => true, 'message' => Terminologies::get('all.common.error_save_data')],
@@ -102,7 +108,9 @@ class PropertyController extends Controller
             return response()
                 ->json(['error' => false, 'message' => Terminologies::get('all.common.save_data')]);
         } catch (\Throwable $th) {
-            Log::error('Error activeOrInactive PropertyController', [$th->getTraceAsString()]);
+            Log::error('Error activeOrInactive PropertyController', [
+                'exception' => $th,
+            ]);
 
             return response()
                 ->json(
@@ -122,7 +130,9 @@ class PropertyController extends Controller
                     Response::HTTP_BAD_REQUEST
                 );
         } catch (\Throwable $th) {
-            Log::error('Error destroy PropertyController', [$th->getTraceAsString()]);
+            Log::error('Error destroy PropertyController', [
+                'exception' => $th,
+            ]);
 
             return response()
                 ->json(
@@ -148,9 +158,10 @@ class PropertyController extends Controller
         }
 
         foreach ($businesses as $business) {
+            logger('JEFF', Arr::only($business, ['value', 'old_value', 'status_situation']));
             BusinessProperty::updateOrCreate(
                 ['property_id' => $property->id, 'business_id' => $business['id']],
-                Arr::only($business, ['value', 'status_situation'])
+                Arr::only($business, ['value', 'old_value', 'status_situation'])
             );
         }
 

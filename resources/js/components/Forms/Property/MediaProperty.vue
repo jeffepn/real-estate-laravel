@@ -123,7 +123,7 @@
           <ReItemImageMedia
             :ref="`${prefixImage}${image.id}`"
             :image="image"
-            v-on:deleted-image="removeImageOfContext"
+            v-on:deleted-image="(id)=> removeImageOfContext([id])"
           />
         </div>
       </div>
@@ -171,12 +171,17 @@ export default {
       prefixImage: "item-image-media-",
       selectedActionBulk: null,
       errorBulk: false,
-      messageBulk: "Selecion pelo menos um item para aplicar a ação.",
+      messageBulk: "Selecione pelo menos um item para aplicar a ação.",
       actionsBulk: [
         {
           label: "Download",
           slug: "download",
           icon: '<i class="fas fa-download"></i>',
+        },
+        {
+          label: "Excluir",
+          slug: "delete",
+          icon: '<i class="fas fa-trash"></i>',
         },
       ],
       checkAll: false,
@@ -296,45 +301,61 @@ export default {
         orders: data,
       });
     },
-    removeImageOfContext(id) {
-      this.images = this.images.filter((element) => element.id !== id);
+    removeImageOfContext(ids) {
+      this.images = this.images.filter((element) => !ids.includes(element.id));
     },
     bulkEvent(action) {
       this.errorBulk = false;
+      const ids = [];
+			this.images.forEach((image) => {
+				const ref = `${this.prefixImage}${image.id}`;
+				if (this.$refs[ref][0] && this.$refs[ref][0].checked) {
+					ids.push(image.id);
+				}
+			});
+
+			if (!ids.length) {
+				this.errorBulk = true;
+				return;
+			}
+
       switch (action.slug) {
         case "download":
-          this.bulkDownload();
+          this.bulkDownload(ids);
+          break;
+        case "delete":
+          this.bulkDelete(ids);
           break;
       }
     },
-    bulkDownload() {
-      const ids = [];
-      this.images.forEach((image) => {
-        const ref = `${this.prefixImage}${image.id}`;
-        if (this.$refs[ref][0] && this.$refs[ref][0].checked) {
-          ids.push(image.id);
-        }
-      });
-
-      if (!ids.length) {
-        this.errorBulk = true;
-        return;
-      }
-
+    bulkDownload(ids) {
       let url = `${reroute("jp_realestate.image_property.bulk_download")}?`;
 
       ids.forEach((el) => (url += `ids[]=${el}&`));
 
       window.location.assign(url.toString());
     },
-    updateCheckAllImages(checked) {
-      this.images.forEach((image) => {
-        const ref = `${this.prefixImage}${image.id}`;
-        if (this.$refs[ref][0]) {
-          this.$refs[ref][0].checked = checked;
-        }
-      });
-    },
+    bulkDelete(ids) {
+			reaxios
+				.delete(
+					reroute("jp_realestate.api.image_property.bulk_destroy", { ids: ids })
+				)
+				.then(({ data: { ids: currentIds } }) => {
+					this.removeImageOfContext(currentIds);
+				});
+			this.updateCheckAllImages(false);
+		},
+		updateCheckAllImages(checked) {
+			this.images.forEach((image) => {
+				const ref = `${this.prefixImage}${image.id}`;
+				if (this.$refs[ref][0]) {
+					this.$refs[ref][0].checked = checked;
+				}
+			});
+      if(!checked) {
+        this.checkAll = false;
+      }
+		},
   },
   mounted() {
     this.getImages();

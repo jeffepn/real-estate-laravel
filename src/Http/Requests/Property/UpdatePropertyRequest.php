@@ -22,6 +22,7 @@ class UpdatePropertyRequest extends FormRequest
             'code' => ['sometimes', 'bail', 'integer', Rule::unique('properties')->ignore($this->property)],
             'businesses.*.id' => 'sometimes|bail|required|uuid',
             'businesses.*.value' => 'sometimes|bail|nullable|numeric|between:0,99999999.99',
+            'businesses.*.old_value' => 'sometimes|bail|nullable|numeric|between:0,99999999.99',
             'businesses.*.status_situation' => ['sometimes', Rule::in(BusinessPropertySituationEnum::all())],
             'situation_id' => 'sometimes|bail|nullable|uuid',
             'sub_type_id' => 'sometimes|bail|required|uuid',
@@ -88,6 +89,10 @@ class UpdatePropertyRequest extends FormRequest
                 'uuid' => 'Escolha um tipo de negócio',
             ],
             'businesses.*.value' => [
+                'between' => 'Faixa de valores disponíveis: 0 - 99999999.99.',
+                'uuid' => 'Escolha um tipo de negócio',
+            ],
+            'businesses.*.old_value' => [
                 'between' => 'Faixa de valores disponíveis: 0 - 99999999.99.',
                 'uuid' => 'Escolha um tipo de negócio',
             ],

@@ -468,6 +468,7 @@ export default {
               return {
                 id: element.attributes.business_id,
                 value: element.attributes.value,
+                old_value: element.attributes.old_value,
                 status_situation: element.attributes.status_situation,
               };
             })
