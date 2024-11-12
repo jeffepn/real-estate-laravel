@@ -5,6 +5,7 @@ use Jeffpereira\RealEstate\Http\Controllers\Api\Property\ImagePropertyController
 use Jeffpereira\RealEstate\Http\Controllers\HomeController;
 use Jeffpereira\RealEstate\Http\Controllers\ProjectController;
 use Jeffpereira\RealEstate\Http\Controllers\PropertyController;
+use Jeffpereira\RealEstate\Http\Controllers\SituationController;
 use Jeffpereira\RealEstate\Http\Controllers\SubTypeController;
 use Jeffpereira\RealEstate\Http\Controllers\TypeController;
 use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
@@ -27,6 +28,9 @@ Route::middleware(ConfigHelper::get('middleware.web'))->group(function () {
 
             Route::resource('sub-tipos', SubTypeController::class, ['names' => 'sub_type'])
                 ->parameters(['sub-tipos' => 'subType']);
+
+            Route::resource('situacoes', SituationController::class, ['names' => 'situations'])
+                ->parameters(['situacoes' => 'situation']);
 
             //Banners
             //Route::get('banners', 'BannerController@list')->name('jp_realestate.banner.list');

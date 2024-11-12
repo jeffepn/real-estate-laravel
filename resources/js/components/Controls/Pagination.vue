@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <p class="g-pagination-label">
+  <div class="d-flex flex-wrap gap-3 align-items-center">
+    <p class="g-pagination-label mb-0">
       {{ paginationLabel }}
     </p>
-    <div class="d-flex flex-wrap">
-      <nav class=" me-3">
-        <ul class="pagination flex-wrap mb-0 mt-2">
+    <div class="d-flex flex-wrap gap-3">
+      <nav>
+        <ul class="pagination flex-wrap mb-0">
           <li class="page-item" :class="{ disabled: disabledPrevious }">
             <a class="page-link" href="#" @click.prevent="prev">
               <span aria-hidden="true">&laquo;</span>
@@ -31,9 +31,9 @@
           </li>
         </ul>
       </nav>
-      <div class="block-select-per-page mt-2">
+      <div class="block-select-per-page gap-3">
         <select
-          class="form-select me-3"
+          class="form-select"
           aria-label="Selecione uma quantidade de imóveis por página"
           v-model="selectPerPage"
         >
@@ -144,6 +144,7 @@ export default {
 .block-select-per-page {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   select {
     max-width: 70px;
   }

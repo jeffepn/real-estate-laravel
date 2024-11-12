@@ -65,6 +65,11 @@ export default {
           icon: "<i class='fas fa-mark'></i>",
           url: reroute("jp_realestate.sub_type.index"),
         },
+        {
+          label: "Situações",
+          icon: "<i class='fas fa-mark'></i>",
+          url: reroute("jp_realestate.situations.index"),
+        },
       ],
       urlHome: null,
     };

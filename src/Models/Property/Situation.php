@@ -4,6 +4,7 @@ namespace Jeffpereira\RealEstate\Models\Property;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Jeffpereira\RealEstate\Models\Traits\ScopeSearchCommon;
 use Jeffpereira\RealEstate\Models\Traits\SetSlug;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 use Illuminate\Support\Str;
@@ -14,6 +15,7 @@ class Situation extends Model
     use UsesUuid;
     use SetSlug;
     use UpperAttributes;
+    use ScopeSearchCommon;
 
     protected $guarded = [];
 

@@ -13,6 +13,7 @@ class RouteHelper
             'Projetos' => 'jp_realestate.project.index',
             'Tipos' => 'jp_realestate.type.index',
             'Sub Tipos' => 'jp_realestate.sub_type.index',
+            'Situações' => 'jp_realestate.situations.index',
         ];
 
         return collect($routes)->map(function ($route, $name) {
