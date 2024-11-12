@@ -8,29 +8,34 @@
           flex-wrap
           justify-content-between
           align-items-center
+          gap-3
         "
       >
-        <h2>Sub Tipos</h2>
-        <div class="d-flex">
-          <div class="input-search input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Procurar"
-              aria-label="Procurar"
-              aria-describedby="basic-addon2"
-              v-model="search"
-            />
-            <span class="input-group-text" id="basic-addon2">
-              <i class="fas fa-search"></i>
-            </span>
+        <h2 class="mb-0">Sub Tipos</h2>
+        <div class="d-flex flex-wrap gap-2">
+          <div class="d-flex">
+            <div class="input-search input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Procurar"
+                aria-label="Procurar"
+                aria-describedby="basic-addon2"
+                v-model="search"
+              />
+              <span class="input-group-text" id="basic-addon2">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
           </div>
-          <button
-            @click.prevent="showModalAddSubType = true"
-            class="btn-new btn btn-outline-primary ms-2"
-          >
-            <i class="fas fa-plus"></i> Novo
-          </button>
+          <div class="d-flex">
+            <button
+              @click.prevent="showModalAddSubType = true"
+              class="btn-new btn btn-outline-primary"
+            >
+              <i class="fas fa-plus"></i> Novo
+            </button>
+          </div>
         </div>
         <div class="col-12">
             <small>
@@ -50,7 +55,7 @@
             <div v-if="subTypesIsEmpty && !loadingSubTypes">
               <ph-table :size="80" weight="thin" />
               <p>
-                Não encontramos tipos, com os termos de busca.
+                Não encontramos sub tipos, com os termos de busca.
               </p>
             </div>
             <div v-if="loadingSubTypes">

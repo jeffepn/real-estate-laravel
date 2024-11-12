@@ -3,12 +3,11 @@
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Models\Property\Situation;
 use Jeffpereira\RealEstate\Tests\TestCase;
-use Jeffpereira\RealEstate\Utilities\Terminologies;
+use Symfony\Component\HttpFoundation\Response;
 
 class SituationTest extends TestCase
 {
@@ -55,6 +54,7 @@ class SituationTest extends TestCase
             'attributes' => [
                 'slug' => $situation->slug,
                 'name' => Str::title($situation->name),
+                'number_linked_properties' => 0,
             ],
         ], $response->json()['data']);
     }
@@ -103,7 +103,7 @@ class SituationTest extends TestCase
         $situation = factory(Situation::class)->create();
         $this->assertNotNull(Situation::first());
         $response = $this->deleteJson(route('jp_realestate.api.situation.destroy', $situation->id));
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
         $this->assertNull(Situation::find($situation->id));
     }
 
@@ -121,7 +121,7 @@ class SituationTest extends TestCase
         $response = $this->deleteJson(route('jp_realestate.api.situation.destroy', $situation->id));
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $this->assertNotNull(Situation::first());
-        $this->assertEquals(Terminologies::get('all.type.not_delete_with_relations'), $response->json()['message']);
+        $this->assertEquals('Não é possivel remover uma situação, com imóveis relacionados a ela.', $response->json()['message']);
     }
 
     /**

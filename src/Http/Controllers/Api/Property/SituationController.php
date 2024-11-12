@@ -4,24 +4,30 @@ namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
 use Exception;
 use Jeffpereira\RealEstate\Http\Requests\Property\StoreSituationRequest;
-use Illuminate\Http\Response;
+use Jeffpereira\RealEstate\Exceptions\CannotDeleteSituationException;
+use Jeffpereira\RealEstate\Exceptions\CannotDeleteSituationRelationshipsException;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\Property\UpdateSituationRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\SituationCollection;
 use Jeffpereira\RealEstate\Http\Resources\Property\SituationResource;
 use Jeffpereira\RealEstate\Models\Property\Situation;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
+use Symfony\Component\HttpFoundation\Response;
 
 class SituationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index()
     {
-        return new SituationCollection(Situation::all());
+        $paginate = request()->paginate;
+        $situations = Situation::orderBy('name', 'asc');
+
+        if (request()->search) {
+            $situations->search(request()->search);
+        }
+
+        return new SituationCollection(
+            $paginate ? $situations->paginate($paginate) : $situations->get()
+        );
     }
 
     /**
@@ -52,24 +58,11 @@ class SituationController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Situation  $situation
-     * @return Response
-     */
     public function show(Situation $situation)
     {
         return new SituationResource($situation);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  UpdateSituationRequest  $request
-     * @param  \App\Situation  $situation
-     * @return Response
-     */
     public function update(UpdateSituationRequest $request, Situation $situation)
     {
         try {
@@ -91,33 +84,20 @@ class SituationController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Situation  $situation
-     * @return Response
-     */
     public function destroy(Situation $situation)
     {
-        try {
-            if ($situation->properties->isNotEmpty()) {
-                return response(['error' => true, 'message' => Terminologies::get('all.type.not_delete_with_relations')], Response::HTTP_BAD_REQUEST);
-            }
-            if ($situation->delete()) {
-                return response()->noContent(Response::HTTP_OK);
-            }
+        if ($situation->properties()->exists()) {
+            throw new CannotDeleteSituationRelationshipsException();
+        }
 
-            throw new Exception();
+        try {
+            $situation->delete();
+
+            return response()->noContent(Response::HTTP_NO_CONTENT);
         } catch (\Throwable $th) {
             $this->registerError($th, __METHOD__);
 
-            return response(
-                [
-                    'error' => true,
-                    'message' => Terminologies::get('all.resource.error.delete'),
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            throw new CannotDeleteSituationException();
         }
     }
 }

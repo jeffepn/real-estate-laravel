@@ -11,8 +11,7 @@
           gap-3
         "
       >
-        <h2>Tipos</h2>
-
+        <h2>Situações</h2>
         <div class="d-flex flex-wrap gap-2">
           <div class="d-flex">
             <div class="input-search input-group">
@@ -31,7 +30,7 @@
           </div>
           <div class="d-flex">
             <button
-              @click.prevent="showModalAddType = true"
+              @click.prevent="showModalAddSituation = true"
               class="btn-new btn btn-outline-primary"
             >
               <i class="fas fa-plus"></i> Novo
@@ -42,7 +41,7 @@
             <small>
               <i class="fas fa-exclamation-triangle text-danger"></i>
               <i>
-                Não é possível excluir um tipo que tenha <b>sub tipos</b> vinculados a ele.
+                Não é possível excluir uma situação que tenha <b>imóveis</b> vinculados a ela.
               </i>
             </small>
         </div>
@@ -51,15 +50,15 @@
         <div class="content-table">
           <div
             class="d-flex justify-content-center text-center p-4"
-            v-if="typesIsEmpty || loadingTypes"
+            v-if="situationsIsEmpty || loadingSituations"
           >
-            <div v-if="typesIsEmpty && !loadingTypes">
+            <div v-if="situationsIsEmpty && !loadingSituations">
               <ph-table :size="80" weight="thin" />
               <p>
-                Não encontramos tipos, com os termos de busca.
+                Não encontramos situações, com os termos de busca.
               </p>
             </div>
-            <div v-if="loadingTypes">
+            <div v-if="loadingSituations">
               <ph-circle-notch :size="80" weight="thin">
                 <animateTransform
                   attributeName="transform"
@@ -78,20 +77,20 @@
           </div>
           <table
             class="table table-striped"
-            v-if="typesIsNotEmpty && !loadingTypes"
+            v-if="situationsIsNotEmpty && !loadingSituations"
           >
             <thead>
               <tr>
                 <th scope="col">Nome</th>
-                <th scope="col">Qtd. sub-tipos</th>
+                <th scope="col">Qtd. Imóveis</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="type in types" :key="type.id">
+              <tr v-for="situation in situations" :key="situation.id">
                 <th>
                   <div class="actions">
                     <button
-                      @click="openModalEditType(type.id)"
+                      @click="openModalEditSituation(situation.id)"
                       class="btn btn-primary btn-sm"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
@@ -100,22 +99,22 @@
                       <i class="fas fa-edit"></i>
                     </button>
                     <button                    
-                      v-if="type.relationships.sub_types.data.length < 1"
+                      v-if="situation.number_linked_properties < 1"
                       class="btn btn-danger btn-sm"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Excluir"
-                      @click="openDelete(type.id)"
+                      @click="openDelete(situation.id)"
                     >
                       <i class="fas fa-trash"></i>
                     </button>
                     <span class="ms-2">
-                      {{ type.name }}
+                      {{ situation.name }}
                     </span>
                   </div>
                 </th>
                 <th>
-                    {{ type.relationships.sub_types.data.length }}
+                    {{ situation.number_linked_properties }}
                 </th>
               </tr>
             </tbody>
@@ -138,30 +137,30 @@
       text-button-cancel="Cancelar"
       text-button-ok="Sim"
       @close="closeDelete"
-      @ok="deleteType"
+      @ok="deleteSituation"
     >
-      <p>Tem certeza da exclusão do tipo?</p>
+      <p>Tem certeza da exclusão da situação?</p>
     </re-modal>
     <re-modal
-      title="Adicionar novo Tipo"
-      :show="showModalAddType"
-      @close="closeModalAddType"
+      title="Adicionar nova Situação"
+      :show="showModalAddSituation"
+      @close="closeModalAddSituation"
       :footer="false"
     >
-      <re-add-type @submitSuccess="submitSuccessAddType"> </re-add-type>
+      <re-add-situation @submitSuccess="submitSuccessAddSituation"> </re-add-situation>
     </re-modal>
     <re-modal
-      title="Editar Tipo"
-      :show="showModalEditType"
-      @close="closeModalEditType"
+      title="Editar Situação"
+      :show="showModalEditSituation"
+      @close="closeModalEditSituation"
       :footer="false"
     >
-      <re-edit-type
-        v-if="!!currentEditTypeId"
-        :id="currentEditTypeId"
-        @submitSuccess="submitSuccessEditType"
+      <re-edit-situation
+        v-if="!!currentEditSituationId"
+        :id="currentEditSituationId"
+        @submitSuccess="submitSuccessEditSituation"
       >
-      </re-edit-type>
+      </re-edit-situation>
     </re-modal>
   </div>
 </template>
@@ -170,8 +169,8 @@
 import RePagination from "@/components/Controls/Pagination";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
 import ReModal from "@/components/Modal";
-import ReAddType from "@/components/Forms/Type/AddType";
-import ReEditType from "@/components/Forms/Type/EditType";
+import ReAddSituation from "@/components/Forms/Situation/AddSituation";
+import ReEditSituation from "@/components/Forms/Situation/EditSituation";
 import { PhTable, PhCircleNotch } from "phosphor-vue";
 export default {
   components: {
@@ -180,8 +179,8 @@ export default {
     ReModal,
     PhTable,
     PhCircleNotch,
-    ReAddType,
-    ReEditType,
+    ReAddSituation,
+    ReEditSituation,
   },
   data() {
     return {
@@ -198,13 +197,13 @@ export default {
         page: 1,
       },
       showModalDelete: false,
-      showModalAddType: false,
-      showModalEditType: false,
+      showModalAddSituation: false,
+      showModalEditSituation: false,
       idDelete: null,
       debounceSearch: null,
       timeoutDebounce: 500,
-      loadingTypes: true,
-      currentEditTypeId: null,
+      loadingSituations: true,
+      currentEditSituationId: null,
     };
   },
   watch: {
@@ -212,33 +211,33 @@ export default {
       clearTimeout(this.debounceSearch);
       this.meta.current_page = 1;
       this.debounceSearch = setTimeout(() => {
-        this.getTypes();
+        this.getSituations();
       }, this.timeoutDebounce);
     },
   },
   computed: {
-    types() {
+    situations() {
       return this.data.reduce((acumulator, currentValue) => {
         let { id, attributes, relationships } = currentValue;
 
-        let type = Object.assign({}, { id, relationships }, attributes);
-        acumulator.push(type);
+        let situation = Object.assign({}, { id, relationships }, attributes);
+        acumulator.push(situation);
         return acumulator;
       }, []);
     },
-    typesIsEmpty() {
-      return !this.typesIsNotEmpty;
+    situationsIsEmpty() {
+      return !this.situationsIsNotEmpty;
     },
-    typesIsNotEmpty() {
-      return this.types.length;
+    situationsIsNotEmpty() {
+      return this.situations.length;
     },
     searchIsNotEmpty() {
       return this.search && this.search.trim().length;
     },
   },
   methods: {
-    getTypes() {
-      this.loadingTypes = true;
+    getSituations() {
+      this.loadingSituations = true;
       const params = {
         paginate: this.meta.per_page,
         page: this.meta.current_page,
@@ -246,7 +245,7 @@ export default {
       if (this.searchIsNotEmpty) params.search = this.search;
 
       reaxios
-        .get(reroute("jp_realestate.api.type.index"), {
+        .get(reroute("jp_realestate.api.situation.index"), {
           params,
         })
         .then((response) => {
@@ -262,16 +261,16 @@ export default {
             message: response.data.message,
           });
         })
-        .finally(() => (this.loadingTypes = false));
+        .finally(() => (this.loadingSituations = false));
     },
     updatePage(page) {
       this.meta.current_page = page;
-      this.getTypes();
+      this.getSituations();
     },
     updatePerPage(perPage) {
       this.meta.current_page = 1;
       this.meta.per_page = perPage;
-      this.getTypes();
+      this.getSituations();
     },
     openDelete(id) {
       this.idDelete = id;
@@ -281,11 +280,11 @@ export default {
       this.idDelete = null;
       this.showModalDelete = false;
     },
-    deleteType() {
+    deleteSituation() {
       reaxios
-        .delete(reroute("jp_realestate.api.type.destroy", [this.idDelete]))
+        .delete(reroute("jp_realestate.api.situation.destroy", [this.idDelete]))
         .then(() => {
-          this.getTypes();
+          this.getSituations();
           this.idDelete = null;
         })
         .catch(({ response }) => {
@@ -298,26 +297,26 @@ export default {
         })
         .finally(() => (this.showModalDelete = false));
     },
-    closeModalAddType() {
-      this.showModalAddType = false;
+    closeModalAddSituation() {
+      this.showModalAddSituation = false;
     },
-    submitSuccessAddType() {
-      this.getTypes();
+    submitSuccessAddSituation() {
+      this.getSituations();
     },
-    openModalEditType(id) {
-      this.currentEditTypeId = id;
-      this.showModalEditType = true;
+    openModalEditSituation(id) {
+      this.currentEditSituationId = id;
+      this.showModalEditSituation = true;
     },
-    closeModalEditType() {
-      this.currentEditTypeId = null;
-      this.showModalEditType = false;
+    closeModalEditSituation() {
+      this.currentEditSituationId = null;
+      this.showModalEditSituation = false;
     },
-    submitSuccessEditType() {
-       this.getTypes();
+    submitSuccessEditSituation() {
+       this.getSituations();
     },
   },
   async beforeMount() {
-    await this.getTypes();
+    await this.getSituations();
   },
 };
 </script>
