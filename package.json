@@ -32,6 +32,7 @@
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^28.0.0",
         "@ckeditor/ckeditor5-vue2": "^1.0.5",
+        "fabric": "^6.5.0",
         "v-money": "^0.8.1",
         "vue": "^2.6.14",
         "ziggy-js": "^1.2.0"

@@ -36,7 +36,7 @@
 
 <script>
 import ReSelect from "@/components/Controls/Inputs/Select";
-import ReModal from "@/components/Modal";
+import ReModal from "@/components/Modals/Modal";
 import ReAddSituation from "@/components/Forms/Situation/AddSituation";
 export default {
   name: "ChooseSituation",

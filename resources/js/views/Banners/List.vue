@@ -121,7 +121,7 @@
 <script>
 import RePagination from "@/components/Controls/Pagination";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
-import ReModal from "@/components/Modal";
+import ReModal from "@/components/Modals/Modal";
 import ReFormBanner from "@/components/Forms/FormBanner";
 export default {
   components: { RePagination, ReButton, ReModal, ReFormBanner },

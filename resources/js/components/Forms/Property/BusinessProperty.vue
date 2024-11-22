@@ -96,7 +96,7 @@
 <script>
 import ReCheckbox from "@/components/Controls/Inputs/Checkbox";
 import ReInput from "@/components/Controls/Inputs/Input";
-import ReModal from "@/components/Modal";
+import ReModal from "@/components/Modals/Modal";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
 import ReAddBusiness from "@/components/Forms/AddBusiness";
 export default {

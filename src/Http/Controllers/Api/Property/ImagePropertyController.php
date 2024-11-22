@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyRequest;
@@ -15,8 +15,11 @@ use Jeffpereira\RealEstate\Models\Property\ImageProperty;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 use Jeffpereira\RealEstate\Http\Controllers\Traits\TreatmentImages;
 use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyUpdateOrderRequest;
+use Jeffpereira\RealEstate\Http\Requests\Property\ImagePropertyUpdateRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\ImagePropertyCollection;
 use Jeffpereira\RealEstate\Services\DownloadService;
+use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use TypeError;
 
@@ -86,8 +89,31 @@ class ImagePropertyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ImagePropertyRequest $request, Property $imageProperty)
+    public function update(ImagePropertyUpdateRequest $request, ImageProperty $imageProperty)
     {
+        $data = [];
+        $wayOld = $imageProperty->way;
+        $thumbnailOld = $imageProperty->thumbnail;
+        if ($request->has('image')) {
+            $property = Property::findOrFail($imageProperty->property_id);
+            $altImage = $property->generateAltImage();
+            $ways = $this->storageImage('properties', $request->image, $altImage);
+            $data['alt'] = $altImage;
+            $data = array_merge($data, $ways);
+        }
+
+        $updated = $imageProperty->update($data);
+
+        if ($updated) {
+            Storage::disk(ConfigHelper::get('filesystem.disk'))
+                ->delete($wayOld);
+            if ($thumbnailOld) {
+                Storage::disk(ConfigHelper::get('filesystem.disk'))
+                    ->delete($thumbnailOld);
+            }
+        }
+
+        return response()->noContent(Response::HTTP_OK);
     }
 
     /**

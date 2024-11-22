@@ -15,6 +15,13 @@
     >
       <i class="fas fa-trash"></i>
     </ReButton>
+    <ReButton
+      v-if="haveWatermark"
+      classes="btn btn-primary btn-circle button-edit"
+      @click="addImageWatermark"
+    >
+      <i class="far fa-bookmark"></i>
+    </ReButton>    
   </div>
 </template>
 
@@ -30,6 +37,10 @@ export default {
     id: {
       type: String,
       default: null,
+    },    
+    haveWatermark: {
+      type: Boolean,
+      require: true,
     },
   },
   components: {
@@ -55,6 +66,12 @@ export default {
           this.$emit("deleted-image", id);
         });
     },
+    addImageWatermark() {
+      this.$emit(
+        'add-image-wattermark', 
+        {id: this.image.id, url: this.image.way}
+      );
+    }
   },
   beforeMount() {
     this.idCheck = this.id ? this.id : `item-image-media-default-${this._uid}`;
@@ -67,6 +84,11 @@ export default {
   position: absolute;
   right: 0;
   top: -5px;
+}
+.button-edit {
+  position: absolute;
+  right: 0;
+  top: 35px;
 }
 .item-image {
   width: 150px;
