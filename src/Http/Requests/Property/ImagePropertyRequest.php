@@ -33,6 +33,7 @@ class ImagePropertyRequest extends FormRequest
     {
         $this->merge([
             'use_watter_mark' => $this->use_watter_mark && $this->use_watter_mark != 'false' ? true : false,
+            'watermark_position' => $this->watermark_position ?: 'center',
         ]);
     }
 }

@@ -68,6 +68,13 @@ export default {
         : reroute("jp_realestate.api.app_setting.store");
     },
   },
+  watch: {
+	watterMark(newValue) {
+		if (newValue) {
+			this.$emit("load-image-wattermark", this.watterMark);
+		}
+	},
+  },
   data: () => ({
     settingsWattermark: "",
     watterMark: null,

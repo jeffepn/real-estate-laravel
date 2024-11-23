@@ -93,13 +93,18 @@ export default {
     this.idModal = this.id ? this.id : `modal-master-${this._uid}`;
   },
   mounted() {
-    this.initialise();
+    this.initialise();    
   },
   methods: {
     initialise() {
       let elementModal = document.getElementById(this.idModal);
       this.modal = new bootstrap.Modal(elementModal);
       elementModal.addEventListener("hide.bs.modal", this.close);
+      elementModal.addEventListener(
+        "shown.bs.modal", 
+        () =>  this.$emit("modal-shown", this.idModal)
+      );
+     
       this.toggle();
     },
     toggle() {

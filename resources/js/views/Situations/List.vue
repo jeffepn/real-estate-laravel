@@ -168,7 +168,7 @@
 <script>
 import RePagination from "@/components/Controls/Pagination";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
-import ReModal from "@/components/Modal";
+import ReModal from "@/components/Modals/Modal";
 import ReAddSituation from "@/components/Forms/Situation/AddSituation";
 import ReEditSituation from "@/components/Forms/Situation/EditSituation";
 import { PhTable, PhCircleNotch } from "phosphor-vue";
