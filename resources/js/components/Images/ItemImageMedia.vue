@@ -21,12 +21,30 @@
       @click="addImageWatermark"
     >
       <i class="far fa-bookmark"></i>
-    </ReButton>    
+    </ReButton>
+    <ReButton
+      classes="btn btn-success btn-circle button-view"
+      @click="showModalImage = true"
+    >
+      <i class="far fa-eye"></i>
+    </ReButton> 
+    <re-modal
+      :id="id"
+      title="Visualização completa da imagem"
+      :show="showModalImage"
+      @close="showModalImage = false"
+      :footer="false"
+    >
+      <div class="preview-image">
+        <img :src="image.way">
+      </div>
+    </re-modal>
   </div>
 </template>
 
 <script>
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
+import ReModal from "@/components/Modals/Modal";
 export default {
   name: "ItemImageMedia",
   props: {
@@ -45,10 +63,12 @@ export default {
   },
   components: {
     ReButton,
+    ReModal,
   },
   data: () => ({
     checked: false,
     idCheck: null,
+    showModalImage: false,
   }),
   computed: {
     classImage() {
@@ -82,10 +102,15 @@ export default {
 <style lang="scss" scoped>
 .button-trash {
   position: absolute;
-  right: 0;
+  left: 8px;
   top: -5px;
 }
 .button-edit {
+  position: absolute;
+  right: 0;
+  top: -5px;
+}
+.button-view {
   position: absolute;
   right: 0;
   top: 35px;
@@ -99,6 +124,18 @@ export default {
   cursor: pointer;
   &-selected {
     border: 1px solid blue;
+  }
+}
+.preview-image {
+	max-height: 100%;
+	height: 300px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  img {
+    max-width: 100%;
+    max-height: 100%;
   }
 }
 </style>

@@ -19,15 +19,18 @@
           v-model="useWatterMark"
         ></re-checkbox>
         <small>
-          Caso seja necessário a incorporação de uma
-          <strong> marca d'água</strong> a suas imagens, será necessário
-          carregá-la antes da escolha de suas imagens.
-          <br />
-          <i>
-            <b class="text-danger"> Obs:</b> No momento, somente existe suporte
-            para a <strong>centralização</strong> da marca d'água.
-          </i>
+          Marque essa opção para adicionar uma marca <strong>d'água</strong> automática a suas imagens.<br />
+          Será necessário carregar a marca d'água previamente, antes da escolha de suas imagens.                    
         </small>
+      </div>
+      <div v-if="useWatterMark" class="col-13 mb-3 d-flex flex-column gap-3">
+        <div>
+          <i>
+            <b class="text-danger"> Obs:</b> Existe suporte a posicionamento da imagem,
+            escolha a <strong>posição</strong> pretendida para aplicar nas imagens a serem carregadas.            
+          </i>
+        </div>
+        <radio-button-position-watermark v-model="watermarkPosition" />
       </div>
       <div class="col-auto mb-3">
         <re-edit-watter-mark 
@@ -154,6 +157,7 @@ import ReButtonFloat from "@/components/Buttons/ButtonFloat";
 import ReItemImageMedia from "@/components/Images/ItemImageMedia";
 import ReSelect from "@/components/Controls/Inputs/Select";
 import ReModalImageWatermark from "@/components/Modals/ModalImageWatermark";
+import RadioButtonPositionWatermark from '@/components/Controls/RadioButtons/RadioButtonPositionWatermark.vue';
 
 export default {
   name: "MediaProperty",
@@ -172,6 +176,7 @@ export default {
     ReItemImageMedia,
     ReSelect,
     ReModalImageWatermark,
+    RadioButtonPositionWatermark,
   },
   watch: {
     checkAll(newValue) {
@@ -209,6 +214,7 @@ export default {
       showModalImageWatermark: false,
       imageToWatermark: null,
       imageWatermark: null,
+      watermarkPosition: "center",
     };
   },
   methods: {
@@ -280,6 +286,7 @@ export default {
       let dataForm = new FormData();
       dataForm.append("property_id", this.form.data.id);
       dataForm.append("use_watter_mark", this.useWatterMark);
+      dataForm.append("watermark_position", this.watermarkPosition);
       dataForm.append("images[]", file);
 
       let result = { error: null, image: null };

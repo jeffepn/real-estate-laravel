@@ -13,15 +13,20 @@ use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
 
 trait TreatmentImages
 {
-    private function storageImage(string $entity, UploadedFile $image, string $altImage, ?bool $useWatterMark = false): array
-    {
+    private function storageImage(
+        string $entity,
+        UploadedFile $image,
+        string $altImage,
+        ?bool $useWatterMark = false,
+        string $watermarkPosition = 'center'
+    ): array {
         $optmize = ConfigHelper::get("filesystem.entities.{$entity}.optmize");
         $path = ConfigHelper::get("filesystem.entities.{$entity}.path");
         $disk = ConfigHelper::get('filesystem.disk');
         $img = Image::make($image);
 
         if ($useWatterMark) {
-            $img = $this->insertWatterMark($entity, $img);
+            $img = $this->insertWatterMark($entity, $img, $watermarkPosition);
         }
         $img->orientate();
         $imgThumbnail = clone $img;
@@ -46,7 +51,7 @@ trait TreatmentImages
         ];
     }
 
-    private function insertWatterMark(string $entity, InterventionImage $img): InterventionImage
+    private function insertWatterMark(string $entity, InterventionImage $img, string $watermarkPosition = 'center'): InterventionImage
     {
         $appSetting = AppSettings::whereName(AppSettingsEnum::translateEntity($entity))
             ->first();
@@ -54,7 +59,7 @@ trait TreatmentImages
         return $appSetting
             ? $img->insert(
                 $this->formatImageInserWatterMark($appSetting, $img->height()),
-                'center'
+                $watermarkPosition
             )
             : $img;
     }
