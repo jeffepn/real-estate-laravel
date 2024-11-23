@@ -36,7 +36,7 @@
 
 <script>
 import ReSelect from "@/components/Controls/Inputs/Select";
-import ReModal from "@/components/Modal";
+import ReModal from "@/components/Modals/Modal";
 import ReAddPerson from "@/components/Forms/AddPerson";
 export default {
   name: "ChoosePerson",

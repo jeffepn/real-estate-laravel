@@ -159,7 +159,7 @@
 import { active } from "@/supports/property.js";
 import RePagination from "@/components/Controls/Pagination";
 import ReButton from "@/components/Controls/Buttons/ButtonDefault";
-import ReModal from "@/components/Modal";
+import ReModal from "@/components/Modals/Modal";
 import { PhTable, PhCircleNotch } from "phosphor-vue";
 export default {
   components: { RePagination, ReButton, ReModal, PhTable, PhCircleNotch },

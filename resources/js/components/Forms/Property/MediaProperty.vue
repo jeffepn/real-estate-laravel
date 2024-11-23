@@ -19,18 +19,25 @@
           v-model="useWatterMark"
         ></re-checkbox>
         <small>
-          Caso seja necessário a incorporação de uma
-          <strong> marca d'água</strong> a suas imagens, será necessário
-          carregá-la antes da escolha de suas imagens.
-          <br />
-          <i>
-            <b class="text-danger"> Obs:</b> No momento, somente existe suporte
-            para a <strong>centralização</strong> da marca d'água.
-          </i>
+          Marque essa opção para adicionar uma marca <strong>d'água</strong> automática a suas imagens.<br />
+          Será necessário carregar a marca d'água previamente, antes da escolha de suas imagens.                    
         </small>
       </div>
-      <div class="col-auto mb-3" v-show="useWatterMark">
-        <re-edit-watter-mark></re-edit-watter-mark>
+      <div v-if="useWatterMark" class="col-13 mb-3 d-flex flex-column gap-3">
+        <div>
+          <i>
+            <b class="text-danger"> Obs:</b> Existe suporte a posicionamento da imagem,
+            escolha a <strong>posição</strong> pretendida para aplicar nas imagens a serem carregadas.            
+          </i>
+        </div>
+        <radio-button-position-watermark v-model="watermarkPosition" />
+      </div>
+      <div class="col-auto mb-3">
+        <re-edit-watter-mark 
+          v-on:load-image-wattermark="(imgWatermarkSetting) => this.imageWatermark = {
+              url: imgWatermarkSetting.attributes.value.image
+          }"
+        />
       </div>
     </div>
 
@@ -99,7 +106,7 @@
         ></small>
       </div>
       <div class="col-sm-4 text-end">
-        <ReButtonFloat
+        <re-button-float
           :actions="actionsBulk"
           v-on:bulk-event="bulkEvent"
           data-bs-toggle="tooltip"
@@ -120,14 +127,24 @@
           :key="index"
           v-dragging="{ item: image, list: images, group: 'image' }"
         >
-          <ReItemImageMedia
+          <re-item-image-media
             :ref="`${prefixImage}${image.id}`"
             :image="image"
+            :haveWatermark="haveWatermark"
             v-on:deleted-image="(id)=> removeImageOfContext([id])"
+            v-on:add-image-wattermark="intChangeImageWatermark"
           />
         </div>
       </div>
     </div>
+    <re-modal-image-watermark 
+      id="modal-image-watermark-property" 
+      :show="showModalImageWatermark"
+      :image="imageToWatermark"
+      :imageWatermark="imageWatermark"
+      v-on:ok="finishChangeImageWatermark"      
+      v-on:close="closeChangeImageWatermark"
+    />
   </div>
 </template>
 
@@ -139,6 +156,8 @@ import ReEditWatterMark from "@/components/Entities/AppSettings/WatterMark/Edit"
 import ReButtonFloat from "@/components/Buttons/ButtonFloat";
 import ReItemImageMedia from "@/components/Images/ItemImageMedia";
 import ReSelect from "@/components/Controls/Inputs/Select";
+import ReModalImageWatermark from "@/components/Modals/ModalImageWatermark";
+import RadioButtonPositionWatermark from '@/components/Controls/RadioButtons/RadioButtonPositionWatermark.vue';
 
 export default {
   name: "MediaProperty",
@@ -156,11 +175,18 @@ export default {
     ReButtonFloat,
     ReItemImageMedia,
     ReSelect,
+    ReModalImageWatermark,
+    RadioButtonPositionWatermark,
   },
   watch: {
     checkAll(newValue) {
       this.updateCheckAllImages(newValue);
     },
+  },
+  computed: {
+    haveWatermark() {
+      return !!this.imageWatermark;
+    }
   },
   data() {
     return {
@@ -185,6 +211,10 @@ export default {
         },
       ],
       checkAll: false,
+      showModalImageWatermark: false,
+      imageToWatermark: null,
+      imageWatermark: null,
+      watermarkPosition: "center",
     };
   },
   methods: {
@@ -256,6 +286,7 @@ export default {
       let dataForm = new FormData();
       dataForm.append("property_id", this.form.data.id);
       dataForm.append("use_watter_mark", this.useWatterMark);
+      dataForm.append("watermark_position", this.watermarkPosition);
       dataForm.append("images[]", file);
 
       let result = { error: null, image: null };
@@ -300,6 +331,34 @@ export default {
       reaxios.patch(reroute("jp_realestate.api.image_property.update_order"), {
         orders: data,
       });
+    },
+    base64ToFile(base64String, nameBaseFile) {
+      const [metadata, base64Data] = base64String.split(',');
+      const mime = metadata.match(/:(.*?);/)[1];
+
+      const extension = mime.split('/')[1];
+      const nameFile = `${nameBaseFile}.${extension}`;
+
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = Array.from(byteCharacters, char => char.charCodeAt(0));
+      const byteArray = new Uint8Array(byteNumbers);
+
+      return new File([byteArray], nameFile, { type: mime });
+    }, 
+    updateImage(image) {
+      const file = this.base64ToFile(image.image, 'teste');
+      let dataForm = new FormData();
+      dataForm.append("image", file);
+      dataForm.append("_method", 'PATCH');
+      reaxios.post(
+        reroute("jp_realestate.api.image_property.update", image.id), 
+        dataForm,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
     },
     removeImageOfContext(ids) {
       this.images = this.images.filter((element) => !ids.includes(element.id));
@@ -355,7 +414,27 @@ export default {
       if(!checked) {
         this.checkAll = false;
       }
-		},
+		},    
+    intChangeImageWatermark(image) {
+      this.showModalImageWatermark = true;
+      this.imageToWatermark = image;
+    },
+    closeChangeImageWatermark() {
+      this.imageToWatermark = null;
+      this.showModalImageWatermark = false;
+    },
+    finishChangeImageWatermark(image) {
+      this.images = this.images.map((img) => {
+        if(img.id === image.id) {
+          img.way = image.image;
+          img.thumbnail = image.image;
+        }
+        return img;
+      })
+      this.imageToWatermark = null;
+      this.showModalImageWatermark = false;
+      this.updateImage(image);
+    }
   },
   mounted() {
     this.getImages();
