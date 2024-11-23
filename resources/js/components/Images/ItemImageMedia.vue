@@ -108,12 +108,12 @@ export default {
 .button-edit {
   position: absolute;
   right: 0;
-  top: -5px;
+  top: 35px;
 }
 .button-view {
   position: absolute;
   right: 0;
-  top: 35px;
+  top: -5px;
 }
 .item-image {
   width: 150px;
