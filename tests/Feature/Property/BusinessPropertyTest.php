@@ -29,14 +29,6 @@ class BusinessPropertyTest extends TestCase
         $this->assertEquals($isCompleted, $businessProperty->isCompleted);
     }
 
-    public function dataCompleted(): array
-    {
-        return [
-            'When status_situation is complete' => [BusinessPropertySituationEnum::COMPLETED, true],
-            'When status_situation is in progress' => [BusinessPropertySituationEnum::IN_PROGRESS, false],
-        ];
-    }
-
     /**
      * @test
      * @group business
@@ -78,7 +70,15 @@ class BusinessPropertyTest extends TestCase
         $this->assertEquals($isDicounted, $businessProperty->isDiscounted);
     }
 
-    public function dataDiscounted(): array
+    public static function dataCompleted(): array
+    {
+        return [
+            'When status_situation is complete' => [BusinessPropertySituationEnum::COMPLETED, true],
+            'When status_situation is in progress' => [BusinessPropertySituationEnum::IN_PROGRESS, false],
+        ];
+    }
+
+    public static function dataDiscounted(): array
     {
         $value = rand(10, 9999);
 

@@ -1,6 +1,6 @@
 services:
   app:
-    image: kooldev/php:7.4-nginx
+    image: kooldev/php:8.1-nginx
     ports:
     - ${KOOL_APP_PORT:-80}:80
     environment:

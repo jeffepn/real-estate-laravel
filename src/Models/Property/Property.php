@@ -42,7 +42,7 @@ class Property extends Model
         );
     }
 
-    protected function generateSlug()
+    protected function generateSlug(): string
     {
         if ($this->slug) {
             return $this->slug;
