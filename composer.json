@@ -8,11 +8,11 @@
       "email": "jefferson.pereira.nascimento10@gmail.com"
     }
   ],
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "require": {
     "php": "^8.1.0",
     "jeffersonpereira/address": "2.*",
-    "laravellegends/pt-br-validator": "dev-master",
+    "laravellegends/pt-br-validator": "^10.0",
     "tightenco/ziggy": "^1.2",
     "spatie/laravel-image-optimizer": "1.8.*",
     "intervention/image": "^2.7",
