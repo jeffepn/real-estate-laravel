@@ -37,7 +37,7 @@ class SubType extends Model
         });
     }
 
-    protected function generateSlug()
+    protected function generateSlug(): string
     {
         return Str::slug($this->name);
     }

@@ -24,7 +24,7 @@ class Situation extends Model
         return $this->hasMany(Property::class);
     }
 
-    protected function generateSlug()
+    protected function generateSlug(): string
     {
         return Str::slug($this->name);
     }

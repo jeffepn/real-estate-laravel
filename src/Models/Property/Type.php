@@ -23,7 +23,7 @@ class Type extends Model
         return $this->hasMany(SubType::class);
     }
 
-    protected function generateSlug()
+    protected function generateSlug(): string
     {
         return Str::slug($this->name);
     }

@@ -41,7 +41,7 @@ class Business extends Model
         return !empty($this->name_completed);
     }
 
-    protected function generateSlug()
+    protected function generateSlug(): string
     {
         return Str::slug($this->name);
     }
