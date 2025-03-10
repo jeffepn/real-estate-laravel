@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0972a196ac55b3e69af75e138d7429c8",
+    "content-hash": "4b9e3fd0e2bc34a90c23f927f31aa811",
     "packages": [
         {
             "name": "brick/math",
@@ -1188,26 +1188,26 @@
         },
         {
             "name": "jeffersonpereira/address",
-            "version": "v1.0.10",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
-                "url": "git@gitlab.com:packages-jp-dev-web/php/address.git",
-                "reference": "ed6c03fbb56139a128946305a7c33180efb6e4ca"
+                "url": "https://gitlab.com/packages-jp-dev-web/php/address.git",
+                "reference": "d147b751dbc4864de53191c03481f7ebd2ae2be3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/packages-jp-dev-web%2Fphp%2Faddress/repository/archive.zip?sha=ed6c03fbb56139a128946305a7c33180efb6e4ca",
-                "reference": "ed6c03fbb56139a128946305a7c33180efb6e4ca",
+                "url": "https://gitlab.com/api/v4/projects/packages-jp-dev-web%2Fphp%2Faddress/repository/archive.zip?sha=d147b751dbc4864de53191c03481f7ebd2ae2be3",
+                "reference": "d147b751dbc4864de53191c03481f7ebd2ae2be3",
                 "shasum": ""
             },
             "require": {
                 "laravellegends/pt-br-validator": "dev-master",
-                "php": " >=7.2.5"
+                "php": "^8.1.0"
             },
             "require-dev": {
                 "fakerphp/faker": "^1.9.1",
                 "laravel/legacy-factories": "^1.0@dev",
-                "orchestra/testbench": "^4.0"
+                "orchestra/testbench": "^8.0"
             },
             "type": "library",
             "extra": {
@@ -1233,7 +1233,11 @@
                 }
             ],
             "description": "Package to manager address in system",
-            "time": "2022-11-16T01:19:15+00:00"
+            "support": {
+                "issues": "https://gitlab.com/packages-jp-dev-web/php/address/-/issues",
+                "source": "https://gitlab.com/packages-jp-dev-web/php/address/-/tree/v2.0.0"
+            },
+            "time": "2025-03-10T04:03:22+00:00"
         },
         {
             "name": "laravel/framework",
