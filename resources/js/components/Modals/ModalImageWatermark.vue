@@ -146,7 +146,7 @@ export default {
 						left: mainImg.left + 20,
 						top: mainImg.top + 20,
 					});
-					const scaleFactor = 0.2;
+					const scaleFactor = 0.5;
 					const watermarkWidth = watermark.width;
 					const watermarkHeight = watermark.height;
 					watermark.scaleToWidth(context.canvas.width * scaleFactor);
