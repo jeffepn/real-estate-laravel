@@ -187,4 +187,7 @@ $rules = [
 return $config->setRules($rules)
     ->setFinder($finder)
     ->setRiskyAllowed(true)
-    ->setHideProgress(true);
+    ->setHideProgress(true)
+    ->setParallelConfig(
+        PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect()
+    );

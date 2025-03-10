@@ -32,7 +32,7 @@ scripts:
     - kool run artisan key:generate
     - kool run node-setup
   yarn: kool docker kooldev/node:16 yarn
-  phpqa: kool docker kooldev/phpqa:8.0
+  phpqa: kool docker kooldev/phpqa:8.1
   php-cs-fixer: kool run phpqa php-cs-fixer fix --diff
-  phpstan: kool docker ghcr.io/phpstan/phpstan --memory-limit=-1 analyse
+  phpstan: kool docker ghcr.io/phpstan/phpstan:latest-php8.1 --memory-limit=-1 analyse
   phpcbf: kool run phpqa phpcbf
