@@ -1,3 +1,3 @@
-@content
-<re-list-banners></re-list-banners>
-@endcontent
+<x-content>
+    <re-list-banners></re-list-banners>
+</x-content>

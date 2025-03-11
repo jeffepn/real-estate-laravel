@@ -1,3 +1,3 @@
-@content
-<re-list-situations></re-list-situations>
-@endcontent
+<x-content>
+    <re-list-situations></re-list-situations>
+<x-content>

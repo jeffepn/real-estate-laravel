@@ -1,2 +1,2 @@
-@content
-@endcontent
+<x-content>
+</x-content>

@@ -1,3 +1,3 @@
-@content
-<re-list-projects></re-list-projects>
-@endcontent
+<x-content>
+    <re-list-projects></re-list-projects>
+</x-content>

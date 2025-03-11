@@ -1,3 +1,3 @@
-@content
-<re-list-sub-types></re-list-sub-types>
-@endcontent
+<x-content>
+    <re-list-sub-types></re-list-sub-types>
+</x-content>
