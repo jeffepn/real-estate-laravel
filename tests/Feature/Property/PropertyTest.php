@@ -276,6 +276,7 @@ class PropertyTest extends TestCase
             'neighborhood' => $this->faker->streetAddress(),
             'city' => $this->faker->city(),
             'initials' => $this->faker->stateAbbr(),
+            'number' => 789,
         ]);
         $response->assertStatus(Response::HTTP_OK);
         $data = $property->refresh()->toArray();
@@ -307,6 +308,7 @@ class PropertyTest extends TestCase
             'has_plate' => $property->has_plate,
             'active' => $property->active,
         ], $data);
+        $this->assertEquals(789, $property->address->number);
     }
 
     /**
