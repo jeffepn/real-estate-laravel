@@ -5,7 +5,6 @@ namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Jeffpereira\RealEstate\Models\Property\Property;
@@ -16,6 +15,7 @@ use Jeffpereira\RealEstate\Models\Property\BusinessProperty;
 use Jeffpereira\RealEstate\Utilities\Terminologies;
 use Jeffpereira\RealEstate\Http\Requests\Property\StorePropertyRequest;
 use Jeffpereira\RealEstate\Http\Requests\Property\UpdatePropertyRequest;
+use Symfony\Component\HttpFoundation\Response;
 
 class PropertyController extends Controller
 {

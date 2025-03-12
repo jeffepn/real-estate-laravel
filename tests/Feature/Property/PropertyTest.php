@@ -4,7 +4,6 @@ namespace Jeffpereira\RealEstate\Tests\Feature\Property;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Enum\BusinessPropertySituationEnum;
@@ -17,6 +16,7 @@ use Jeffpereira\RealEstate\Models\Property\Situation;
 use Jeffpereira\RealEstate\Models\Property\SubType;
 use Jeffpereira\RealEstate\Models\Property\Type;
 use Jeffpereira\RealEstate\Tests\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class PropertyTest extends TestCase
 {
@@ -273,6 +273,7 @@ class PropertyTest extends TestCase
             'max_garage' => 9,
             'min_restroom' => 2,
             'max_restroom' => 4,
+            'number' => 789,
             'neighborhood' => $this->faker->streetAddress(),
             'city' => $this->faker->city(),
             'initials' => $this->faker->stateAbbr(),
@@ -307,6 +308,7 @@ class PropertyTest extends TestCase
             'has_plate' => $property->has_plate,
             'active' => $property->active,
         ], $data);
+        $this->assertEquals(789, $property->address->number);
     }
 
     /**

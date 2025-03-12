@@ -42,7 +42,7 @@ class UpdatePropertyRequest extends FormRequest
             'embed' => 'sometimes|bail|nullable|url|max:300',
             'has_plate' => 'sometimes|bail|boolean',
             'address' => 'sometimes|bail|nullable|max:100',
-            'number' => 'sometimes|nullable|integer|min:o',
+            'number' => 'sometimes|nullable|integer|min:0',
             'complement' => 'max:15',
             'cep' => 'sometimes|bail|nullable|formato_cep',
             'latitude' => 'sometimes|nullable|integer',
