@@ -20,6 +20,13 @@
 
 Package used to manage real estate / brokerage websites, built with the Laravel framework
 
+## Compatibilidade
+| Laravel      | Pacote realestatelaravel |
+|:--------:|:------:|
+| 10        |   ^2.0  |
+| 6         |   ^1.0  |
+
+_The package only supports the mentioned Laravel versions._
 ## Instalation
 
 ```php
