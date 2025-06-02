@@ -3,7 +3,7 @@
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Property\SubType;
 use Jeffpereira\RealEstate\Models\Property\Type;
@@ -21,7 +21,7 @@ class TypeTest extends TestCase
      */
     public function verify_format_return_index()
     {
-        factory(Type::class)->create();
+        Type::factory()->create();
         $response = $this->getJson(route('jp_realestate.api.type.index'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -35,7 +35,7 @@ class TypeTest extends TestCase
      */
     public function verify_format_return_show()
     {
-        $type = factory(Type::class)->create();
+        $type = Type::factory()->create();
         $response = $this->getJson(route('jp_realestate.api.type.show', $type->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -74,7 +74,7 @@ class TypeTest extends TestCase
      */
     public function update_with_success()
     {
-        $type = factory(Type::class)->create();
+        $type = Type::factory()->create();
         $response = $this->patchJson(
             route('jp_realestate.api.type.update', $type->id),
             ['name' => 'Test of name2']
@@ -89,7 +89,7 @@ class TypeTest extends TestCase
      */
     public function destroy_with_success()
     {
-        $type = factory(Type::class)->create();
+        $type = Type::factory()->create();
         $this->assertNotNull(Type::first());
         $response = $this->deleteJson(route('jp_realestate.api.type.destroy', $type->id));
         $response->assertStatus(Response::HTTP_OK);
@@ -102,9 +102,9 @@ class TypeTest extends TestCase
      */
     public function dont_destroy_type_with_one_or_more_sub_type()
     {
-        $type = factory(Type::class)->create();
+        $type = Type::factory()->create();
         $this->assertNotNull(Type::first());
-        $type->sub_types()->save(factory(SubType::class)->make());
+        $type->sub_types()->save(SubType::factory()->make());
         $response = $this->deleteJson(route('jp_realestate.api.type.destroy', $type->id));
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $this->assertNotNull(Type::first());
@@ -118,7 +118,7 @@ class TypeTest extends TestCase
     public function validate_name_request()
     {
         // $request = new typeRequest();
-        $type = factory(Type::class)->create(['name' => 'teste']);
+        $type = Type::factory()->create(['name' => 'teste']);
 
         $response = $this->postJson(route('jp_realestate.api.type.store'), ['name' => Str::random(30)]);
         $response->assertStatus(Response::HTTP_CREATED);

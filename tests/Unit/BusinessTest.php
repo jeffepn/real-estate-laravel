@@ -16,7 +16,7 @@ class BusinessTest extends TestCase
      */
     public function slugIsDefinedPerNameOfBusiness()
     {
-        $business = factory(Business::class)->create(['name' => 'Nome teste de negócio']);
+        $business = Business::factory()->create(['name' => 'Nome teste de negócio']);
         $this->assertEquals('nome-teste-de-negocio', $business->slug);
     }
 
@@ -25,12 +25,12 @@ class BusinessTest extends TestCase
      */
     public function isNameOfUniqueMustBeUnique()
     {
-        $business = factory(Business::class)->create(['name' => 'Nome teste de negócio']);
+        $business = Business::factory()->create(['name' => 'Nome teste de negócio']);
         $this->assertEquals('nome-teste-de-negocio', $business->slug);
         $codeError = null;
 
         try {
-            $business = factory(Business::class)->create(['name' => 'Nome teste de negócio']);
+            $business = Business::factory()->create(['name' => 'Nome teste de negócio']);
             $this->assertEquals('nome-teste-de-negocio', $business->slug);
         } catch (QueryException $ex) {
             $codeError = $ex->getCode();
@@ -43,10 +43,10 @@ class BusinessTest extends TestCase
      */
     // public function aBusinessCanHaveOneOrMoreProperties()
     // {
-    //     $business = factory(Business::class)->create();
-    //     $business->properties()->save(factory(Property::class)->make());
+    //     $business = Business::factory()->create();
+    //     $business->properties()->save(Property::factory()->make());
     //     $this->assertEquals(1, $business->properties->count());
-    //     $business->properties()->saveMany(factory(Property::class, 20)->make());
+    //     $business->properties()->saveMany(Property::factory( 20)->make());
     //     $this->assertEquals(21, $business->refresh()->properties->count());
     // }
 }

@@ -3,7 +3,7 @@
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
 use Exception;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\Property\TypeRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\TypeCollection;

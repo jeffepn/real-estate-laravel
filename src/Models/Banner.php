@@ -2,6 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Models;
 
+use Database\Factories\BannerFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
@@ -19,5 +20,10 @@ class Banner extends Model
     public function getWayUrlAttribute()
     {
         return Storage::disk(ConfigHelper::get('filesystem.disk'))->url($this->way);
+    }
+
+    protected static function newFactory()
+    {
+        return BannerFactory::new();
     }
 }

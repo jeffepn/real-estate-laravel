@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api;
 
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Jeffpereira\RealEstate\Enum\AppSettingsEnum;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Requests\AppSettingsRequest;

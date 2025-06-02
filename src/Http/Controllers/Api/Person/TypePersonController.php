@@ -5,7 +5,7 @@ namespace Jeffpereira\RealEstate\Http\Controllers\Api\Person;
 use Exception;
 use Illuminate\Database\QueryException;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Jeffpereira\RealEstate\Http\Requests\Person\StoreTypePersonRequest;
 use Jeffpereira\RealEstate\Http\Requests\Person\UpdateTypePersonRequest;
 use Jeffpereira\RealEstate\Http\Resources\Person\TypePersonCollection;

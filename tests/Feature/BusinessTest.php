@@ -3,11 +3,11 @@
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Tests\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class BusinessTest extends TestCase
 {
@@ -19,7 +19,7 @@ class BusinessTest extends TestCase
      */
     public function verify_format_return_index()
     {
-        factory(Business::class)->create();
+        Business::factory()->create();
         $response = $this->getJson(route('jp_realestate.api.business.index'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -33,7 +33,7 @@ class BusinessTest extends TestCase
      */
     public function verify_format_return_show()
     {
-        $business = factory(Business::class)->create(['name_completed' => 'Example name completed']);
+        $business = Business::factory()->create(['name_completed' => 'Example name completed']);
         $response = $this->getJson(route('jp_realestate.api.business.show', $business->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -74,7 +74,7 @@ class BusinessTest extends TestCase
      */
     public function update_with_success()
     {
-        $business = factory(Business::class)->create();
+        $business = Business::factory()->create();
         $response = $this->patchJson(
             route('jp_realestate.api.business.update', $business->id),
             ['name' => 'Test of name2']
@@ -89,7 +89,7 @@ class BusinessTest extends TestCase
      */
     public function destroy_with_success()
     {
-        $business = factory(Business::class)->create();
+        $business = Business::factory()->create();
         $this->assertNotNull(Business::first());
         $response = $this->deleteJson(route('jp_realestate.api.business.destroy', $business->id));
         $response->assertStatus(Response::HTTP_OK);
@@ -103,7 +103,7 @@ class BusinessTest extends TestCase
     public function validate_name_request()
     {
         // $request = new BusinessRequest();
-        $business = factory(Business::class)->create(['name' => 'teste']);
+        $business = Business::factory()->create(['name' => 'teste']);
 
         $response = $this->postJson(route('jp_realestate.api.business.store'), ['name' => Str::random(30)]);
         $response->assertStatus(Response::HTTP_CREATED);
@@ -133,7 +133,7 @@ class BusinessTest extends TestCase
      */
     public function checkHasSituationWhenTheBusinessNotHasNameCompleted()
     {
-        $business = factory(Business::class)
+        $business = Business::factory()
             ->create();
 
         $this->assertFalse($business->hasSituation);
@@ -145,7 +145,7 @@ class BusinessTest extends TestCase
      */
     public function checkHasSituationWhenBusinessHasNameCompleted()
     {
-        $business = factory(Business::class)->create(['name_completed' => 'Teste name completed']);
+        $business = Business::factory()->create(['name_completed' => 'Teste name completed']);
 
         $this->assertEquals('Teste name completed', $business->name_completed);
         $this->assertTrue($business->hasSituation);
@@ -159,14 +159,14 @@ class BusinessTest extends TestCase
      */
     public function hasProperties()
     {
-        factory(Business::class, 10)->create();
+        Business::factory(10)->create();
         $this->assertCount(10, Business::all());
         $this->assertCount(0, Business::hasProperties()->get());
         Business::all()->each(function ($business, $key) {
             $business->properties()->attach(
                 $key < 5
-                ? factory(Property::class)->state('active')->create()->id
-                : factory(Property::class)->state('inactive')->create()->id
+                ? Property::factory()->active()->create()->id
+                : Property::factory()->inactive()->create()->id
             );
         });
         $this->assertCount(5, Business::hasProperties()->get());

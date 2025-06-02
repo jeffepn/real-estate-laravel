@@ -1,13 +1,19 @@
 <?php
 
-/** @var Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Jeffpereira\RealEstate\Models\Property\Type;
-use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
-$factory->define(Type::class, function (Faker $faker) {
-    return [
-        'name' => Str::limit($faker->unique()->name(), 30, ''),
-    ];
-});
+class TypeFactory extends Factory
+{
+    protected $model = Type::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => Str::limit($this->faker->unique()->name(), 30, ''),
+        ];
+    }
+}

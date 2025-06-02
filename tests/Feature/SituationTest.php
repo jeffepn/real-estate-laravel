@@ -20,7 +20,7 @@ class SituationTest extends TestCase
      */
     public function verifyFormatReturnIndex()
     {
-        factory(Situation::class)->create();
+        Situation::factory()->create();
         $response = $this->getJson(route('jp_realestate.api.situation.index'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -40,7 +40,7 @@ class SituationTest extends TestCase
      */
     public function verifyFormatReturnShow()
     {
-        $situation = factory(Situation::class)->create();
+        $situation = Situation::factory()->create();
         $response = $this->getJson(route('jp_realestate.api.situation.show', $situation->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -84,7 +84,7 @@ class SituationTest extends TestCase
      */
     public function updateWithSuccess()
     {
-        $situation = factory(Situation::class)->create();
+        $situation = Situation::factory()->create();
         $response = $this->patchJson(
             route('jp_realestate.api.situation.update', $situation->id),
             ['name' => 'Test of name2']
@@ -100,7 +100,7 @@ class SituationTest extends TestCase
      */
     public function destroyWithSuccess()
     {
-        $situation = factory(Situation::class)->create();
+        $situation = Situation::factory()->create();
         $this->assertNotNull(Situation::first());
         $response = $this->deleteJson(route('jp_realestate.api.situation.destroy', $situation->id));
         $response->assertStatus(Response::HTTP_NO_CONTENT);
@@ -115,9 +115,9 @@ class SituationTest extends TestCase
      */
     public function dontDestroyTypeWithOneOrMoreProperty()
     {
-        $situation = factory(Situation::class)->create();
+        $situation = Situation::factory()->create();
         $this->assertNotNull(Situation::first());
-        $situation->properties()->save(factory(Property::class)->make());
+        $situation->properties()->save(Property::factory()->make());
         $response = $this->deleteJson(route('jp_realestate.api.situation.destroy', $situation->id));
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $this->assertNotNull(Situation::first());
@@ -132,7 +132,7 @@ class SituationTest extends TestCase
     public function validateNameRequest()
     {
         // $request = new typeRequest();
-        $situation = factory(Situation::class)->create(['name' => 'teste']);
+        $situation = Situation::factory()->create(['name' => 'teste']);
 
         $response = $this->postJson(route('jp_realestate.api.situation.store'), ['name' => Str::random(30)]);
         $response->assertStatus(Response::HTTP_CREATED);

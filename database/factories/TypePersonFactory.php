@@ -1,12 +1,18 @@
 <?php
 
-/** @var Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Jeffpereira\RealEstate\Models\Person\TypePerson;
 
-$factory->define(TypePerson::class, function (Faker $faker) {
-    return [
-        'name' => $faker->unique()->name(),
-    ];
-});
+class TypePersonFactory extends Factory
+{
+    protected $model = TypePerson::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->unique()->name(),
+        ];
+    }
+}

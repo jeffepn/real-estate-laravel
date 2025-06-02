@@ -4,7 +4,7 @@ namespace Jeffpereira\RealEstate\Tests\Feature\Project;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Person\Person;
 use Jeffpereira\RealEstate\Models\Person\TypePerson;
@@ -33,7 +33,7 @@ class ProjectTest extends TestCase
      */
     public function verifyFormatReturnIndex()
     {
-        factory(Project::class, 20)->create();
+        Project::factory(20)->create();
         $response = $this->getJson(route('jp_realestate.api.project.index'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -58,10 +58,10 @@ class ProjectTest extends TestCase
      */
     public function verifyFormatReturnIndexWithResponsible()
     {
-        factory(TypePerson::class, 2)->create()->each(function ($typePerson) {
-            factory(Person::class, 2)->create(['type_person_id' => $typePerson->id])
+        TypePerson::factory(2)->create()->each(function ($typePerson) {
+            Person::factory(2)->create(['type_person_id' => $typePerson->id])
                 ->each(function ($person) {
-                    factory(Project::class, 5)->create(['person_id' => $person->id]);
+                    Project::factory(5)->create(['person_id' => $person->id]);
                 });
         });
         $response = $this->getJson(route('jp_realestate.api.project.index') . '?with=responsible,responsible.type');
@@ -132,7 +132,7 @@ class ProjectTest extends TestCase
      */
     public function verifyFormatReturnShow()
     {
-        $project = factory(Project::class)->create();
+        $project = Project::factory()->create();
         $project->refresh();
         $response = $this->getJson(route('jp_realestate.api.project.show', $project->id));
 
@@ -166,7 +166,7 @@ class ProjectTest extends TestCase
      */
     public function verifyFormatReturnShowWithResponsible()
     {
-        $project = factory(Project::class)->create();
+        $project = Project::factory()->create();
         $project->refresh();
         $response = $this->getJson(
             route('jp_realestate.api.project.show', $project->id) . '?with=responsible'
@@ -222,7 +222,7 @@ class ProjectTest extends TestCase
      */
     public function verifyFormatReturnShowWithResponsibleAndType()
     {
-        $project = factory(Project::class)->create();
+        $project = Project::factory()->create();
         $project->refresh();
         $response = $this->getJson(
             route('jp_realestate.api.project.show', $project->id) . '?with=responsible,responsible.type'
@@ -294,7 +294,7 @@ class ProjectTest extends TestCase
      */
     public function storeWithSuccess()
     {
-        $person = factory(Person::class)->create(['name' => 'Name of person']);
+        $person = Person::factory()->create(['name' => 'Name of person']);
         $name = $this->faker->name();
         $content = $this->faker->sentence(20);
         $response = $this->postJson(
@@ -356,7 +356,7 @@ class ProjectTest extends TestCase
      */
     public function updateWithSuccess()
     {
-        $project = factory(Project::class)->create();
+        $project = Project::factory()->create();
         $response = $this->patchJson(route('jp_realestate.api.project.update', $project->id), [
             'name' => 'Other name',
             'content' => 'test content edit',
@@ -389,7 +389,7 @@ class ProjectTest extends TestCase
      */
     public function destroyWithSuccess()
     {
-        $project = factory(Project::class)->create();
+        $project = Project::factory()->create();
         $this->assertNotNull(Project::first());
         $response = $this->deleteJson(route('jp_realestate.api.project.destroy', $project->id));
         $response->assertStatus(Response::HTTP_OK);
@@ -411,7 +411,7 @@ class ProjectTest extends TestCase
      */
     public function validateDataRequest()
     {
-        $person = factory(Person::class)->create();
+        $person = Person::factory()->create();
         $data = [
             'name' => 'Test name',
             'person_id' => $person->id,

@@ -31,8 +31,8 @@ class PropertyTest extends TestCase
      */
     public function verifyFormatReturnIndex()
     {
-        $subType = factory(Type::class)->create()->sub_types()->save(factory(SubType::class)->make());
-        factory(Property::class, 20)->create([
+        $subType = Type:: factory()->create()->sub_types()->save(SubType::factory()->make());
+        Property::factory(20)->create([
             'sub_type_id' => $subType->id,
             'address_id' => $this->createAddress()->id,
             'max_dormitory' => function () {
@@ -65,7 +65,7 @@ class PropertyTest extends TestCase
      */
     public function verifyFormatReturnShow()
     {
-        $property = factory(Property::class)->create();
+        $property = Property::factory()->create();
         $response = $this->getJson(route('jp_realestate.api.property.show', $property->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -128,10 +128,10 @@ class PropertyTest extends TestCase
      */
     public function storeWithSuccess()
     {
-        $situation = $this->faker->boolean() ? factory(Situation::class)->create() : null;
-        $subType = factory(SubType::class)->create();
-        $businessSale = factory(Business::class)->state('sale')->create();
-        $businessRent = factory(Business::class)->state('rent')->create();
+        $situation = $this->faker->boolean() ? Situation::factory()->create() : null;
+        $subType = SubType::factory()->create();
+        $businessSale = Business::factory()->sale()->create();
+        $businessRent = Business::factory()->rent()->create();
         $response = $this->postJson(
             route('jp_realestate.api.property.store'),
             [
@@ -240,8 +240,8 @@ class PropertyTest extends TestCase
      */
     public function updateWithSuccess()
     {
-        $situation = factory(Situation::class)->create(); //$this->faker->boolean() ? factory(Situation::class)->create() : null;
-        $subType = factory(SubType::class)->create();
+        $situation = Situation::factory()->create(); //$this->faker->boolean() ? Situation::factory()->create() : null;
+        $subType = SubType::factory()->create();
         $address = $this->createAddress();
         $property = Property::create([
             'situation_id' => $situation ? $situation->id : null,
@@ -277,7 +277,6 @@ class PropertyTest extends TestCase
             'neighborhood' => $this->faker->streetAddress(),
             'city' => $this->faker->city(),
             'initials' => $this->faker->stateAbbr(),
-            'number' => 789,
         ]);
         $response->assertStatus(Response::HTTP_OK);
         $data = $property->refresh()->toArray();
@@ -320,9 +319,9 @@ class PropertyTest extends TestCase
      */
     public function updatePropertyWithAddingBusinesses()
     {
-        $property = factory(Property::class)->create();
-        $businessSale = factory(Business::class)->state('sale')->create();
-        $businessRent = factory(Business::class)->state('rent')->create();
+        $property = Property::factory()->create();
+        $businessSale = Business::factory()->sale()->create();
+        $businessRent = Business::factory()->rent()->create();
         $response = $this->patchJson(route('jp_realestate.api.property.update', $property->id), [
             'neighborhood' => $this->faker->streetAddress(),
             'city' => $this->faker->city(),
@@ -358,12 +357,12 @@ class PropertyTest extends TestCase
     public function updatePropertyWithAddingBusinessesSituation()
     {
         Event::fake(BusinessPropertyFinalizedEvent::class);
-        $property = factory(Property::class)->create();
-        $businessSale = factory(Business::class)->state('sale')->create();
-        $businessRent = factory(Business::class)->state('rent')->create();
+        $property = Property::factory()->create();
+        $businessSale = Business::factory()->sale()->create();
+        $businessRent = Business::factory()->rent()->create();
         $property->businessesProperty()
             ->save(
-                factory(BusinessProperty::class)
+                BusinessProperty::factory()
                     ->make(['business_id' => $businessRent->id])
             );
         $response = $this->patchJson(route('jp_realestate.api.property.update', $property->id), [
@@ -398,11 +397,11 @@ class PropertyTest extends TestCase
      */
     public function updatePropertyWithRemoveBusiness()
     {
-        $property = factory(Property::class)->create();
-        $businessSale = factory(Business::class)->state('sale')->create();
-        $businessRent = factory(Business::class)->state('rent')->create();
+        $property = Property::factory()->create();
+        $businessSale = Business::factory()->sale()->create();
+        $businessRent = Business::factory()->rent()->create();
         foreach ([$businessSale, $businessRent] as $currentBusiness) {
-            factory(BusinessProperty::class)
+            BusinessProperty::factory()
                 ->create(['property_id' => $property->id, 'business_id' => $currentBusiness->id]);
         }
 
@@ -430,7 +429,7 @@ class PropertyTest extends TestCase
      */
     public function destroyWithSuccess()
     {
-        $property = factory(Property::class)->create();
+        $property = Property::factory()->create();
         $this->assertNotNull(Property::first());
         $response = $this->deleteJson(route('jp_realestate.api.property.destroy', $property->id));
         $response->assertStatus(Response::HTTP_OK);
@@ -445,9 +444,9 @@ class PropertyTest extends TestCase
      */
     public function validateDataRequest()
     {
-        $business = factory(Business::class)->create();
-        $type = factory(Type::class)->create();
-        $subType = factory(SubType::class)->create(['name' => 'teste', 'type_id' => $type->id]);
+        $business = Business::factory()->create();
+        $type = Type:: factory()->create();
+        $subType = SubType::factory()->create(['name' => 'teste', 'type_id' => $type->id]);
         $data = [
             'slug' => 'test-slug',
             'businesses' => [
@@ -566,7 +565,7 @@ class PropertyTest extends TestCase
      */
     public function routeInactiveProperty()
     {
-        $property = factory(Property::class)->state('active')->create();
+        $property = Property::factory()->active()->create();
         $this->assertTrue($property->isActive);
 
         $response = $this->patchJson(
@@ -588,10 +587,10 @@ class PropertyTest extends TestCase
      */
     public function routeActivePropertyWithErrorWhenNotPossibleAcivateWithoutBusinesses()
     {
-        $property = factory(Property::class)->state('inactive')->create();
+        $property = Property::factory()->inactive()->create();
         $property->images()
             ->createMany(
-                factory(ImageProperty::class, 2)
+                ImageProperty::factory(2)
                     ->make()
                     ->makeHidden(['way_url'])
                     ->toArray()
@@ -616,10 +615,10 @@ class PropertyTest extends TestCase
      */
     public function routeActivePropertyWithErrorWhenNotPossibleAcivateWithoutImages()
     {
-        $property = factory(Property::class)->state('inactive')->create();
+        $property = Property::factory()->inactive()->create();
         $property->businessesProperty()
             ->createMany(
-                factory(BusinessProperty::class, 2)
+                BusinessProperty::factory(2)
                     ->make()
                     ->toArray()
             );
@@ -643,16 +642,16 @@ class PropertyTest extends TestCase
      */
     public function routeActivePropertyWithSuccessWhenHasImagesAndBusiness()
     {
-        $property = factory(Property::class)->state('inactive')->create();
+        $property = Property::factory()->inactive()->create();
         $property->businessesProperty()
             ->createMany(
-                factory(BusinessProperty::class, 3)
+                BusinessProperty::factory(3)
                     ->make()
                     ->toArray()
             );
         $property->images()
             ->createMany(
-                factory(ImageProperty::class, 2)
+                ImageProperty::factory(2)
                     ->make()
                     ->makeHidden(['way_url'])
                     ->toArray()
@@ -682,7 +681,7 @@ class PropertyTest extends TestCase
      */
     public function propertyIsActiveAndNotActive()
     {
-        $property = factory(Property::class)->state('active')->create();
+        $property = Property::factory()->active()->create();
         $this->assertCount(1, Property::active()->get());
         $this->assertCount(0, Property::notActive()->get());
         $property->active = false;

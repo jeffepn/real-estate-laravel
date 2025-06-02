@@ -2,12 +2,15 @@
 
 namespace Jeffpereira\RealEstate\Models;
 
+use Database\Factories\AppSettingFactory;
 use Illuminate\Database\Eloquent\Model;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AppSettings extends Model
 {
     use UsesUuid;
+    use HasFactory;
     public const NAME_KEY_ROUTE = 'name';
 
     protected $fillable = ['name', 'value'];
@@ -24,5 +27,10 @@ class AppSettings extends Model
     public function getRouteKeyName()
     {
         return self::NAME_KEY_ROUTE;
+    }
+
+    protected static function newFactory()
+    {
+        return AppSettingFactory::new();
     }
 }

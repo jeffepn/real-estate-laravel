@@ -18,16 +18,23 @@
 
 ## Description
 
-Package used to manage real estate / brokerage websites, built with the Laravel framework
+Package for real estate and real estate website management, built with Laravel 10+ framework
 
-## Compatibilidade
-| Laravel      | Pacote realestatelaravel |
+## Requirements
+
+- PHP >= 8.1
+- Laravel >= 10.0
+- Composer
+
+## Compatibility
+| Laravel      | realestatelaravel package |
 |:--------:|:------:|
-| 10        |   ^2.0  |
-| 6         |   ^1.0  |
+| 10.x      |   ^2.0  |
+| 6.x       |   ^1.0  |
 
 _The package only supports the mentioned Laravel versions._
-## Instalation
+
+## Installation
 
 ```php
 composer require jeffersonpereira/realestatelaravel
@@ -41,7 +48,7 @@ php artisan realestatelaravel:install
 
 _Note:_
 
-##### We strongly advise using ​​environment variables, since when the package install command is executed, the configuration file will be overwritten.
+##### We strongly advise using environment variables, since when the package install command is executed, the configuration file will be overwritten.
 
 The package has migrations and you will need to run:
 
@@ -49,11 +56,11 @@ The package has migrations and you will need to run:
 php artisan migrate
 ```
 
-## Importants Notes:
+## Important Notes:
 
-When using your template, import assets with the directive blade and cdn to font-awesome.
+When using your template, import assets with the blade directive and cdn for font-awesome.
 
-_Obs: We use **bootstrap 5.1** on ours assets_
+_Note: We use **bootstrap 5.1** in our assets_
 
 ```html
 <html>
@@ -80,11 +87,11 @@ _Obs: We use **bootstrap 5.1** on ours assets_
 
 #### Property
 
-The package is under development and will be added new features over time. At the moment the package has all the management of a property.
+The package is under development and new features will be added over time. Currently, the package has complete property management functionality.
 
 #### Routes to views
 
-Use the `Menu::class` class to get all the view routes to get started, when used your template.
+Use the `Menu::class` class to get all the view routes to get started when using your template.
 
 ```php
 use Jeffpereira\RealEstate\Utilities\Helpers\RouteHelper;
@@ -94,7 +101,7 @@ $routes = RouteHelper::allView();
 
 #### Config
 
-Define as configs in your `.env`
+Define the configs in your `.env`
 
 ```php
 /**
@@ -114,7 +121,7 @@ Define as configs in your `.env`
 'section_content' => 'content',
 ```
 
-More options, check the `config/realestatelaravel.php` config file
+For more options, check the `config/realestatelaravel.php` config file
 
 #### Events
 

@@ -3,7 +3,7 @@
 namespace Jeffpereira\RealEstate\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Property\Property;
 use Jeffpereira\RealEstate\Models\Property\SubType;
@@ -20,7 +20,7 @@ class SubTypeTest extends TestCase
      */
     public function verify_format_return_index()
     {
-        factory(SubType::class)->create();
+        SubType::factory()->create();
         $response = $this->getJson(route('jp_realestate.api.sub_type.index'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -35,7 +35,7 @@ class SubTypeTest extends TestCase
      */
     public function verify_format_return_show()
     {
-        $subType = factory(SubType::class)->create();
+        $subType = SubType::factory()->create();
         $response = $this->getJson(route('jp_realestate.api.sub_type.show', $subType->id));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -62,7 +62,7 @@ class SubTypeTest extends TestCase
      */
     public function store_with_success()
     {
-        $type = factory(Type::class)->create();
+        $type = Type::factory()->create();
         $response = $this->postJson(route('jp_realestate.api.sub_type.store'), ['name' => 'Test of name', 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure(['data' => ['type', 'id', 'attributes' => ['name', 'slug'], 'relationships' => ['type']], 'included', 'error', 'message']);
@@ -75,8 +75,8 @@ class SubTypeTest extends TestCase
      */
     public function update_with_success()
     {
-        $type = factory(Type::class)->create();
-        $subType = factory(SubType::class)->create();
+        $type = Type::factory()->create();
+        $subType = SubType::factory()->create();
         $response = $this->patchJson(route('jp_realestate.api.sub_type.update', $subType->id), ['name' => 'Test of name2', 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals('test-of-name2', SubType::first()->slug);
@@ -87,7 +87,7 @@ class SubTypeTest extends TestCase
      */
     public function destroy_with_success()
     {
-        $subType = factory(SubType::class)->create();
+        $subType = SubType::factory()->create();
         $this->assertNotNull(SubType::first());
         $response = $this->deleteJson(route('jp_realestate.api.sub_type.destroy', $subType->id));
         $response->assertStatus(Response::HTTP_OK);
@@ -99,9 +99,9 @@ class SubTypeTest extends TestCase
      */
     public function dont_destroy_type_with_one_or_more_property()
     {
-        $subType = factory(SubType::class)->create();
+        $subType = SubType::factory()->create();
         $this->assertNotNull(SubType::first());
-        $subType->properties()->save(factory(Property::class)->make());
+        $subType->properties()->save(Property::factory()->make());
         $response = $this->deleteJson(route('jp_realestate.api.sub_type.destroy', $subType->id));
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $this->assertNotNull(SubType::first());
@@ -113,8 +113,8 @@ class SubTypeTest extends TestCase
      */
     public function validate_data_request()
     {
-        $type = factory(Type::class)->create();
-        $subType = factory(SubType::class)->create(['name' => 'teste', 'type_id' => $type->id]);
+        $type = Type::factory()->create();
+        $subType = SubType::factory()->create(['name' => 'teste', 'type_id' => $type->id]);
 
         $response = $this->postJson(route('jp_realestate.api.sub_type.store'), ['name' => Str::random(30), 'type_id' => $type->id]);
         $response->assertStatus(Response::HTTP_CREATED);
@@ -145,15 +145,15 @@ class SubTypeTest extends TestCase
      */
     public function hasProperties()
     {
-        $type = factory(Type::class)->create();
-        factory(SubType::class, 10)->create(['type_id' => $type->id]);
+        $type = Type::factory()->create();
+        SubType::factory(10)->create(['type_id' => $type->id]);
         $this->assertCount(10, SubType::all());
         $this->assertCount(0, SubType::hasProperties()->get());
         SubType::all()->each(function ($subType, $key) {
             $subType->properties()->save(
                 $key < 5
-                    ? factory(Property::class)->state('active')->make()
-                    : factory(Property::class)->state('inactive')->make()
+                    ? Property::factory()->active()->make()
+                    : Property::factory()->inactive()->make()
             );
         });
         $this->assertCount(5, SubType::hasProperties()->get());

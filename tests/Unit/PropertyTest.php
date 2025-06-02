@@ -18,11 +18,11 @@ class PropertyTest extends TestCase
      */
     public function aSlugMustBeUnique()
     {
-        $property = factory(Property::class)->create();
+        $property = Property::factory()->create();
         $codeException = null;
 
         try {
-            factory(Property::class)->create(['slug' => $property->slug]);
+            Property::factory()->create(['slug' => $property->slug]);
         } catch (\Illuminate\Database\QueryException $ex) {
             $codeException = $ex->getCode();
         }
@@ -32,8 +32,8 @@ class PropertyTest extends TestCase
     public function testFormatGeneratSluBasedIinContext()
     {
         $address = $this->createAddress();
-        $business = factory(Business::class)->create();
-        $subType = factory(SubType::class)->create();
+        $business = Business::factory()->create();
+        $subType = SubType:: factory()->create();
         $property = Property::create([
             'sub_type_id' => $subType->id,
             'address_id' => $address->id, 'min_description' => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni necessitatibus non architecto adipisci quidem',

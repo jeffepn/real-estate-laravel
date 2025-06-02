@@ -1,6 +1,6 @@
 {
   "name": "jeffersonpereira/realestatelaravel",
-  "description": "It's package to make manager real estate in system with laravel",
+  "description": "Pacote para gerenciamento de imóveis em sistemas Laravel 10+",
   "license": "MIT",
   "authors": [
     {
@@ -11,6 +11,7 @@
   "minimum-stability": "stable",
   "require": {
     "php": "^8.1.0",
+    "laravel/framework": "^10.0",
     "jeffersonpereira/address": "2.*",
     "laravellegends/pt-br-validator": "^10.0",
     "tightenco/ziggy": "^1.2",
@@ -22,7 +23,8 @@
     "fakerphp/faker": "^1.9.1",
     "orchestra/testbench": "^8.0",
     "laravel/legacy-factories": "^1.0@dev",
-    "nunomaduro/collision": "^6.1"
+    "nunomaduro/collision": "^6.1",
+    "spatie/phpunit-watcher": "^1.24"
     },
   "extra": {
     "laravel": {
@@ -33,7 +35,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Jeffpereira\\RealEstate\\": "src/"
+      "Jeffpereira\\RealEstate\\": "src/",
+      "Database\\Factories\\": "database/factories/"
     }
   },
   "autoload-dev": {

@@ -1,26 +1,24 @@
 <?php
 
-/** @var Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Jeffpereira\RealEstate\Enum\BusinessPropertySituationEnum;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Models\Property\BusinessProperty;
 use Jeffpereira\RealEstate\Models\Property\Property;
 
-$factory->define(BusinessProperty::class, function (Faker $faker) {
-    return [
-        'business_id' => function () {
-            return factory(Business::class)
-                ->create()
-                ->id;
-        },
-        'property_id' => function () {
-            return factory(Property::class)
-                ->create()
-                ->id;
-        },
-        'status' => 1,
-        'status_situation' => BusinessPropertySituationEnum::IN_PROGRESS,
-    ];
-});
+class BusinessPropertyFactory extends Factory
+{
+    protected $model = BusinessProperty::class;
+
+    public function definition(): array
+    {
+        return [
+            'business_id' => fn () => Business::factory()->create()->id,
+            'property_id' => fn () => Property::factory()->create()->id,
+            'status' => 1,
+            'status_situation' => BusinessPropertySituationEnum::IN_PROGRESS,
+        ];
+    }
+}

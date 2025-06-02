@@ -2,14 +2,17 @@
 
 namespace Jeffpereira\RealEstate\Models\Property;
 
+use Database\Factories\ImagePropertyFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 use Jeffpereira\RealEstate\Utilities\Helpers\ConfigHelper;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ImageProperty extends Model
 {
     use UsesUuid;
+    use HasFactory;
 
     protected $table = 'image_properties';
 
@@ -33,5 +36,10 @@ class ImageProperty extends Model
             ->getDriver()
             ->getAdapter()
             ->getPathPrefix() . $this->way;
+    }
+
+    protected static function newFactory()
+    {
+        return ImagePropertyFactory::new();
     }
 }

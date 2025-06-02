@@ -1,19 +1,21 @@
 <?php
 
-/** @var Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Jeffpereira\RealEstate\Models\Common\Image;
 use Jeffpereira\RealEstate\Models\Project\ImageProject;
 use Jeffpereira\RealEstate\Models\Project\Project;
 
-$factory->define(ImageProject::class, function (Faker $faker) {
-    return [
-        'project_id' => function () {
-            return factory(Project::class)->create()->id;
-        },
-        'image_id' => function () {
-            return factory(Image::class)->create()->id;
-        },
-    ];
-});
+class ImageProjectFactory extends Factory
+{
+    protected $model = ImageProject::class;
+
+    public function definition(): array
+    {
+        return [
+            'project_id' => fn () => Project::factory()->create()->id,
+            'image_id' => fn () => Image::factory()->create()->id,
+        ];
+    }
+}

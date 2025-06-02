@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Jeffpereira\RealEstate\Models\Property\Business;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
 use Jeffpereira\RealEstate\Http\Resources\Property\BusinessCollection;

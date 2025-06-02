@@ -2,16 +2,19 @@
 
 namespace Jeffpereira\RealEstate\Models\Property;
 
+use Database\Factories\BusinessFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Traits\SetSlug;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Business extends Model
 {
     use UsesUuid;
+    use HasFactory;
     use SetSlug;
 
     protected $guarded = [];
@@ -52,5 +55,10 @@ class Business extends Model
         static::saving(function ($business) {
             $business->name = Str::upper($business->name);
         });
+    }
+
+    protected static function newFactory()
+    {
+        return BusinessFactory::new();
     }
 }

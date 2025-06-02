@@ -1,17 +1,21 @@
 <?php
 
-/** @var Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Jeffpereira\RealEstate\Models\Person\Person;
 use Jeffpereira\RealEstate\Models\Person\TypePerson;
 
-$factory->define(Person::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name(),
-        'type_person_id' => function () {
-            return factory(TypePerson::class)->create()->id;
-        },
-        'bio' => $faker->sentence(4),
-    ];
-});
+class PersonFactory extends Factory
+{
+    protected $model = Person::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->name(),
+            'type_person_id' => fn () => TypePerson::factory()->create()->id,
+            'bio' => $this->faker->sentence(4),
+        ];
+    }
+}

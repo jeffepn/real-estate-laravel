@@ -4,7 +4,7 @@ namespace Jeffpereira\RealEstate\Http\Controllers\Api\Property;
 
 use Exception;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Jeffpereira\RealEstate\Http\Requests\Property\SubTypeRequest;
 use Jeffpereira\RealEstate\Http\Resources\Property\SubTypeCollection;
 use Jeffpereira\RealEstate\Http\Resources\Property\SubTypeResource;

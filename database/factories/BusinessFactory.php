@@ -1,21 +1,33 @@
 <?php
 
-/** @var Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Jeffpereira\RealEstate\Models\Property\Business;
-use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
-$factory->define(Business::class, function (Faker $faker) {
-    return [
-        'name' => Str::limit($faker->unique()->name(), 30, ''),
-    ];
-});
+class BusinessFactory extends Factory
+{
+    protected $model = Business::class;
 
-$factory->state(Business::class, 'sale', [
-    'name' => 'venda',
-]);
+    public function definition(): array
+    {
+        return [
+            'name' => Str::limit($this->faker->unique()->name(), 30, ''),
+        ];
+    }
 
-$factory->state(Business::class, 'rent', [
-    'name' => 'aluguel',
-]);
+    public function sale(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'venda',
+        ]);
+    }
+
+    public function rent(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'aluguel',
+        ]);
+    }
+}

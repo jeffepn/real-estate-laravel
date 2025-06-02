@@ -22,11 +22,11 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     public function createAddress()
     {
-        return factory(Address::class)->create([
+        return Address::factory()->create([
             'cep' => '99999999',
-            'neighborhood_id' => factory(Neighborhood::class)->create([
-                'city_id' => factory(City::class)->create([
-                    'state_id' => factory(State::class)->create([
+            'neighborhood_id' => Neighborhood::factory()->create([
+                'city_id' => City::factory()->create([
+                    'state_id' => State::factory()->create([
                         'country_id' => Country::firstOrCreate(['name' => 'brasil'])->id,
                     ]),
                 ])->id,

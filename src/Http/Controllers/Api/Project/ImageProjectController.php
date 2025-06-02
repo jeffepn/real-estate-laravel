@@ -4,7 +4,7 @@ namespace Jeffpereira\RealEstate\Http\Controllers\Api\Project;
 
 use Exception;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Arr;
 use Jeffpereira\RealEstate\Http\Controllers\Traits\TreatmentImages;
 use Jeffpereira\RealEstate\Http\Requests\Project\StoreImageProjectRequest;

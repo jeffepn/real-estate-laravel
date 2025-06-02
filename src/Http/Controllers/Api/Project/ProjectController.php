@@ -4,7 +4,7 @@ namespace Jeffpereira\RealEstate\Http\Controllers\Api\Project;
 
 use Exception;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Jeffpereira\RealEstate\Http\Requests\Project\StoreProjectRequest;
 use Jeffpereira\RealEstate\Http\Requests\Project\UpdateProjectRequest;
 use Jeffpereira\RealEstate\Http\Resources\Project\ProjectCollection;

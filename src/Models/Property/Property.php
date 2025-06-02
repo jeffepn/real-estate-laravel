@@ -2,6 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Models\Property;
 
+use Database\Factories\PropertyFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Jeffpereira\RealEstate\Models\Traits\AbstractAddress;
@@ -10,10 +11,12 @@ use Jeffpereira\RealEstate\Models\Traits\Property\Scopes;
 use Jeffpereira\RealEstate\Models\Traits\SetSlug;
 use Jeffpereira\RealEstate\Models\Traits\UsesUuid;
 use JPAddress\Models\Address\Address;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Property extends Model
 {
     use UsesUuid;
+    use HasFactory;
     use SetSlug;
     use AbstractAddress;
     use Relationships;
@@ -79,5 +82,10 @@ class Property extends Model
     private function getInstanceAddress(): Address
     {
         return $this->address;
+    }
+
+    protected static function newFactory()
+    {
+        return PropertyFactory::new();
     }
 }

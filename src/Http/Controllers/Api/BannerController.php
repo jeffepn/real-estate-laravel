@@ -2,7 +2,7 @@
 
 namespace Jeffpereira\RealEstate\Http\Controllers\Api;
 
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Jeffpereira\RealEstate\Models\Banner;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Http\Controllers\Controller;

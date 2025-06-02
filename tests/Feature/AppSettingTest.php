@@ -4,7 +4,7 @@ namespace Jeffpereira\RealEstate\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Jeffpereira\RealEstate\Enum\AppSettingsEnum;

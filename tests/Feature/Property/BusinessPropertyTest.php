@@ -23,7 +23,7 @@ class BusinessPropertyTest extends TestCase
      */
     public function checkIfIsNotCompleted($statusSituation, $isCompleted)
     {
-        $businessProperty = factory(BusinessProperty::class)
+        $businessProperty = BusinessProperty::factory()
             ->create(['status_situation' => $statusSituation]);
 
         $this->assertEquals($isCompleted, $businessProperty->isCompleted);
@@ -37,9 +37,9 @@ class BusinessPropertyTest extends TestCase
     public function checkIfDispatchEventWhenCompleted()
     {
         Event::fake(BusinessPropertyFinalizedEvent::class);
-        $property = factory(Property::class)
+        $property = Property::factory()
             ->create();
-        $business = factory(Business::class)
+        $business = Business::factory()
             ->create();
         $businessProperty = BusinessProperty::create([
             'property_id' => $property->id,
@@ -61,7 +61,7 @@ class BusinessPropertyTest extends TestCase
      */
     public function checkIfHasDiscount($oldValue, $value, $isDicounted)
     {
-        $businessProperty = factory(BusinessProperty::class)
+        $businessProperty = BusinessProperty::factory()
             ->create([
                 'old_value' => $oldValue,
                 'value' => $value,

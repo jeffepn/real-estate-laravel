@@ -4,7 +4,7 @@ namespace Jeffpereira\RealEstate\Tests\Feature\Project;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -46,8 +46,8 @@ class ProjectImageTest extends TestCase
      */
     public function verifyFormatReturnIndex()
     {
-        $project = factory(Project::class)->create();
-        factory(ImageProject::class, 10)->create(['project_id' => $project->id]);
+        $project = Project::factory()->create();
+        ImageProject::factory(10)->create(['project_id' => $project->id]);
 
         $response = $this->getJson(
             route('jp_realestate.api.image_project.index') . "?project_id={$project->id}"
@@ -65,7 +65,7 @@ class ProjectImageTest extends TestCase
      */
     public function storeWithSuccess()
     {
-        $project = factory(Project::class)->create();
+        $project = Project::factory()->create();
         $response = $this->postJson(
             route('jp_realestate.api.image_project.store'),
             [
@@ -116,7 +116,7 @@ class ProjectImageTest extends TestCase
      */
     public function destroyWithSuccess()
     {
-        $imageProject = factory(ImageProject::class)->create();
+        $imageProject = ImageProject::factory()->create();
         $this->assertNotNull(ImageProject::first());
         $response = $this->deleteJson(route('jp_realestate.api.image_project.destroy', $imageProject->id));
         $response->assertStatus(Response::HTTP_OK);
@@ -138,7 +138,7 @@ class ProjectImageTest extends TestCase
      */
     public function validateDataRequest()
     {
-        $project = factory(Project::class)->create();
+        $project = Project::factory()->create();
         $data = [
             'project_id' => $project->id,
             'images' => [
