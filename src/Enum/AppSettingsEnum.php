@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 
 class AppSettingsEnum
 {
-    public const VERSION_PACKAGE = '1.10.3';
+    public const VERSION_PACKAGE = '2.2.1';
     public const WATTERMARK_IMAGE_PROPERTY = 'wattermark_image_property';
     public const WATTERMARK_IMAGE_PROJECT = 'wattermark_image_project';
     private const SLUG_PROPERTY = 'properties';
